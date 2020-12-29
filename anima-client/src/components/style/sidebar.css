@@ -1,0 +1,11 @@
+.sidebar {
+    height: 100%;
+    width:40px;
+    min-width: 40px;
+	background-color:#424B54;
+    transition: width 0.5s;
+}
+
+.sidebar:hover {
+    width: 250px;
+}

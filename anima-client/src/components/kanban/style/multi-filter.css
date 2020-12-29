@@ -1,0 +1,11 @@
+.multi-filter {
+    display: flex;
+    align-items: center;
+
+    height: 30px;
+    width: 100%;
+}
+
+div.multi-filter > div {
+    width: 100%;
+}

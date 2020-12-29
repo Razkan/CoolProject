@@ -1,0 +1,54 @@
+.kanban-container {
+    height: 100%;
+    width: 100%;
+    
+    background: #efefef;
+
+    overflow: hidden;
+}
+
+.kanban {
+    display: flex;
+    flex-direction: column;
+
+    height: calc(100% - 53px);
+    
+    overflow-y: auto;
+}
+
+.kanban-show-filter-result {
+    height: 25px;
+    
+    margin-left: 10px;
+
+    transition: height 0.5s;
+}
+
+.kanban-show-filter-result-hidden {
+    height: 0px;
+}
+
+/* .kanban-show-filter-result {
+
+} */
+
+/* width */
+div.kanban::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+div.kanban::-webkit-scrollbar-track {
+    background: #efefef;
+}
+
+/* Handle */
+div.kanban::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+div.kanban::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

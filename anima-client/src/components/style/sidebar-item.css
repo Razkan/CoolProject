@@ -1,0 +1,37 @@
+.sidebar-item {
+    display: flex;
+    align-items: center;
+
+    height: 30px;
+    padding: 10px 10px 10px 20px;
+
+    color: white;
+}
+
+.sidebar-item:hover {
+    background-color:#676e75;
+    cursor: pointer;
+}
+
+.sidebar-item-collapsed {
+    justify-content: flex-start;
+
+    height: 30px;
+
+    padding: 10px 10px 10px 10px;
+    
+    font-size: 20px;
+}
+
+.sidebar-item-expanded {
+
+}
+
+.sidebar-item-expanded.sidebar-item-active {
+    background-color:#676e75;
+
+}
+
+.sidebar-item-collapsed.sidebar-item-active {
+    background-color:#676e75;
+}
