@@ -1,11 +1,22 @@
-.multi-filter {
-    display: flex;
-    align-items: center;
+.multi-filter-container {
+    height: 86px;
+}
 
+.multi-filter {
     height: 30px;
-    width: 100%;
 }
 
 div.multi-filter > div {
-    width: 100%;
+    width: calc(100% - 10px);
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.multi-filter-header {
+    margin-bottom: 5px;
+    color: white;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }

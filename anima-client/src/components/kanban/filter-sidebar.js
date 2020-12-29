@@ -1,20 +1,20 @@
 import React from 'react';
-import './style/header.css';
+import './style/filter-sidebar.css';
 import MultiFilter from './multi-filter';
 import SearchFilter from './search-filter';
 
-class FilterHeader extends React.Component {
+class FilterSidebar extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.filters = { 
+        this.filters = {
             contains: "",
             schools: [],
             tags: [],
             special: []
         };
-        
+
         this.setFilter = this.setFilter.bind(this);
         this.filterAsQuery = this.filterAsQuery.bind(this);
     }
@@ -24,23 +24,24 @@ class FilterHeader extends React.Component {
         var tagsFilter = this.props.filterData.tags || [];
 
         return (
-            <div className="header">
+            <div className="filter-sidebar">
+
                 <SearchFilter key={0}
-                    placeholder={"Contains..."}
+                    title="Filter by Spells"
                     onSearch={e => this.setFilter("contains", e)}
                 />
                 <MultiFilter key={1}
-                    placeholder={"Filter by magic school..."}
+                    title="Magic School"
                     options={schoolFilter}
                     onFilter={e => this.setFilter("schools", e)}
                 />
                 <MultiFilter key={2}
-                    placeholder={"Filer by tag..."}
+                    title="Tag"
                     options={tagsFilter}
                     onFilter={e => this.setFilter("tags", e)}
                 />
                 <MultiFilter key={3}
-                    placeholder={"By special..."}
+                    title="Special"
                     options={[]}
                     onFilter={e => this.setFilter("specials", e)}
                 />
@@ -54,19 +55,19 @@ class FilterHeader extends React.Component {
     }
 
     filterAsQuery(filterObj) {
-                
+
         var filterQuery = [];
 
-        for(var obj of Object.keys(filterObj)) {
-            for(var filter of filterObj[obj]) {
-                filterQuery.push(obj+"="+filter);
+        for (var obj of Object.keys(filterObj)) {
+            for (var filter of filterObj[obj]) {
+                filterQuery.push(obj + "=" + filter);
             }
         }
 
         return filterQuery.length > 0
-            ?   "?"+ filterQuery.join("&")
-            :   "";
+            ? "?" + filterQuery.join("&")
+            : "";
     }
 }
 
-export default FilterHeader;
+export default FilterSidebar;

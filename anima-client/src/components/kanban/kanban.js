@@ -1,7 +1,8 @@
 import React from 'react';
 import './style/kanban.css';
 import CardCategory from './card-category';
-import FilterHeader from './filter-header';
+import KanbanHeader from './kanban-header';
+import FilterSidebar from './filter-sidebar';
 
 class Kanban extends React.Component {
 
@@ -12,7 +13,9 @@ class Kanban extends React.Component {
             categoryData: {},
             filterData: {},
 
-            showResult: false
+            showFilterResult: false,
+            
+            showFilterSidebar: false
         };
 
         this.handleFilters = this.handleFilters.bind(this);
@@ -20,13 +23,16 @@ class Kanban extends React.Component {
         this.fetchData = this.fetchData.bind(this);
         this.setupData = this.setupData.bind(this);
         this.retryFetch = this.retryFetch.bind(this);
+
+        this.getShowFilterResult = this.getShowFilterResult.bind(this);
         
-        this.getShowResult = this.getShowResult.bind(this);
+        this.openFilterSidebar = this.openFilterSidebar.bind(this);
+        this.closeFilterSidebar = this.closeFilterSidebar.bind(this);
 
         this.baseUrl = "http://localhost:9422/book/all";
-        
+
         this.retry = null;
-        this.showResult = null;
+        this.showFilterResult = null;
     }
 
     componentDidMount() {
@@ -91,8 +97,11 @@ class Kanban extends React.Component {
         });
     }
 
+    openFilterSidebar = () => this.setState({showFilterSidebar: true});
+    closeFilterSidebar = () => this.setState({showFilterSidebar: false});
+
     handleFilters = query => {
-        this.fetchData(this.baseUrl + query, data => this.setState({ categoryData: data, showResult: true }), this.retryFetch);
+        this.fetchData(this.baseUrl + query, data => this.setState({ categoryData: data, showFilterResult: true }), this.retryFetch);
     };
 
     getCategory() {
@@ -108,46 +117,61 @@ class Kanban extends React.Component {
         return cardCategories;
     }
 
-    getHeader() {
-        return (
-            <FilterHeader onFilterChanged={this.handleFilters}
-                filterData={this.state.filterData}
-            />
-        );
-    }
-
-    getShowResult() {
-
+    getShowFilterResult() {
         const countBooks = () => {
             return this.state.categoryData.length;
         };
 
         const countSpells = () => {
             var lengthArr = this.state.categoryData.map(spellbook => spellbook.spells.length);
-            if(lengthArr.length > 0) {
+            if (lengthArr.length > 0) {
                 return lengthArr.reduce((accumulator, current) => accumulator += current);
             }
 
             return 0;
         };
 
-        if(this.state.showResult)
-        {
-            if (this.showResult) {
-                clearTimeout(this.showResult);
+        if (this.state.showFilterResult) {
+            if (this.showFilterResult) {
+                clearTimeout(this.showFilterResult);
             }
-    
-            this.showResult = setTimeout(() => {
-                this.setState({showResult: false});
+
+            this.showFilterResult = setTimeout(() => {
+                this.setState({ showFilterResult: false });
             }, 2000);
 
-            return (
+            return (    
                 <div className="kanban-show-filter-result">Found {countBooks()} books and {countSpells()} spells</div>
-            );            
+            );
         }
 
+        return null;
+    }
+
+    getHeader() {
         return (
-            <div class="kanban-show-filter-result kanban-show-filter-result-hidden"></div>
+            <KanbanHeader onFilterChanged={this.handleFilters}
+                filterData={this.state.filterData}
+                showFilterResult={this.getShowFilterResult()}
+                openFilter={this.openFilterSidebar}
+                closeFilter={this.closeFilterSidebar}
+            />
+        );
+    }
+
+    getSidebar() {
+        
+        var classes = ["kanban-sidebar"];
+
+        if(!this.state.showFilterSidebar) {
+            classes.push("kanban-sidebar-hidden")
+        }
+        
+        return (
+            <div className={classes.join(" ")}>
+                <FilterSidebar onFilterChanged={this.handleFilters}
+            filterData={this.state.filterData}/>
+            </div>
         );
     }
 
@@ -155,9 +179,11 @@ class Kanban extends React.Component {
         return (
             <div className="kanban-container">
                 {this.getHeader()}
-                {this.getShowResult()}
-                <div className="kanban">
-                    {this.getCategory()}
+                <div className="kanban-content">
+                    {this.getSidebar()}
+                    <div className="kanban-board">
+                        {this.getCategory()}
+                    </div>
                 </div>
             </div>
         );

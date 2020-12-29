@@ -6,12 +6,6 @@ class SearchFilter extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            placeholder: props.placeholder,
-            options: props.options,
-            handleSearch: props.onSearch,
-        };
-
         this.handleValue = this.handleValue.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
@@ -24,17 +18,22 @@ class SearchFilter extends React.Component {
 
     handleValue = event => {
         event.target.value
-        ? this.state.handleSearch([event.target.value]) 
-        :  this.state.handleSearch([]);
+        ? this.props.onSearch([event.target.value]) 
+        :  this.props.onSearch([]);
     };
 
     render() {
         return (
             <div className="search-filter-container">
-                <input className="search-filter" 
+
+                <div className="search-filter-header">
+                    {this.props.title}
+                </div>
+                
+                <input className="search-filter-input" 
                         type="text" 
                         name="name" 
-                        placeholder={this.state.placeholder}
+                        placeholder="..."
                         onChange={this.handleValue}
                         onKeyDown={this.handleKeyDown}
                         autoComplete="off"
