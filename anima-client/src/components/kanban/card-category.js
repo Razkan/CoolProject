@@ -14,7 +14,7 @@ class CardCategory extends React.Component {
 
         this.state = {
             name: props.data.name,
-            expanded: false
+            expanded: true
         };
 
         this.toggle = this.toggle.bind(this);

@@ -1,10 +1,9 @@
 ﻿namespace Interfaces.Model.Enum
 {
-    public enum CharacterAttribute
+    public enum ResistanceType
     {
         Missing = -1,
 
-        Int,
-        Pow
+        Magic
     }
 }

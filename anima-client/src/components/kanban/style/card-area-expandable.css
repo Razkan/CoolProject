@@ -1,0 +1,35 @@
+.card-area-expandable {    
+}
+
+.card-area-expandable-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    padding: 5px;
+    
+    background-color: #f5f5f5;
+    
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+    border-radius: 5px;
+}
+
+.card-area-expandable-button:hover {
+    cursor: pointer;
+}
+
+.card-area-expandable-items {
+    margin-top: 10px;
+}
+
+.card-area-expandable-items > div.card-area {
+    padding: 5px;
+}
+
+.card-area-expandable-items > div {
+    margin-bottom: 5px;
+}
+
+.card-area-expandable-items > div:last-child {
+    margin-bottom: 0px;
+}

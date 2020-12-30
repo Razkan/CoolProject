@@ -25,7 +25,7 @@ namespace BackendAPI.Model
                         Effect = "Creates light in a radius of 15 feet",
                         AddedEffect = "15 feet radius",
                         MaximumZeon = "x20",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (2)",
                         MaintenanceDuration = MaintenanceDuration.Daily,
                         Type = SpellType.Effect,
@@ -56,7 +56,7 @@ namespace BackendAPI.Model
                                  "Everything within the area is perceived as though on a dark and moonless night.",
                         AddedEffect = "15 feet radius,",
                         MaximumZeon = "x20",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (2)",
                         MaintenanceDuration = MaintenanceDuration.Daily,
                         Type = SpellType.Effect,
@@ -86,7 +86,7 @@ namespace BackendAPI.Model
                         Effect = "Creates a simple object with a Presence of no more than 25",
                         AddedEffect = "Creates one additional object",
                         MaximumZeon = "x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (3)",
                         MaintenanceDuration = MaintenanceDuration.Turn,
                         Type = SpellType.Effect,
@@ -120,7 +120,7 @@ namespace BackendAPI.Model
                         AddedEffect = "+5 to the maximum Presence that can be affected and –1 " +
                                       "to Fortitude",
                         MaximumZeon = "x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (3)",
                         MaintenanceDuration = MaintenanceDuration.Turn,
                         Type = SpellType.Effect,
@@ -152,7 +152,7 @@ namespace BackendAPI.Model
                                  "Maximum wind draft width is 80 feet.",
                         AddedEffect = "+5 miles per hour and +15 feet wide.",
                         MaximumZeon = "x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (3)",
                         MaintenanceDuration = MaintenanceDuration.Daily,
                         Type = SpellType.Effect,
@@ -185,7 +185,7 @@ namespace BackendAPI.Model
                                  "can not overcome energy barriers",
                         AddedEffect = "+100 feet to radius.",
                         MaximumZeon = "x20",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (3)",
                         MaintenanceDuration = MaintenanceDuration.Daily,
                         Type = SpellType.Effect,
@@ -217,7 +217,7 @@ namespace BackendAPI.Model
                                  "continue burn naturally even after the spell has ended.",
                         AddedEffect = "+1 fire intensity.",
                         MaximumZeon = "x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (3)",
                         MaintenanceDuration = MaintenanceDuration.Daily,
                         Type = SpellType.Effect,
@@ -249,7 +249,7 @@ namespace BackendAPI.Model
                                  "source. Energy based barriers can not be overcome",
                         AddedEffect = "+5 meters to radius.",
                         MaximumZeon = "x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "No",
                         MaintenanceDuration = MaintenanceDuration.Daily,
                         Type = SpellType.Automatic,
@@ -283,7 +283,7 @@ namespace BackendAPI.Model
                                  "total 60 Presence",
                         AddedEffect = "+10 to the maximum Presence affected.",
                         MaximumZeon = "x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (3)",
                         MaintenanceDuration = MaintenanceDuration.Daily,
                         Type = SpellType.Effect,
@@ -316,14 +316,15 @@ namespace BackendAPI.Model
                                 spellcaster may choose which specific characters hear the illusion.",
                         AddedEffect = "+30 feet to radius and +5 to MR Difficulty.",
                         MaximumZeon = "x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 50 (1)",
                         MaintenanceDuration = MaintenanceDuration.Turn,
                         Type = SpellType.Automatic,
                         Resistances = new[]
                         {
-                            new MagicResistance
+                            new Resistance
                             {
+                                Type = ResistanceType.Magic,
                                 Value = 100
                             }
                         },
@@ -345,14 +346,15 @@ namespace BackendAPI.Model
                                 Added Effect: +30 feet to radius and +5 to MR Difficulty.",
                         AddedEffect = "+30 feet to radius and +5 to MR Difficulty.",
                         MaximumZeon = "x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 50 (1)",
                         MaintenanceDuration = MaintenanceDuration.Turn,
                         Type = SpellType.Automatic,
                         Resistances = new[]
                         {
-                            new MagicResistance
+                            new Resistance
                             {
+                                Type = ResistanceType.Magic,
                                 Value = 100
                             }
                         },
@@ -374,14 +376,15 @@ namespace BackendAPI.Model
                                 choose who notices the illusion and who does not.",
                         AddedEffect = "+30 feet to radius and +5 to MR Difficulty.",
                         MaximumZeon = "x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 50 (1)",
                         MaintenanceDuration = MaintenanceDuration.Turn,
                         Type = SpellType.Automatic,
                         Resistances = new[]
                         {
-                            new MagicResistance
+                            new Resistance
                             {
+                                Type = ResistanceType.Magic,
                                 Value = 100
                             }
                         },
@@ -403,14 +406,15 @@ namespace BackendAPI.Model
                                     100. It is up to the caster to decide who will see the image and who will not.",
                         AddedEffect = "+5 square feet to radius and +5 to MR Difficulty.",
                         MaximumZeon = "Intelligence x10",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 50 (1)",
                         MaintenanceDuration = MaintenanceDuration.Turn,
                         Type = SpellType.Automatic,
                         Resistances = new[]
                         {
-                            new MagicResistance
+                            new Resistance
                             {
+                                Type = ResistanceType.Magic,
                                 Value = 100
                             }
                         },
@@ -430,7 +434,7 @@ namespace BackendAPI.Model
                                     with a Zeonic Value of 80 or less in a 150-foot radius.",
                         AddedEffect = "+30 feet to radius and +10 to Zeonic Value.",
                         MaximumZeon = "x20",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (6)",
                         MaintenanceDuration = MaintenanceDuration.Turn,
                         Type = SpellType.Detection,
@@ -462,14 +466,15 @@ namespace BackendAPI.Model
                                  "with a Difficulty of 120.",
                         AddedEffect = "+80 feet to radius and +5 to MR Difficulty.",
                         MaximumZeon = "x20",
-                        ZeonAttribute = CharacterAttribute.Intelligence,
+                        ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 10 (3)",
                         MaintenanceDuration = MaintenanceDuration.Turn,
                         Type = SpellType.Detection,
-                        Resistances = new []
+                        Resistances = new[]
                         {
-                            new MagicResistance
+                            new Resistance
                             {
+                                Type = ResistanceType.Magic,
                                 Value = 120
                             }
                         },
