@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Interfaces.Model;
 using Library.Model;
 
-namespace Library
+namespace Library.Service
 {
     public class Storage : IStorage
     {

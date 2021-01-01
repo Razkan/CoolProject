@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text.Json;
 using Interfaces.Model;
-using Library.Converter;
+using Library.Communication.Converter;
 
-namespace Library
+namespace Library.Communication
 {
     public class RPCResponse : IRPCResponse
     {
@@ -19,7 +19,7 @@ namespace Library
             
             foreach (var stream in Streams)
             {
-                var response = await JsonSerializer.DeserializeAsync<ITrackedResult<T>>(stream, options);
+                var response = await JsonSerializer.DeserializeAsync<ITrackedObject<T>>(stream, options);
                 yield return response.__Object__;
             }
         }

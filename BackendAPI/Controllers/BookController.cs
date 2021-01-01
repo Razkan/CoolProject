@@ -1,7 +1,8 @@
-﻿using BackendAPI.Model;
+﻿using System.Threading.Tasks;
 using Interfaces.Model;
 using Interfaces.Model.Book;
 using Library.Model;
+using Library.Model.Book;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendAPI.Controllers
@@ -10,104 +11,83 @@ namespace BackendAPI.Controllers
     [Route("book")]
     public class BookController : ControllerBase
     {
-        [HttpGet("light")]
-        public ITrackedResult<ISpellBook> Light()
+        private readonly IRepository _repository;
+
+        public BookController(IRepository repository)
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfLight()
-            };
+            _repository = repository;
+        }
+
+        [HttpGet("light")]
+        public async Task<ITrackedObject<ISpellBook>> Light()
+        {
+            return await GetBook(Identification.BookOfLight);
         }
 
         [HttpGet("darkness")]
-        public ITrackedResult<ISpellBook> Darkness()
+        public async Task<ITrackedObject<ISpellBook>> Darkness()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfDarkness()
-            };
+            return await GetBook(Identification.BookOfDarkness);
         }
 
         [HttpGet("creation")]
-        public ITrackedResult<ISpellBook> Creation()
+        public async Task<ITrackedObject<ISpellBook>> Creation()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfCreation()
-            };
+            return await GetBook(Identification.BookOfCreation);
         }
 
         [HttpGet("destruction")]
-        public ITrackedResult<ISpellBook> Destruction()
+        public async Task<ITrackedObject<ISpellBook>> Destruction()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfDestruction()
-            };
+            return await GetBook(Identification.BookOfDestruction);
         }
 
         [HttpGet("fire")]
-        public ITrackedResult<ISpellBook> Fire()
+        public async Task<ITrackedObject<ISpellBook>> Fire()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfFire()
-            };
+            return await GetBook(Identification.BookOfFire);
         }
 
         [HttpGet("water")]
-        public ITrackedResult<ISpellBook> Water()
+        public async Task<ITrackedObject<ISpellBook>> Water()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfWater()
-            };
+            return await GetBook(Identification.BookOfWater);
         }
 
         [HttpGet("earth")]
-        public ITrackedResult<ISpellBook> Earth()
+        public async Task<ITrackedObject<ISpellBook>> Earth()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfEarth()
-            };
+            return await GetBook(Identification.BookOfEarth);
         }
 
         [HttpGet("air")]
-        public ITrackedResult<ISpellBook> Air()
+        public async Task<ITrackedObject<ISpellBook>> Air()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfAir()
-            };
+            return await GetBook(Identification.BookOfAir);
         }
 
-
         [HttpGet("essence")]
-        public ITrackedResult<ISpellBook> Essence()
+        public async Task<ITrackedObject<ISpellBook>> Essence()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfEssence()
-            };
+            return await GetBook(Identification.BookOfEssence);
         }
 
         [HttpGet("illusion")]
-        public ITrackedResult<ISpellBook> Illusion()
+        public async Task<ITrackedObject<ISpellBook>> Illusion()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfIllusion()
-            };
+            return await GetBook(Identification.BookOfIllusion);
         }
 
         [HttpGet("necromancy")]
-        public ITrackedResult<ISpellBook> Necromancy()
+        public async Task<ITrackedObject<ISpellBook>> Necromancy()
         {
-            return new TrackedResult<ISpellBook>
-            {
-                __Object__ = SpellBooks.GetBookOfNecromancy()
-            };
+            return await GetBook(Identification.BookOfNecromancy);
+        }
+
+        private async Task<ITrackedObject<ISpellBook>> GetBook(string id)
+        {
+            var spellBook = await _repository.GetAsync<ISpellBook>(id);
+            return new TrackedObject<ISpellBook>(spellBook);
         }
     }
 }

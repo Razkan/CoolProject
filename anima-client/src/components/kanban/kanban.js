@@ -40,6 +40,7 @@ class Kanban extends React.Component {
     }
 
     async fetchData(url, onSuccess, onFailure) {
+        console.time("fetch");
         try {
             var response = await fetch(url);
             var body = await response.json();
@@ -48,6 +49,7 @@ class Kanban extends React.Component {
         catch (err) {
             onFailure(err, url, onSuccess, onFailure);
         }
+        console.timeEnd("fetch");
     }
 
     retryFetch(error, url, onSuccess, onFailure) {

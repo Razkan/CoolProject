@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Library.Converter
+namespace Library.Communication.Converter
 {
     public class InterfaceConverter : JsonConverterFactory
     {

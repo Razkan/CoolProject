@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Library
+namespace Interfaces.Model
 {
     public interface IRemoteProcedureCall
     {

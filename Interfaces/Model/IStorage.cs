@@ -1,7 +1,6 @@
 ﻿using System;
-using Interfaces.Model;
 
-namespace Library
+namespace Interfaces.Model
 {
     public interface IStorage
     {

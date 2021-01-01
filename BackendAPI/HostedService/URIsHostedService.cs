@@ -2,19 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Interfaces.Model;
 using Interfaces.Model.Book;
-using Library;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace BackendAPI
+namespace BackendAPI.HostedService
 {
-    public class URIs : IHostedService
+    public class URIsHostedService : IHostedService
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public URIs( 
+        public URIsHostedService(
             IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;

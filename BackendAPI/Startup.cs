@@ -1,5 +1,11 @@
-using Library;
-using Library.Converter;
+using BackendAPI.HostedService;
+using Interfaces.Model;
+using Interfaces.Model.Db;
+using Library.Communication.Converter;
+using Library.Service;
+using Library.Service.Repository;
+using Library.Service.Repository.Db.Databases;
+using Library.Service.Repository.Db.Setting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-
 
 namespace BackendAPI
 {
@@ -23,9 +28,14 @@ namespace BackendAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var databaseSetting = new DatabaseSetting();
+            Configuration.GetSection("DatabaseSettings").Bind(databaseSetting);
+            services.AddSingleton<IDatabaseSettings>(databaseSetting);
+            services.AddSingleton<IDatabase, SQLiteDatabase>();
 
             services.AddHttpClient("client");
             services.AddScoped<IRemoteProcedureCall, RemoteProcedureCall>();
+            services.AddSingleton<IRepository, Repository>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
@@ -40,7 +50,8 @@ namespace BackendAPI
 
             services.AddControllers();
 
-            services.AddHostedService<URIs>();
+            services.AddHostedService<URIsHostedService>();
+            services.AddHostedService<DatabaseHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,7 +4,7 @@ using Library.Model.Book;
 using Library.Model.Book.Spell;
 using Library.Model.Book.Spell.Resistance;
 
-namespace BackendAPI.Model
+namespace Library.Service
 {
     public class SpellBooks
     {
@@ -441,6 +441,314 @@ namespace BackendAPI.Model
                         Tags = new[]
                         {
                             Tag.Self
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Sweet Talk",
+                        Action = SpellAction.Active,
+                        Level = 20,
+                        Cost = 50,
+                        Effect = "This spell enhances the targeted individual’s charisma and personal " +
+                                 "charm. The character receives a +50 bonus the Leadership and Persuasion " +
+                                 "Secondary Abilities.",
+                        AddedEffect = "+10 to Leadership and Persuasion.",
+                        MaximumZeon = "x10",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 10 (5)",
+                        MaintenanceDuration = MaintenanceDuration.Turn,
+                        Type = SpellType.Effect,
+                        Resistances = new Resistance[]
+                        {
+                        },
+                        Tags = new[]
+                        {
+                            Tag.PlayerDecide
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Alter Appearance",
+                        Action = SpellAction.Active,
+                        Level = 22,
+                        Cost = 60,
+                        Effect = "The spellcaster can change the appearance of an individual or object " +
+                                 "into that of another of his choosing. This spell will only increase or decrease " +
+                                 "the targeted individual’s Size and Appearance by two degrees. All subjects in " +
+                                 "contact with the image can see through the illusion if they pass a MR Check " +
+                                 "with a Difficulty of 120.Once a viewer is affected by an illusion, he only " +
+                                 "receives a new Resistance Check when he has reason to doubt the identity or " +
+                                 "appearance of the subject.",
+                        AddedEffect = "+10 to MR Difficulty.",
+                        MaximumZeon = "x10",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 10 (6)",
+                        MaintenanceDuration = MaintenanceDuration.Daily,
+                        Type = SpellType.Automatic,
+                        Resistances = new[]
+                        {
+                            new Resistance
+                            {
+                                Type = ResistanceType.Magic,
+                                Value = 120
+                            }
+                        },
+                        Tags = new[]
+                        {
+                            Tag.PlayerDecide
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Illusory Invisibility",
+                        Action = SpellAction.Active,
+                        Level = 26,
+                        Cost = 60,
+                        Effect = "This spell allows the caster to make any being or object vanish from " +
+                                 "sight. He can affect any number of people, as long as the sum of their Presence " +
+                                 "does not exceed 140. Only individuals who pass a MR Check with a Difficulty " +
+                                 "of 120 can detect the presence of the invisible character through their sense " +
+                                 "of vision.",
+                        AddedEffect = "+5 to MR and +10 to the maximum Presence affected.",
+                        MaximumZeon = "x10",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 20 (3)",
+                        MaintenanceDuration = MaintenanceDuration.Turn,
+                        Type = SpellType.Automatic,
+                        Resistances = new[]
+                        {
+                            new Resistance
+                            {
+                                Type = ResistanceType.Magic,
+                                Value = 120
+                            }
+                        },
+                        Tags = new[]
+                        {
+                            Tag.Area,
+                            Tag.PlayerDecide
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Mirror Image",
+                        Action = SpellAction.Active,
+                        Level = 30,
+                        Cost = 80,
+                        Effect = "This spell creates eight illusory copies of any given target. The caster " +
+                                 "can not place these mirror images more than 15 feet apart from one another. " +
+                                 "Acting as mirrors, they perform the same actions as the targeted individual. " +
+                                 "Any images hit by an Energy damaging attack are immediately destroyed. " +
+                                 "Seeing through this illusion requires a MR Check with a Difficulty of 120.",
+                        AddedEffect = "+5 to MR and +2 images.",
+                        MaximumZeon = "x10",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 10 (8)",
+                        MaintenanceDuration = MaintenanceDuration.Turn,
+                        Type = SpellType.Automatic,
+                        Resistances = new[]
+                        {
+                            new Resistance
+                            {
+                                Type = ResistanceType.Magic,
+                                Value = 120
+                            }
+                        },
+                        Tags = new[]
+                        {
+                            Tag.PlayerDecide
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Total Illusion",
+                        Action = SpellAction.Active,
+                        Level = 32,
+                        Cost = 80,
+                        Effect = "This spell creates a complete illusion that deceives all five of a victim’s " +
+                                 "senses. The caster can create any inanimate object with a volume not exceeding " +
+                                 "5 square feet. The illusion can be destroyed by Energy damaging attacks. This " +
+                                 "spell affects anyone able to see, hear, smell, or feel the illusion who fails a MR " +
+                                 "Check with a Difficulty of 120.",
+                        AddedEffect = "+5 square feet to volume and +5 to MR.",
+                        MaximumZeon = "x20",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 50 (2)",
+                        MaintenanceDuration = MaintenanceDuration.Turn,
+                        Type = SpellType.Detection,
+                        Resistances = new[]
+                        {
+                            new Resistance
+                            {
+                                Type = ResistanceType.Magic,
+                                Value = 120
+                            }
+                        },
+                        Tags = new[]
+                        {
+                            Tag.PlayerDecide,
+                            Tag.Area
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Confusion",
+                        Action = SpellAction.Active,
+                        Level = 36,
+                        Cost = 50,
+                        Effect = "This spell confounds all five senses of a single target. The " +
+                                 "target must pass a MR Check with a Difficulty of 120 to resist " +
+                                 "the spell. If he fails, he suffers a penalty equal to his Failure " +
+                                 "Level to all of his perception-based Secondary Abilities. " +
+                                 "Furthermore, if he fails by more than 40, the target also " +
+                                 "suffers a –20 All Action Penalty due to dizziness. An " +
+                                 "affected cannot make a new Check unless he increases " +
+                                 "his Resistances.",
+                        AddedEffect = "+5 to MR Difficulty.",
+                        MaximumZeon = "x10",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 20 (3)",
+                        MaintenanceDuration = MaintenanceDuration.Turn,
+                        Type = SpellType.Spiritual,
+                        Resistances = new[]
+                        {
+                            new Resistance
+                            {
+                                Type = ResistanceType.Magic,
+                                Value = 120
+                            }
+                        },
+                        Tags = new[]
+                        {
+                            Tag.PlayerDecide
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Create Illusory Being",
+                        Action = SpellAction.Active,
+                        Level = 40,
+                        Cost = 60,
+                        Effect = "This spell creates a first-level illusory being. " +
+                                 "The entity is fashioned according to the caster’s desires, " +
+                                 "using the rules set forth in Chapter 26 for Beings Between " +
+                                 "Worlds.However, the illusory being’s nature automatically " +
+                                 "grants it the Physical Exemption ability. " +
+                                 "Because the creature is not real, it can not inflict damage or affect " +
+                                 "physical reality whatsoever.All non - Energy based attacks pass right " +
+                                 "through it without damaging it in any way.This spell must be cast " +
+                                 "upon a specific area not exceeding a radius of 60 feet.Those characters " +
+                                 "entering the spell’s area of effect must pass a MR Check with a Difficulty of " +
+                                 "120 to avoid it.Even though the spell is circumscribed to a specific zone, the " +
+                                 "illusory creature can leave that area while chasing after a subject affected " +
+                                 "by the spell.However, it remains unseen by anyone not previously inside the spell’s " +
+                                 "area.Keep in mind that those subjects who pass the MR Check do not exist to the " +
+                                 "illusory creature, and it will ignore them.Illusions may have a maximum of two " +
+                                 "levels more than the caster.",
+                        AddedEffect = "+5 to MR, +1 to the created being’s level and +5 feet to radius.",
+                        MaximumZeon = "x10",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 20 (3)",
+                        MaintenanceDuration = MaintenanceDuration.Daily,
+                        Type = SpellType.Automatic,
+                        Resistances = new[]
+                        {
+                            new Resistance
+                            {
+                                Type = ResistanceType.Magic,
+                                Value = 120
+                            }
+                        },
+                        Tags = new[]
+                        {
+                            Tag.Area
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Resistance to Illusions",
+                        Action = SpellAction.Active,
+                        Level = 42,
+                        Cost = 80,
+                        Effect = "This spell increases a subject’s MR against illusory effects. It grants a +30 " +
+                                 "bonus to every MR Check made against an illusion spell. The effects of this spell " +
+                                 "do not overlap, and subjects may be affected by it only once.",
+                        AddedEffect = "+10 to MR against illusions.",
+                        MaximumZeon = "x10",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 10 (8)",
+                        MaintenanceDuration = MaintenanceDuration.Daily,
+                        Type = SpellType.Effect,
+                        Tags = new[]
+                        {
+                            Tag.PlayerDecide
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Detect Lie",
+                        Action = SpellAction.Active,
+                        Level = 46,
+                        Cost = 80,
+                        Effect = "This spell automatically detects any lie told in the caster’s presence. " +
+                                 "Every time a lie is deliberately told before him, the liar must make a MR or " +
+                                 "PsR Check with a Difficulty of 120 to prevent the caster from finding out. Lies " +
+                                 "unknowingly told are not detected by the spell.",
+                        AddedEffect = "+5 to MR or PsR Difficulty.",
+                        MaximumZeon = "x10",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 10 (8)",
+                        MaintenanceDuration = MaintenanceDuration.Daily,
+                        Type = SpellType.Automatic,
+                        Resistances = new[]
+                        {
+                            new Resistance
+                            {
+                                Type = ResistanceType.Magic,
+                                Value = 120
+                            },
+                            new Resistance
+                            {
+                                Type = ResistanceType.Psychic,
+                                Value = 120
+                            },
+                        },
+                        Tags = new[]
+                        {
+                            Tag.Self
+                        }
+                    },
+                    new Spell
+                    {
+                        Name = "Ghostly Illusion",
+                        Action = SpellAction.Active,
+                        Level = 50,
+                        Cost = 120,
+                        Effect = "This spell creates one or several objects governed by the Ghostly " +
+                                 "Spell rules. Any inanimate object the caster desires can be produced, " +
+                                 "from a sword to a wall, provided that its theoretical Presence does not " +
+                                 "exceed 60. A character or creature can avoid the spell and ignore the " +
+                                 "illusion if he or it passes a MR Check with a Difficulty of 120. " +
+                                 "Anyone can make another Check if he has reason to doubt the " +
+                                 "reality of the object.",
+                        AddedEffect = "+5 to the maximum Presence of the object " +
+                                      "and +5 to the MR Difficulty.",
+                        MaximumZeon = "x20",
+                        ZeonAttribute = CharacterAttribute.Int,
+                        Maintenance = "1 every 20 (6)",
+                        MaintenanceDuration = MaintenanceDuration.Turn,
+                        Type = SpellType.Automatic,
+                        Resistances = new[]
+                        {
+                            new Resistance
+                            {
+                                Type = ResistanceType.Magic,
+                                Value = 120
+                            }
+                        },
+                        Tags = new[]
+                        {
+                            Tag.Area
                         }
                     },
                 }

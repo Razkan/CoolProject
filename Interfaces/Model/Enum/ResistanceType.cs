@@ -4,6 +4,7 @@
     {
         Missing = -1,
 
-        Magic
+        Magic,
+        Psychic
     }
 }

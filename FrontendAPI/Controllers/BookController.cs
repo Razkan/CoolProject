@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interfaces.Model.Book;
 using System.Linq;
 using Interfaces.Model;
 using Interfaces.Model.Book.Spell;
-using Interfaces.Model.Enum;
-using Library;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FrontendAPI.Controllers

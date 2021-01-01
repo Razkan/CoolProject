@@ -1,12 +1,11 @@
 ﻿using Interfaces.Model;
-using Library;
 using Library.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Tracker.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("tracker")]
     public class TrackerController : ControllerBase
     {
         private readonly IStorage _storage;
@@ -16,13 +15,13 @@ namespace Tracker.Controllers
             _storage = storage;
         }
 
-        [HttpPost("store")]
+        [HttpPost("post")]
         public void Post([FromBody] Store data)
         {
             _storage.Store(data.TInterface, data.Uri);
         }
 
-        [HttpGet("info")]
+        [HttpGet("get")]
         public IFetch Get([FromBody] TrackerInfo trackerInfo)
         {
             return _storage.Get(trackerInfo.Type);

@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using Interfaces.Model.Db;
+using Interfaces.Model.Db.Attribute;
 using Interfaces.Model.Enum;
 
 namespace Interfaces.Model.Book.Spell
 {
-    public interface ISpell
+    [TableInterface]
+    public interface ISpell : IDatabaseEntity
     {
         string Name { get; }
         SpellAction Action { get; }
@@ -11,15 +14,11 @@ namespace Interfaces.Model.Book.Spell
         long Cost { get; }
         string Effect { get; }
         string AddedEffect { get; }
-
         string MaximumZeon { get; }
         CharacterAttribute ZeonAttribute { get; }
-        
         string Maintenance { get; }
         MaintenanceDuration MaintenanceDuration { get; }
-        
         SpellType Type { get; }
-        
         IEnumerable<IResistance> Resistances { get; }
         IEnumerable<Tag> Tags { get; }
     }

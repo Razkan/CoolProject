@@ -2,14 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Library.Converter
+namespace Library.Communication.Converter
 {
     public class InterfaceConverterImpl<T> : JsonConverter<T>
     {
-        private static Type IsEnumerable { get; } = typeof(IEnumerable);
+        private Type IsEnumerable { get; } = typeof(IEnumerable);
 
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -28,8 +29,10 @@ namespace Library.Converter
                 object instance;
                 if (instanceType.IsArray)
                 {
+                    if (propertyTypeGenericTypeArguments.Length > 1)
+                        throw new Exception("Only handling of one generic array type allowed");
+
                     var listType = typeof(List<>);
-                    //var constructedListType = listType.MakeGenericType(instanceType.GetElementType());
                     var constructedListType = listType.MakeGenericType(propertyTypeGenericTypeArguments);
                     instance = Activator.CreateInstance(constructedListType);
                 }
@@ -53,7 +56,8 @@ namespace Library.Converter
 
                         case List<object> list:
                         {
-                            Build(list, (IList) instance, instanceType.GetElementType());
+                            var typeArgument = propertyTypeGenericTypeArguments[0];
+                            Build(list, (IList) instance, typeArgument);
                         }
                             break;
 
@@ -65,7 +69,10 @@ namespace Library.Converter
 
                         default:
                         {
-                            pi?.SetValue(instance, value);
+                            if (IsAutoProperty(pi))
+                            {
+                                pi?.SetValue(instance, value);
+                            }
                         }
                             break;
                     }
@@ -191,7 +198,7 @@ namespace Library.Converter
             if (IsEnumerable.IsAssignableFrom(type))
             {
                 writer.WriteStartObject();
-                WriteArray(writer, value, type, options);
+                WriteArray(writer, value, options);
                 writer.WriteEndObject();
             }
             else
@@ -209,7 +216,7 @@ namespace Library.Converter
                 return;
 
             writer.WriteString("__Type__", type.AssemblyQualifiedName);
-            
+
             foreach (var property in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance |
                                                         BindingFlags.Public))
             {
@@ -219,7 +226,7 @@ namespace Library.Converter
                     if (IsEnumerable.IsAssignableFrom(property.PropertyType))
                     {
                         writer.WriteStartObject();
-                        WriteArray(writer, property.GetValue(value), null, options);
+                        WriteArray(writer, property.GetValue(value), options);
                         writer.WriteEndObject();
                     }
                     else
@@ -236,12 +243,12 @@ namespace Library.Converter
             }
         }
 
-        private void WriteArray(Utf8JsonWriter writer, object value, Type type, JsonSerializerOptions options)
+        private void WriteArray(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
         {
             if (value == null)
                 return;
 
-            type = value.GetType();
+            var type = value.GetType();
             writer.WriteString("__Type__", type.AssemblyQualifiedName);
             writer.WriteStartArray("__Array__");
 
@@ -290,6 +297,15 @@ namespace Library.Converter
             }
 
             writer.WriteEndArray();
+        }
+
+        public static bool IsAutoProperty(PropertyInfo property)
+        {
+            var backingFieldName = $"<{property?.Name}>k__BackingField";
+            var backingField =
+                property?.DeclaringType?.GetField(backingFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+
+            return backingField != null && backingField.GetCustomAttribute(typeof(CompilerGeneratedAttribute)) != null;
         }
     }
 }

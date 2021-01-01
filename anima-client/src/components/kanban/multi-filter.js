@@ -35,6 +35,10 @@ class MultiFilter extends React.Component {
             control: (provided, state) => ({
                 ...provided,
                 flexWrap: "nowrap"
+            }),
+            valueContainer: (provided, state) => ({
+                ...provided,
+                flexWrap: "nowrap"
             })
         };
 

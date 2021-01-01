@@ -6,9 +6,11 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Interfaces.Model;
+using Library.Communication;
 using Library.Model;
 
-namespace Library
+namespace Library.Service
 {
     public class RemoteProcedureCall : IRemoteProcedureCall
     {
@@ -40,7 +42,7 @@ namespace Library
                 var content = new StringContent(json, Encoding.UTF8, ApplicationJsonMediaType);
 
                 var client = GetClient();
-                await client.PostAsync("http://localhost:5000/tracker/store", content);
+                await client.PostAsync("http://localhost:5000/tracker/post", content);
             }
 
             static ISet<string> GetInterfaces(Type type, ISet<string> set)
@@ -73,7 +75,7 @@ namespace Library
 
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri("http://localhost:5000/tracker/info"),
+                RequestUri = new Uri("http://localhost:5000/tracker/get"),
                 Content = content,
                 Method = HttpMethod.Get
             };
