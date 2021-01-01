@@ -13,6 +13,7 @@ using Interfaces.Model.Db;
 using Interfaces.Model.Db.Attribute;
 using Library.Model.DbEntity;
 using Library.Service.Repository.Db.Setting;
+using Serilog;
 
 namespace Library.Service.Repository.Db.Databases
 {
@@ -97,7 +98,7 @@ namespace Library.Service.Repository.Db.Databases
                     catch (Exception e)
 #pragma warning restore 168
                     {
-                        // TODO log errors
+                        Log.Error(e, e.Message);
                     }
                 }
             }
@@ -126,7 +127,7 @@ namespace Library.Service.Repository.Db.Databases
                     catch (Exception e)
 #pragma warning restore 168
                     {
-                        // TODO log errors
+                        Log.Error(e, e.Message);
                     }
                 }
             }
@@ -338,47 +339,39 @@ namespace Library.Service.Repository.Db.Databases
 
         private async Task<T> ExecuteReaderAsync<T>(DbCommand cmd, Func<DbDataReader, T> func)
         {
-            using (var conn = new SQLiteConnection(_settings.Args))
-            {
-                await conn.OpenAsync();
-                cmd.Connection = conn;
+            await using var conn = new SQLiteConnection(_settings.Args);
+            await conn.OpenAsync();
+            cmd.Connection = conn;
 
-                try
-                {
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        return func(reader);
-                    }
-                }
+            try
+            {
+                await using var reader = await cmd.ExecuteReaderAsync();
+                return func(reader);
+            }
 #pragma warning disable 168
-                catch (Exception e)
+            catch (Exception e)
 #pragma warning restore 168
-                {
-                    // TODO log errors
-                    // Log errors
-                    return default;
-                }
+            {
+                Log.Error(e, e.Message);
+                return default;
             }
         }
 
         private async Task ExecuteNonQueryAsync(DbCommand cmd)
         {
-            using (var conn = new SQLiteConnection(_settings.Args))
-            {
-                await conn.OpenAsync();
-                cmd.Connection = conn;
+            await using var conn = new SQLiteConnection(_settings.Args);
+            await conn.OpenAsync();
+            cmd.Connection = conn;
 
-                try
-                {
-                    await cmd.ExecuteNonQueryAsync();
-                }
+            try
+            {
+                await cmd.ExecuteNonQueryAsync();
+            }
 #pragma warning disable 168
-                catch (Exception e)
+            catch (Exception e)
 #pragma warning restore 168
-                {
-                    // TODO log errors
-                    // Log errors
-                }
+            {
+                Log.Error(e, e.Message);
             }
         }
 

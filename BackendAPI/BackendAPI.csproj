@@ -5,11 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Library\Library.csproj" />
+    <Compile Remove="Model\**" />
+    <Content Remove="Model\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <None Remove="Model\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
+    <ProjectReference Include="..\Library\Library.csproj" />
   </ItemGroup>
 
 

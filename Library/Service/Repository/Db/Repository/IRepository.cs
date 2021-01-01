@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 
 namespace Library.Service.Repository.Db.Repository
 {
-    // TODO change sealed database class to repositories, can add specific queries within each
     public interface IRepository<T>
     {
         Task<T> SelectAsync(string id);

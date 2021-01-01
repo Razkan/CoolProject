@@ -41,9 +41,9 @@ namespace FrontendAPI.Controllers
                 .SelectAwait(spellBook => _spellBookFilter.ByTag(tags, spellBook))
                 .SelectAwait(spellBook => _spellBookFilter.BySpecial(specials, spellBook))
                 .WhereAwait(spellBook => new ValueTask<bool>(spellBook.Spells != null && spellBook.Spells.Any()));
-            
-            //filteredResult = filteredResult.OrderBy(spellBook => spellBook.Name);
-            
+
+            filteredResult = filteredResult.OrderBy(spellBook => spellBook.Name);
+
             await foreach (var filterResult in filteredResult)
             {
                 yield return OrderBy(filterResult);
