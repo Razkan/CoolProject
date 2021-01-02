@@ -6,9 +6,9 @@ namespace Library.Service.Repository.Db.Repository
 {
     public class Repository<T> : IRepository<T>
     {
-        protected IDatabase Context { get; }
+        protected IDatabaseContext Context { get; }
 
-        protected Repository(IDatabase context)
+        protected Repository(IDatabaseContext context)
         {
             Context = context;
         }

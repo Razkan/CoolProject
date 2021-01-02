@@ -8,11 +8,11 @@ namespace Library.Service.Repository
 {
     public class Repository : IRepository
     {
-        private readonly IDatabase _database;
+        private readonly IDatabaseContext _databaseContext;
 
-        public Repository(IDatabase database)
+        public Repository(IDatabaseContext databaseContext)
         {
-            _database = database;
+            _databaseContext = databaseContext;
         }
 
         public async Task<T> GetAsync<T>(string id)
@@ -28,7 +28,7 @@ namespace Library.Service.Repository
 
         private IRepository<T> GetRepository<T>()
         {
-            var repository = new GenericRepository<T>(_database);
+            var repository = new GenericRepository<T>(_databaseContext);
             return repository;
         }
     }

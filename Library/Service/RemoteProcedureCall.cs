@@ -90,11 +90,11 @@ namespace Library.Service
             var fetch = JsonSerializer.Deserialize<Fetch>(await httpResponse.Content.ReadAsStringAsync());
             if (fetch.URIs == null || !fetch.URIs.Any()) return RPCResponse.Empty;
 
-            var tasks = new List<Task<Stream>>();
+            var streamTasks = new List<Task<Stream>>();
 
             foreach (var uri in fetch.URIs)
             {
-                var task = Task.Run(async () =>
+                var streamTask = Task.Run(async () =>
                 {
                     var response = await client.GetAsync(uri);
                     if (response.IsSuccessStatusCode)
@@ -105,12 +105,12 @@ namespace Library.Service
                     return null;
                 });
 
-                tasks.Add(task);
+                streamTasks.Add(streamTask);
             }
 
             return new RPCResponse
             {
-                Tasks = tasks
+                Tasks = streamTasks
             };
         }
     }

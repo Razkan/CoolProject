@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Library.Model;
 
 namespace Library.Communication.Converter
 {
@@ -15,14 +16,21 @@ namespace Library.Communication.Converter
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var dict = ParseDictionary(ref reader, options);
-            return (T) Build(dict, null);
+            var obj = Build(dict, null);
+
+            var resultType = typeof(T);
+            var trackedResultType = typeof(TrackedResult<>);
+            var constructedTrackedResult = trackedResultType.MakeGenericType(resultType.GetGenericArguments());
+            var result = Activator.CreateInstance(constructedTrackedResult, obj);
+
+            return (T) result;
         }
 
-        public object Build(Dictionary<string, object> something, Type[] propertyTypeGenericTypeArguments)
+        public object Build(Dictionary<string, object> jsonStructure, Type[] propertyTypeGenericTypeArguments)
         {
-            if (something.ContainsKey("__Type__"))
+            if (jsonStructure.ContainsKey("__Type__"))
             {
-                var type = something["__Type__"];
+                var type = jsonStructure["__Type__"];
                 var instanceType = Type.GetType(type.ToString());
                 if (instanceType == null) return null;
 
@@ -41,7 +49,7 @@ namespace Library.Communication.Converter
                     instance = Activator.CreateInstance(instanceType);
                 }
 
-                foreach (var (key, value) in something)
+                foreach (var (key, value) in jsonStructure)
                 {
                     var pi = instanceType.GetProperty(key);
 
@@ -85,9 +93,9 @@ namespace Library.Communication.Converter
             return default;
         }
 
-        private void Build(IEnumerable<object> something, IList instance, Type instanceType)
+        private void Build(IEnumerable<object> list, IList instance, Type instanceType)
         {
-            foreach (var obj in something)
+            foreach (var obj in list)
             {
                 switch (obj)
                 {

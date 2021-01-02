@@ -5,6 +5,7 @@
         Missing = -1,
 
         Magic,
-        Psychic
+        Psychic,
+        Physical
     }
 }

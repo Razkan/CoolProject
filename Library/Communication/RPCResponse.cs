@@ -10,8 +10,10 @@ namespace Library.Communication
 {
     public class RPCResponse : IRPCResponse
     {
+        public static RPCResponse Empty { get; } = new RPCResponse {Tasks = new List<Task<Stream>>()};
+
         private static readonly JsonSerializerOptions _jsonSerializerOptions;
-        
+
         static RPCResponse()
         {
             _jsonSerializerOptions = new JsonSerializerOptions();
@@ -19,19 +21,23 @@ namespace Library.Communication
         }
 
         public List<Task<Stream>> Tasks { get; set; }
-        public static RPCResponse Empty { get; } = new RPCResponse {Tasks = new List<Task<Stream>>()};
 
         public async IAsyncEnumerable<T> GetResult<T>()
         {
-            var results = Tasks.Select(task => task.ContinueWith(async stream =>
-            {
-                var response = await JsonSerializer.DeserializeAsync<ITrackedObject<T>>(await stream, _jsonSerializerOptions);
-                return response.__Object__;
-            }).Unwrap());
+            var enumerableTasks = Tasks.Select(task => task.ContinueWith(
+                async stream =>
+                {
+                    var response =await JsonSerializer.DeserializeAsync<ITrackedResult<T>>(await stream, _jsonSerializerOptions);
+                    return response.Get();
+                }).Unwrap());
 
-            foreach (var result in results)
+            foreach (var enumerableTask in enumerableTasks)
             {
-                yield return await result;
+                var enumerable = await enumerableTask;
+                foreach (var result in enumerable)
+                {
+                    yield return result;
+                }
             }
         }
     }

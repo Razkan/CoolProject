@@ -1,3 +1,5 @@
+using System.Data.Common;
+using System.Data.SQLite;
 using BackendAPI.HostedService;
 using Interfaces.Model;
 using Interfaces.Model.Db;
@@ -31,11 +33,12 @@ namespace BackendAPI
             var databaseSetting = new DatabaseSetting();
             Configuration.GetSection("DatabaseSettings").Bind(databaseSetting);
             services.AddSingleton<IDatabaseSettings>(databaseSetting);
-            services.AddSingleton<IDatabase, SQLiteDatabase>();
+            services.AddScoped<IDatabaseContext, SqLiteDatabase>();
+            services.AddScoped<DbConnection, SQLiteConnection>();
 
             services.AddHttpClient("client");
             services.AddScoped<IRemoteProcedureCall, RemoteProcedureCall>();
-            services.AddSingleton<IRepository, Repository>();
+            services.AddScoped<IRepository, Repository>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)

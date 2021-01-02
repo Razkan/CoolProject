@@ -18,7 +18,7 @@ using Serilog;
 namespace Library.Service.Repository.Db.Databases
 {
     // TODO Update to prepared statements https://github.com/OWASP/CheatSheetSeries/blob/d8edfc0659e986829dec36ee0ee093688f0bf694/cheatsheets/Query_Parameterization_Cheat_Sheet.md
-    public class SQLiteDatabase : IDatabase
+    public class SqLiteDatabase : IDatabaseContext
     {
         private const string INTEGER = nameof(INTEGER);
         private const string TEXT = nameof(TEXT);
@@ -30,29 +30,36 @@ namespace Library.Service.Repository.Db.Databases
         private static readonly Type[] ObjectTypeArr = {typeof(object)};
 
         private static readonly MethodInfo ContainsAsyncMethod =
-            typeof(SQLiteDatabase).GetMethod(nameof(ContainsAsync), StringTypeArr);
+            typeof(SqLiteDatabase).GetMethod(nameof(ContainsAsync), StringTypeArr);
 
         private static readonly MethodInfo SelectAsyncMethod =
-            typeof(SQLiteDatabase).GetMethod(nameof(SelectAsync), StringTypeArr);
+            typeof(SqLiteDatabase).GetMethod(nameof(SelectAsync), StringTypeArr);
 
         private static readonly MethodInfo InsertAsyncMethod =
-            typeof(SQLiteDatabase).GetMethod(nameof(InsertAsync));
+            typeof(SqLiteDatabase).GetMethod(nameof(InsertAsync));
 
         private static readonly MethodInfo UpdateAsyncMethod =
-            typeof(SQLiteDatabase).GetMethod(nameof(UpdateAsync));
+            typeof(SqLiteDatabase).GetMethod(nameof(UpdateAsync));
 
+        private readonly DbConnection _dbConnection;
         private readonly IDatabaseSettings _settings;
 
-        public SQLiteDatabase(IDatabaseSettings settings)
+        public SqLiteDatabase(
+            DbConnection dbConnection,
+            IDatabaseSettings settings)
         {
+            _dbConnection = dbConnection;
             _settings = settings;
+
+            _dbConnection.ConnectionString = _settings.Args;
         }
 
-        public void Run()
+        public async Task RunAsync()
         {
             Setup();
-            CreateInterfaceTables();
-            CreateImplementationTables();
+            await EnsureDbConnection();
+            await CreateInterfaceTables();
+            await CreateImplementationTables();
         }
 
         private void Setup()
@@ -74,7 +81,7 @@ namespace Library.Service.Repository.Db.Databases
             }
         }
 
-        private void CreateInterfaceTables()
+        private async Task CreateInterfaceTables()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             var attributeType = typeof(TableInterfaceAttribute);
@@ -91,8 +98,7 @@ namespace Library.Service.Repository.Db.Databases
                             CommandText = $"CREATE TABLE IF NOT EXISTS {type.Name} (" +
                                           $"{CreateQueryFromProperties(templateType)});"
                         };
-                        var task = ExecuteNonQueryAsync(cmd);
-                        Task.WaitAll(task);
+                        await ExecuteNonQueryAsync(cmd);
                     }
 #pragma warning disable 168
                     catch (Exception e)
@@ -104,7 +110,7 @@ namespace Library.Service.Repository.Db.Databases
             }
         }
 
-        private void CreateImplementationTables()
+        private async Task CreateImplementationTables()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             var attributeType = typeof(TableAttribute);
@@ -120,8 +126,7 @@ namespace Library.Service.Repository.Db.Databases
                             CommandText = $"CREATE TABLE IF NOT EXISTS {type.Name} (" +
                                           $"{CreateQueryFromProperties(type)});"
                         };
-                        var task = ExecuteNonQueryAsync(cmd);
-                        Task.WaitAll(task);
+                        await ExecuteNonQueryAsync(cmd);
                     }
 #pragma warning disable 168
                     catch (Exception e)
@@ -166,6 +171,14 @@ namespace Library.Service.Repository.Db.Databases
             }
         }
 
+        private async Task EnsureDbConnection()
+        {
+            if (_dbConnection.State == ConnectionState.Closed)
+            {
+                await _dbConnection.OpenAsync();
+            }
+        }
+
         private async Task InsertLookupAsync(Type interfaceType, Type entityType, object entity)
         {
             var cmd = new SQLiteCommand
@@ -195,6 +208,8 @@ namespace Library.Service.Repository.Db.Databases
 
         public async Task<T> SelectAsync<T>(string id)
         {
+            await EnsureDbConnection();
+
             var type = await GetTableReference<T>(id);
 
             var cmd = new SQLiteCommand();
@@ -214,6 +229,8 @@ namespace Library.Service.Repository.Db.Databases
 
         public async Task<IEnumerable<T>> SelectAllAsync<T>()
         {
+            await EnsureDbConnection();
+
             var type = typeof(T);
             var cmd = new SQLiteCommand
             {
@@ -235,6 +252,8 @@ namespace Library.Service.Repository.Db.Databases
 
         public async Task<bool> ContainsAsync<T>(string id)
         {
+            await EnsureDbConnection();
+
             var type = typeof(T);
             var cmd = new SQLiteCommand {CommandType = CommandType.Text};
             cmd.CommandText = $"SELECT * FROM {type.Name} " +
@@ -251,6 +270,8 @@ namespace Library.Service.Repository.Db.Databases
 
         public async Task InsertAsync<T>(T entity)
         {
+            await EnsureDbConnection();
+
             var parameterType = typeof(T);
             var entityType = entity.GetType();
             await CreateTableReference(parameterType, entityType, GetPropertyId(entity));
@@ -292,6 +313,8 @@ namespace Library.Service.Repository.Db.Databases
 
         public async Task UpdateAsync<T>(T entity)
         {
+            await EnsureDbConnection();
+
             var type = await GetTableReference<T>(GetPropertyId(entity));
             var cmd = new SQLiteCommand
             {
@@ -307,6 +330,8 @@ namespace Library.Service.Repository.Db.Databases
 
         public async Task DeleteAsync<T>(T entity)
         {
+            await EnsureDbConnection();
+
             var type = await GetTableReference<T>(GetPropertyId(entity));
             var cmd = new SQLiteCommand
             {
@@ -320,6 +345,8 @@ namespace Library.Service.Repository.Db.Databases
 
         public async Task<ulong> CountAsync<T>()
         {
+            await EnsureDbConnection();
+
             var type = typeof(T);
             var cmd = new SQLiteCommand
             {
@@ -339,9 +366,7 @@ namespace Library.Service.Repository.Db.Databases
 
         private async Task<T> ExecuteReaderAsync<T>(DbCommand cmd, Func<DbDataReader, T> func)
         {
-            await using var conn = new SQLiteConnection(_settings.Args);
-            await conn.OpenAsync();
-            cmd.Connection = conn;
+            cmd.Connection = _dbConnection;
 
             try
             {
@@ -359,9 +384,7 @@ namespace Library.Service.Repository.Db.Databases
 
         private async Task ExecuteNonQueryAsync(DbCommand cmd)
         {
-            await using var conn = new SQLiteConnection(_settings.Args);
-            await conn.OpenAsync();
-            cmd.Connection = conn;
+            cmd.Connection = _dbConnection;
 
             try
             {
@@ -585,5 +608,11 @@ namespace Library.Service.Repository.Db.Databases
 
         private static bool IsUnique(PropertyInfo pi) =>
             pi.GetCustomAttribute(typeof(UniqueAttribute)) != null;
+
+        public void Dispose()
+        {
+            _dbConnection.Close();
+            _dbConnection.Dispose();
+        }
     }
 }

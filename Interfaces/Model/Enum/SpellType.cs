@@ -8,6 +8,7 @@
         Effect,
         Spiritual,
         Automatic,
-        Detection
+        Detection,
+        Defense
     }
 }

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Interfaces.Model.Db
 {
-    public interface IDatabase
+    public interface IDatabaseContext : IDisposable
     {
-        void Run();
+        Task RunAsync();
         
         Task<T> SelectAsync<T>(string id);
         

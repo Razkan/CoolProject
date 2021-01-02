@@ -5,6 +5,6 @@
         Self,
         Other,
         Area,
-        PlayerDecide,
+        Target,
     }
 }

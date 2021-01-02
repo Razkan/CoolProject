@@ -23,7 +23,9 @@ namespace Library.Model.Book.Spell
         public CharacterAttribute ZeonAttribute { get; set; }
         public string Maintenance { get; set; }
         public MaintenanceDuration MaintenanceDuration { get; set; }
-        public SpellType Type { get; set; }
+        
+        [DbPrimitiveCollection]
+        public IEnumerable<SpellType> Type { get; set; }
 
         [DbObjectCollection]
         public IEnumerable<IResistance> Resistances { get; set; }

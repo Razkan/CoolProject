@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Interfaces.Model;
 using Interfaces.Model.Book;
-using Library.Model;
+using Library.Communication;
 using Library.Model.Book;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +16,27 @@ namespace BackendAPI.Controllers
         public BookController(IRepository repository)
         {
             _repository = repository;
+        }
+
+        [HttpGet("All")]
+        public async Task<ITrackedArray<ISpellBook>> All()
+        {
+            var arr = new[]
+            {
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfLight),
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfDarkness),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfCreation),
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfDestruction),
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfAir),
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfWater),
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfFire),
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfEarth),
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfEssence),
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfIllusion),
+                //await _repository.GetAsync<ISpellBook>(Identification.BookOfNecromancy)
+            };
+
+            return new TrackedArray<ISpellBook>(arr);
         }
 
         [HttpGet("light")]

@@ -5,6 +5,7 @@
         Missing = -1,
 
         Turn,
-        Daily
+        Daily,
+        None
     }
 }

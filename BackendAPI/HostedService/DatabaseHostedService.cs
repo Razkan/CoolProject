@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Interfaces.Model.Book;
@@ -23,12 +24,11 @@ namespace BackendAPI.HostedService
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             using var scope = _serviceProvider.CreateScope();
-            var database = scope.ServiceProvider.GetRequiredService<IDatabase>();
+            var database = scope.ServiceProvider.GetRequiredService<IDatabaseContext>();
 
             Log.Information("Start database");
 
-            var task = Task.Run(() => database.Run(), cancellationToken);
-            await Task.WhenAny(task);
+            await database.RunAsync();
 
             var spellBooks = new List<ISpellBook>
             {
@@ -45,13 +45,7 @@ namespace BackendAPI.HostedService
                 SpellBooks.GetBookOfNecromancy()
             };
 
-            var tasks = new List<Task>();
-            foreach (var book in spellBooks)
-            {
-                task = Task.Run(async () => await database.InsertAsync(book), cancellationToken);
-                tasks.Add(task);
-            }
-
+            var tasks = spellBooks.Select(book => Task.Run(async () => await database.InsertAsync(book), cancellationToken)).ToList();
             await Task.WhenAll(tasks);
 
             Log.Information("Finished database");

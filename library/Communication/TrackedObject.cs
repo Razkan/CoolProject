@@ -1,6 +1,6 @@
 ﻿using Interfaces.Model;
 
-namespace Library.Model
+namespace Library.Communication
 {
     public class TrackedObject<T> : ITrackedObject<T>
     {
