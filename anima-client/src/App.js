@@ -5,9 +5,11 @@ import Sidebar from './components/sidebar';
 import Main from './components/main';
 
 class App extends React.Component {
+
 	render() {
 		return (
 			<div className="app">
+				
 				{/* <Navigation /> */}
 				<div className="content">
 					<Sidebar />

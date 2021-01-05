@@ -1,11 +1,11 @@
 .sidebar {
     height: 100%;
-    width:40px;
-    min-width: 40px;
+    width: 40px;
+    min-width: 250px;
 	background-color:#424B54;
-    transition: width 0.5s;
+    transition: min-width 0.5s;
 }
 
-.sidebar:hover {
-    width: 250px;
+.sidebar-collapsed {
+    min-width: 40px;
 }

@@ -1004,7 +1004,7 @@ namespace Library.Service
                                  "natural composition. It can affect rocks and metals with a base Presence " +
                                  "not higher than 30. For instance, it can turn a piece of limestone into a " +
                                  "gold nugget. It can transform up to 20 pounds of material",
-                        AddedEffect = "+5 to the maximum Presence affected and +20",
+                        AddedEffect = "+5 to the maximum Presence affected and +20 pounds",
                         MaximumZeon = "x10",
                         ZeonAttribute = CharacterAttribute.Int,
                         Maintenance = "1 every 20 (2)",
@@ -1692,8 +1692,8 @@ namespace Library.Service
         {
             return new BookOfIllusion
             {
-                Name = "Book of Illusions",
-                School = "Illusions",
+                Name = "Book of Illusion",
+                School = "Illusion",
                 Spells = new[]
                 {
                     new Spell
@@ -1702,10 +1702,10 @@ namespace Library.Service
                         Action = SpellAction.Active,
                         Level = 2,
                         Cost = 30,
-                        Effect = @"This spell allows the caster to create any sound, including human
-                                voices, in a 60-foot radius area. All subjects within the area of effect must
-                                pass a MR check with a Difficulty of 100 to disbelieve the effect, though the
-                                spellcaster may choose which specific characters hear the illusion.",
+                        Effect = "This spell allows the caster to create any sound, including human " +
+                                 "voices, in a 60-foot radius area. All subjects within the area of effect must " +
+                                 "pass a MR check with a Difficulty of 100 to disbelieve the effect, though the " +
+                                 "spellcaster may choose which specific characters hear the illusion.",
                         AddedEffect = "+30 feet to radius and +5 to MR Difficulty.",
                         MaximumZeon = "x10",
                         ZeonAttribute = CharacterAttribute.Int,
@@ -2057,18 +2057,18 @@ namespace Library.Service
                         Effect = "This spell creates a first-level illusory being. " +
                                  "The entity is fashioned according to the caster’s desires, " +
                                  "using the rules set forth in Chapter 26 for Beings Between " +
-                                 "Worlds.However, the illusory being’s nature automatically " +
+                                 "Worlds. However, the illusory being’s nature automatically " +
                                  "grants it the Physical Exemption ability. " +
                                  "Because the creature is not real, it can not inflict damage or affect " +
-                                 "physical reality whatsoever.All non - Energy based attacks pass right " +
-                                 "through it without damaging it in any way.This spell must be cast " +
-                                 "upon a specific area not exceeding a radius of 60 feet.Those characters " +
+                                 "physical reality whatsoever. All non - Energy based attacks pass right " +
+                                 "through it without damaging it in any way. This spell must be cast " +
+                                 "upon a specific area not exceeding a radius of 60 feet. Those characters " +
                                  "entering the spell’s area of effect must pass a MR Check with a Difficulty of " +
-                                 "120 to avoid it.Even though the spell is circumscribed to a specific zone, the " +
+                                 "120 to avoid it. Even though the spell is circumscribed to a specific zone, the " +
                                  "illusory creature can leave that area while chasing after a subject affected " +
-                                 "by the spell.However, it remains unseen by anyone not previously inside the spell’s " +
-                                 "area.Keep in mind that those subjects who pass the MR Check do not exist to the " +
-                                 "illusory creature, and it will ignore them.Illusions may have a maximum of two " +
+                                 "by the spell. However, it remains unseen by anyone not previously inside the spell’s " +
+                                 "area. Keep in mind that those subjects who pass the MR Check do not exist to the " +
+                                 "illusory creature, and it will ignore them. Illusions may have a maximum of two " +
                                  "levels more than the caster.",
                         AddedEffect = "+5 to MR, +1 to the created being’s level and +5 feet to radius.",
                         MaximumZeon = "x10",

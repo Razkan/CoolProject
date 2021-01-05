@@ -1,6 +1,7 @@
 import React from 'react';
 import './style/kanban.css';
-import CardCategory from './card-category';
+import CardHeader from './card-list-header';
+import CardList from './card-list';
 import KanbanHeader from './kanban-header';
 import FilterSidebar from './filter-sidebar';
 
@@ -14,7 +15,7 @@ class Kanban extends React.Component {
             filterData: {},
 
             showFilterResult: false,
-            
+
             showFilterSidebar: false
         };
 
@@ -25,7 +26,7 @@ class Kanban extends React.Component {
         this.retryFetch = this.retryFetch.bind(this);
 
         this.getShowFilterResult = this.getShowFilterResult.bind(this);
-        
+
         this.openFilterSidebar = this.openFilterSidebar.bind(this);
         this.closeFilterSidebar = this.closeFilterSidebar.bind(this);
 
@@ -99,24 +100,44 @@ class Kanban extends React.Component {
         });
     }
 
-    openFilterSidebar = () => this.setState({showFilterSidebar: true});
-    closeFilterSidebar = () => this.setState({showFilterSidebar: false});
+    openFilterSidebar = () => this.setState({ showFilterSidebar: true });
+    closeFilterSidebar = () => this.setState({ showFilterSidebar: false });
 
     handleFilters = query => {
         this.fetchData(this.baseUrl + query, data => this.setState({ categoryData: data, showFilterResult: true }), this.retryFetch);
     };
 
-    getCategory() {
-        var cardCategories = [];
+    getCardHeader() {
+        return (<CardHeader />);
+    }
+
+    getCardList() {
+        var cards = [];
 
         var books = Object.values(this.state.categoryData);
         if (books) {
             for (var book of books) {
-                cardCategories.push(<CardCategory key={book.name} data={book} />);
+                if (book.spells) {
+                    for (var spell of book.spells) {
+                        cards.push({ school: book.school, data: spell });
+                    }
+                }
             }
         }
-
-        return cardCategories;
+        
+        cards = cards.sort((a, b) => {
+            if(a.data.level > b.data.level) return 1;    
+            if(a.data.level < b.data.level) return -1;
+            
+            if(a.data.cost > b.data.cost) return 1;    
+            if(a.data.cost < b.data.cost) return -1;            
+            
+            if(a.data.name > b.data.name) return 1;    
+            if(a.data.name < b.data.name) return -1;
+        
+            return 0;
+        });
+        return (<CardList data={cards} />);
     }
 
     getShowFilterResult() {
@@ -142,7 +163,7 @@ class Kanban extends React.Component {
                 this.setState({ showFilterResult: false });
             }, 2000);
 
-            return (    
+            return (
                 <div className="kanban-show-filter-result">Found {countBooks()} books and {countSpells()} spells</div>
             );
         }
@@ -162,17 +183,16 @@ class Kanban extends React.Component {
     }
 
     getSidebar() {
-        
         var classes = ["kanban-sidebar"];
 
-        if(!this.state.showFilterSidebar) {
+        if (!this.state.showFilterSidebar) {
             classes.push("kanban-sidebar-hidden")
         }
-        
+
         return (
             <div className={classes.join(" ")}>
                 <FilterSidebar onFilterChanged={this.handleFilters}
-            filterData={this.state.filterData}/>
+                    filterData={this.state.filterData} />
             </div>
         );
     }
@@ -184,7 +204,8 @@ class Kanban extends React.Component {
                 <div className="kanban-content">
                     {this.getSidebar()}
                     <div className="kanban-board">
-                        {this.getCategory()}
+                        {this.getCardHeader()}
+                        {this.getCardList()}
                     </div>
                 </div>
             </div>

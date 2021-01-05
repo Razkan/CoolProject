@@ -2,6 +2,7 @@ import React from 'react';
 import './style/filter-sidebar.css';
 import MultiFilter from './multi-filter';
 import SearchFilter from './search-filter';
+import HighlightFilter from './highlight-filter';
 
 class FilterSidebar extends React.Component {
 
@@ -22,25 +23,29 @@ class FilterSidebar extends React.Component {
     render() {
         var schoolFilter = this.props.filterData.schools || [];
         var tagsFilter = this.props.filterData.tags || [];
-
+        var key = 0;
         return (
             <div className="filter-sidebar">
 
-                <SearchFilter key={0}
+                <HighlightFilter key={key++}
+                    title="Highlight word"
+                />
+
+                <SearchFilter key={key++}
                     title="Filter by Spells"
                     onSearch={e => this.setFilter("contains", e)}
                 />
-                <MultiFilter key={1}
+                <MultiFilter key={key++}
                     title="Magic School"
                     options={schoolFilter}
                     onFilter={e => this.setFilter("schools", e)}
                 />
-                <MultiFilter key={2}
+                <MultiFilter key={key++}
                     title="Tag"
                     options={tagsFilter}
                     onFilter={e => this.setFilter("tags", e)}
                 />
-                <MultiFilter key={3}
+                <MultiFilter key={key++}
                     title="Special"
                     options={[]}
                     onFilter={e => this.setFilter("specials", e)}

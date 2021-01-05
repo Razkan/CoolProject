@@ -1,7 +1,6 @@
 import React from 'react';
 import './style/card.css';
-import CardArea from './card-area';
-import CardAreaExpandable from './card-area-expandable';
+import Text from '../../redux/highlight/text';
 
 class Card extends React.Component {
 
@@ -10,8 +9,12 @@ class Card extends React.Component {
 
         this.state = {
             data: props.data,
+            show: false
         };
     }
+
+    toggleShow = () => this.setState({ show: !this.state.show });
+    hasHighlight = highlight => this.setState({ show: highlight });
 
     getTags() {
         var tags = [];
@@ -35,158 +38,169 @@ class Card extends React.Component {
             }
         }
 
-        return resistances.map(resistance => <div key={resistance} className="card-tag">{resistance}</div>);
+        if (resistances.length === 0) {
+            return (
+                <div>
+                    None
+                </div>
+            );
+        }
+        return resistances.map(resistance => <div key={resistance}>{resistance}</div>);
+    }
+
+    getType() {
+        if (this.props.data.type.length === 0) {
+            return (
+                <div>
+                    None
+                </div>
+            );
+        }
+        return this.props.data.type.map(type => <div key={type}>{type}</div>);
+    }
+
+    getExpandedClass() {
+        var classes = ["card-expandable-item"];
+
+        if (!this.state.show) {
+            classes.push("card-expandable-item-hidden");
+        }
+
+        return classes.join(" ");
+    }
+
+    getExpanded() {
+        return (
+            <div className={this.getExpandedClass()}>
+                <div className="card-expandable-item-section1">
+                    <div className="card-expandable-item-section1-column">
+                        <div>
+                            <div className="card-expandable-item-section1-column-header">
+                                Level
+                                </div>
+                            <div className="card-expandable-item-section1-column-value">
+                                {this.props.data.level}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="card-expandable-item-section1-column-header">
+                                Type
+                                </div>
+                            <div className="card-expandable-item-section1-column-value">
+                                {this.getType()}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-expandable-item-section1-column">
+                        <div>
+                            <div className="card-expandable-item-section1-column-header">
+                                Cost
+                                </div>
+                            <div className="card-expandable-item-section1-column-value">
+                                {this.props.data.cost}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="card-expandable-item-section1-column-header">
+                                Action
+                                </div>
+                            <div className="card-expandable-item-section1-column-value">
+                                {this.props.data.action}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-expandable-item-section1-column">
+                        <div>
+                            <div className="card-expandable-item-section1-column-header">
+                                Maximum Zeon
+                                </div>
+                            <div className="card-expandable-item-section1-column-value">
+                                {this.props.data.zeonAttribute} {this.props.data.maximumZeon}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="card-expandable-item-section1-column-header">
+                                Maintenance
+                                </div>
+                            <div className="card-expandable-item-section1-column-value">
+                                {this.props.data.maintenance}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-expandable-item-section1-column">
+                        <div>
+                            <div className="card-expandable-item-section1-column-header">
+                                Resistance(s)
+                                </div>
+                            <div className="card-expandable-item-section1-column-value">
+                                {this.getResistance()}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="card-expandable-item-section1-column-header">
+                                Placeholder
+                                </div>
+                            <div className="card-expandable-item-section1-column-value">
+                                Value
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="card-expandable-item-breakline" />
+                <div className="card-expandable-item-section2">
+                    <div className="card-expandable-item-section2-effect">
+                        <strong>Effect:</strong> <Text value={this.props.data.effect} hasHighlight={this.hasHighlight} />
+                    </div>
+                    <div className="card-expandable-item-section2-added-effect">
+                        <strong>Added Effect:</strong> {this.props.data.addedEffect}
+                    </div>
+                </div>
+                <div className="card-expandable-item-section3">
+                    <strong>Tags: </strong>
+                </div>
+            </div>
+        );
+
     }
 
     render() {
         return (
             <div className="card">
+                <div className="card-header"
+                    onMouseDown={this.toggleShow}
+                >
+                    <div className={"card-header-icon card-icon-" + this.props.school.toLowerCase()} />
 
-                <CardArea header={this.state.data.name}>
-                    <div className="card-info">
-                        <div className="card-tag">
-                            Lv: {this.state.data.level}
-                        </div>
-                        <div className="card-tag">
-                            Cost: {this.state.data.cost}
-                        </div>
-                        <div className="card-tag">
-                            Action: {this.state.data.action}
-                        </div>
-                        <div className="card-tag">
-                            Type: {this.state.data.type}
-                        </div>
-                    </div>
-                </CardArea>
-
-                <CardArea>
-                    <div className="card-description">
-                        {this.props.data.effect}
-                    </div>
-                </CardArea>
-
-                <CardAreaExpandable>
-
-                    <CardArea>
-                        <div className="slotted-card-header">
-                            Added Effect
-                        </div>
-                        <div className="card-description">
-                            {this.props.data.addedEffect}
-                        </div>
-                    </CardArea>
-
-                    <div className="slotted-card-additional-info">
-                        <CardArea>
-                            <div className="card-info card-info-slotted">
-                                <div className="slotted-card-header">
-                                    Maintenance
-                                </div>
-                                <div className="card-tag">
-                                    {this.state.data.maintenanceDuration}
-                                </div>
-                            </div>
-                            <div className="card-description">
-                                {this.props.data.maintenance}
-                            </div>
-
-                        </CardArea>
-
-                        <CardArea>
-                            <div className="card-info card-info-slotted">
-                                <div className="slotted-card-header">
-                                    Maximum Zeon
-                                </div>
-                                <div className="card-tag">
-                                    {this.state.data.zeonAttribute}
-                                </div>
-                            </div>
-                            <div className="card-description">
-                                {this.props.data.maximumZeon}
-                            </div>
-                        </CardArea>
+                    <div className="card-header-lv">
+                        {this.props.data.level}
                     </div>
 
-                    <div className="slotted-card-additional-info">
-                        <CardArea>
-                            <div className="slotted-card-header">Tags</div>
-                            <div className="card-info">
-                                {this.getTags()}
-                            </div>
-                        </CardArea>
-
-                        <CardArea>
-                            <div className="slotted-card-header">Resistances</div>
-                            <div className="card-info">
-                                {this.getResistance()}
-                            </div>
-                        </CardArea>
+                    <div className="card-header-name-container">
+                        <div className="card-header-name">{this.props.data.name}</div>
+                        <div className="card-header-school">{this.props.school}</div>
                     </div>
 
-                    {/* <CardArea>
-                        <div className="slotted-card-header">Tags</div>
-                        <div className="card-info">
-                            {this.getTags()}
-                        </div>
-                    </CardArea> */}
+                    <div className="card-header-cost">
+                        {this.props.data.cost}
+                    </div>
 
-                </CardAreaExpandable>
+                    <div className="card-header-maintenance">
+                        {this.props.data.maintenanceDuration}
+                    </div>
 
+                    <div className="card-header-type">
+                        {this.getType()}
+                    </div>
+
+                    <div className="card-header-action">
+                        {this.props.data.action}
+                    </div>
+                </div>
+
+                {this.getExpanded()}
             </div>
         );
     }
-
-    // render() {
-
-    //     var effectStyle = {
-    //         display: "flex",
-    //         flexGrow: "20",
-    //         paddingBottom: "5px"
-    //     }
-
-    //     return (
-    //         <div className="card">
-    //             <div className="card-header card-item">
-    //                 {this.state.data.name}
-    //             </div>
-    //             <div className="card-info card-item">
-    // <div className="card-tag">
-    //     Lv: {this.state.data.level}
-    // </div>
-    // <div className="card-tag">
-    //     Cost: {this.state.data.cost}
-    // </div>
-    // <div className="card-tag">
-    //     Action: {this.state.data.action}
-    // </div>
-    // <div className="card-tag">
-    //     Type: {this.state.data.type}
-    // </div>
-    //             </div>
-    //             <div className="card-description card-item" style={effectStyle}>
-    //                 {this.state.data.effect}
-    //             </div>
-    //             <div className="card-description">
-    //                 <div className="card-description-header">
-    //                     <div className="card-inline-header-text">Added Effect</div>
-    //                     <div>{this.state.data.addedEffect}</div>
-    //                 </div>
-    //             </div>
-    //             <div className="card-description">
-    //                 <div className="card-description-header">
-    //                     <div className="card-inline-header-text">Maximum Zeon</div>
-    //                     <div>{this.state.data.zeonAttribute} {this.state.data.maximumZeon}</div>
-    //                 </div>
-    //             </div>
-    //             <div className="card-description">
-    //                 <div className="card-description-header">
-    //                     <div className="card-inline-header-text">Maintenance</div>
-    //                     {this.state.data.maintenance}
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     );
-    // }
 }
 
 export default Card;

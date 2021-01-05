@@ -18,11 +18,21 @@ class Sidebar extends React.Component {
     open = () => this.setState({show: true});
     close = () => this.setState({show: false});
 
+    getSidebarClass() {
+        var classes = ["sidebar"];
+
+        if(!this.state.show) {
+            classes.push("sidebar-collapsed");
+        }
+
+        return classes.join(" ");
+    }
+
     render() {
         return (
-            <div className="sidebar"
-                        onMouseEnter={this.open} 
-                        onMouseLeave={this.close}
+            <div className={this.getSidebarClass()}
+                 onMouseDown={this.open}
+                 onMouseLeave={this.close}
             > 
                 {this.getItems()}
             </div>

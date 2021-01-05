@@ -15,15 +15,18 @@
 }
 
 .kanban-board {
+    position: relative;
+
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     height: 100%;
     width: 100%;
     
-    border-top: 1px solid #cacaca;
+    border-top: 1px solid #cacaca; 
     
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 div.kanban-board > div.card-category-container:first-child {
@@ -35,18 +38,19 @@ div.kanban-board > div.card-category-container:last-child {
 }
 
 .kanban-sidebar {
-    width: 400px;
+    width: 0%;
+    min-width: 400px;
     height: 100%;
 
     background-color: #646464;
 
-    transition: width 0.75s;
+    transition: min-width 0.75s;
 
     overflow-x: hidden;
 }
 
 .kanban-sidebar-hidden {
-    width: 0px;
+    min-width: 0px;
 }
 
 .kanban-show-filter-result {
@@ -59,25 +63,4 @@ div.kanban-board > div.card-category-container:last-child {
 
 .kanban-show-filter-result-hidden {
     height: 0px;
-}
-
-/* width */
-div.kanban-board::-webkit-scrollbar {
-    width: 7px;
-}
-
-/* Track */
-div.kanban-board::-webkit-scrollbar-track {
-    background: #efefef;
-}
-
-/* Handle */
-div.kanban-board::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 5px;
-}
-
-/* Handle on hover */
-div.kanban-board::-webkit-scrollbar-thumb:hover {
-    background: #555;
 }

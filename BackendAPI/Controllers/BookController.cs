@@ -23,17 +23,17 @@ namespace BackendAPI.Controllers
         {
             var arr = new[]
             {
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfLight),
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfDarkness),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfLight),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfDarkness),
                 await _repository.GetAsync<ISpellBook>(Identification.BookOfCreation),
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfDestruction),
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfAir),
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfWater),
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfFire),
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfEarth),
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfEssence),
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfIllusion),
-                //await _repository.GetAsync<ISpellBook>(Identification.BookOfNecromancy)
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfDestruction),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfAir),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfWater),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfFire),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfEarth),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfEssence),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfIllusion),
+                await _repository.GetAsync<ISpellBook>(Identification.BookOfNecromancy)
             };
 
             return new TrackedArray<ISpellBook>(arr);

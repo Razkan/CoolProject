@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Interfaces.Model.Book;
 using System.Linq;
 using Interfaces.Model;
-using Interfaces.Model.Book.Spell;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FrontendAPI.Controllers
@@ -42,25 +41,9 @@ namespace FrontendAPI.Controllers
                 .SelectAwait(spellBook => _spellBookFilter.BySpecial(specials, spellBook))
                 .WhereAwait(spellBook => new ValueTask<bool>(spellBook.Spells != null && spellBook.Spells.Any()));
 
-            filteredResult = filteredResult.OrderBy(spellBook => spellBook.Name);
-
             await foreach (var filterResult in filteredResult)
             {
-                yield return OrderBy(filterResult);
-            }
-
-            ISpellBook OrderBy(ISpellBook book)
-            {
-                var spellList = new List<ISpell>(book.Spells);
-                var orderSpellList = spellList.OrderBy(spell => spell.Level).ThenBy(spell => spell.Cost);
-                book.Spells.Clear();
-
-                foreach (var spell in orderSpellList)
-                {
-                    book.Spells.Add(spell);
-                }
-
-                return book;
+                yield return filterResult;
             }
         }
 
@@ -81,11 +64,5 @@ namespace FrontendAPI.Controllers
             Response.Headers.Add("Content-Type", "application/json");
             return await _remoteProcedureCall.GetAsync<IBookOfIllusion>();
         }
-
-        //[HttpGet]
-        //public async Task<Stream> Chaos()
-        //{
-        //    return await RemoteProcedureCall.GetAsync<IUser>();
-        //}
     }
 }

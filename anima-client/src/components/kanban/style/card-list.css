@@ -1,0 +1,44 @@
+.card-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+
+    overflow-y: auto;
+}
+
+.card-list {
+    width: 95%;
+}
+
+.card-list-content {
+    margin-top: 70px;
+}
+
+div.card-list-content > div.card {
+    margin-bottom: 15px;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+/* width */
+div.card-list-container::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+div.card-list-container::-webkit-scrollbar-track {
+    background: #efefef;
+}
+
+/* Handle */
+div.card-list-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+div.card-list-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
