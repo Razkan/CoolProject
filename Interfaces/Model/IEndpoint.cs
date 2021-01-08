@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Interfaces.Model
 {
-    public interface IFetch
+    public interface IEndpoint
     {
         IEnumerable<Uri> URIs { get; }
     }

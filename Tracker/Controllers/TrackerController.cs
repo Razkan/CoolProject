@@ -8,23 +8,23 @@ namespace Tracker.Controllers
     [Route("tracker")]
     public class TrackerController : ControllerBase
     {
-        private readonly IStorage _storage;
+        private readonly ICache _cache;
 
-        public TrackerController(IStorage storage)
+        public TrackerController(ICache cache)
         {
-            _storage = storage;
+            _cache = cache;
         }
 
         [HttpPost("post")]
-        public void Post([FromBody] Store data)
+        public void Post([FromBody] TrackEndpoint data)
         {
-            _storage.Store(data.TInterface, data.Uri);
+            _cache.Store(data.TInterface, data.Uri);
         }
 
         [HttpGet("get")]
-        public IFetch Get([FromBody] TrackerInfo trackerInfo)
+        public IEndpoint Get([FromBody] EndpointInfo endpointInfo)
         {
-            return _storage.Get(trackerInfo.Type);
+            return _cache.Get(endpointInfo.Type);
         }
     }
 }

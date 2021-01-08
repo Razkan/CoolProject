@@ -5,9 +5,9 @@ using Interfaces.Model;
 
 namespace Library.Model
 {
-    public class Fetch : IFetch
+    public class Endpoint : IEndpoint
     {
-        public static IFetch Empty { get; } = new Fetch();
+        public static IEndpoint Empty { get; } = new Endpoint();
 
         [JsonPropertyName("URIs")]
         public IEnumerable<Uri> URIs { get; set; }

@@ -33,7 +33,7 @@ namespace Library.Service
 
             foreach (var @interface in interfaces)
             {
-                var json = JsonSerializer.Serialize(new Store
+                var json = JsonSerializer.Serialize(new TrackEndpoint
                 {
                     TInterface = @interface,
                     Uri = uri
@@ -52,9 +52,9 @@ namespace Library.Service
                     return set;
                 }
 
-                foreach (var t in type.GetInterfaces())
+                foreach (var interfaceType in type.GetInterfaces())
                 {
-                    GetInterfaces(t, set);
+                    GetInterfaces(interfaceType, set);
                 }
 
                 set.Add(type.FullName);
@@ -66,7 +66,7 @@ namespace Library.Service
         {
             var client = GetClient();
 
-            var trackerInfo = JsonSerializer.Serialize(new TrackerInfo
+            var trackerInfo = JsonSerializer.Serialize(new EndpointInfo
             {
                 Type = typeof(TInterface).FullName
             });
@@ -87,7 +87,7 @@ namespace Library.Service
                 return RPCResponse.Empty;
             }
 
-            var fetch = JsonSerializer.Deserialize<Fetch>(await httpResponse.Content.ReadAsStringAsync());
+            var fetch = JsonSerializer.Deserialize<Endpoint>(await httpResponse.Content.ReadAsStringAsync());
             if (fetch.URIs == null || !fetch.URIs.Any()) return RPCResponse.Empty;
 
             var streamTasks = new List<Task<Stream>>();

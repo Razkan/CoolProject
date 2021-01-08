@@ -2,7 +2,7 @@
 
 namespace Library.Model
 {
-    public class TrackerInfo : ITrackerInfo
+    public class EndpointInfo : IEndpointInfo
     {
         public string Type { get; set; }
     }

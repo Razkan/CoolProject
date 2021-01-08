@@ -23,7 +23,7 @@ namespace Tracker
         {
             services.AddControllers();
 
-            services.AddSingleton<IStorage, Storage>();
+            services.AddSingleton<ICache, Cache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

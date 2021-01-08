@@ -1,6 +1,6 @@
 ﻿namespace Interfaces.Model
 {
-    public interface ITrackerInfo
+    public interface IEndpointInfo
     {
         string Type { get; }
     }

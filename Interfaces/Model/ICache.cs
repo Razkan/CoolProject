@@ -2,9 +2,9 @@
 
 namespace Interfaces.Model
 {
-    public interface IStorage
+    public interface ICache
     {
         void Store(string @interface, Uri uri);
-        IFetch Get(string @interface);
+        IEndpoint Get(string @interface);
     }
 }

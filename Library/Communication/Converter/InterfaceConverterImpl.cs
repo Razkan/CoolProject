@@ -14,8 +14,8 @@ namespace Library.Communication.Converter
 
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var dict = ParseDictionary(ref reader, options);
-            var obj = Build(dict, null);
+            var dict = ParseJsonToDictionary(ref reader, options);
+            var obj = DictionaryToObject(dict, null);
 
             var resultType = typeof(T);
             var trackedResultType = typeof(TrackedResult<>);
@@ -25,74 +25,72 @@ namespace Library.Communication.Converter
             return (T) result;
         }
 
-        public object Build(Dictionary<string, object> jsonStructure, Type[] propertyTypeGenericTypeArguments)
+        public object DictionaryToObject(Dictionary<string, object> dictionary,
+            Type[] propertyTypeGenericTypeArguments)
         {
-            if (jsonStructure.ContainsKey("__Type__"))
+            if (!dictionary.ContainsKey("__Type__")) return default;
+
+            var type = dictionary["__Type__"];
+            var instanceType = Type.GetType(type.ToString());
+            if (instanceType == null) return null;
+
+            object instance;
+            if (instanceType.IsArray)
             {
-                var type = jsonStructure["__Type__"];
-                var instanceType = Type.GetType(type.ToString());
-                if (instanceType == null) return null;
+                if (propertyTypeGenericTypeArguments.Length > 1)
+                    throw new Exception("Only handling of one generic array type allowed");
 
-                object instance;
-                if (instanceType.IsArray)
-                {
-                    if (propertyTypeGenericTypeArguments.Length > 1)
-                        throw new Exception("Only handling of one generic array type allowed");
-
-                    var listType = typeof(List<>);
-                    var constructedListType = listType.MakeGenericType(propertyTypeGenericTypeArguments);
-                    instance = Activator.CreateInstance(constructedListType);
-                }
-                else
-                {
-                    instance = Activator.CreateInstance(instanceType);
-                }
-
-                foreach (var (key, value) in jsonStructure)
-                {
-                    var pi = instanceType.GetProperty(key);
-
-                    switch (value)
-                    {
-                        case Dictionary<string, object> dict:
-                        {
-                            var obj = Build(dict, pi?.PropertyType.GenericTypeArguments);
-                            pi?.SetValue(instance, obj);
-                        }
-                            break;
-
-                        case List<object> list:
-                        {
-                            var typeArgument = propertyTypeGenericTypeArguments[0];
-                            Build(list, (IList) instance, typeArgument);
-                        }
-                            break;
-
-                        case long v when pi != null && pi.PropertyType.IsEnum:
-                        {
-                            pi.SetValue(instance, Enum.ToObject(pi.PropertyType, v));
-                        }
-                            break;
-
-                        default:
-                        {
-                            if (IsAutoProperty(pi))
-                            {
-                                pi?.SetValue(instance, value);
-                            }
-                        }
-                            break;
-                    }
-                }
-
-                return instance;
+                var listType = typeof(List<>);
+                var constructedListType = listType.MakeGenericType(propertyTypeGenericTypeArguments);
+                instance = Activator.CreateInstance(constructedListType);
+            }
+            else
+            {
+                instance = Activator.CreateInstance(instanceType);
             }
 
+            foreach (var (key, value) in dictionary)
+            {
+                switch (value)
+                {
+                    // Is nested object
+                    case Dictionary<string, object> dict:
+                    {
+                        var propertyInfo = instanceType.GetProperty(key);
+                        if (propertyInfo != null)
+                        {
+                            var obj = DictionaryToObject(dict, propertyInfo.PropertyType.GenericTypeArguments);
+                            propertyInfo.SetValue(instance, obj);
+                        }
+                    }
+                        break;
 
-            return default;
+                    // Is nested array
+                    case List<object> list:
+                    {
+                        var typeArgument = propertyTypeGenericTypeArguments[0];
+                        AddEnumerableObject(list, (IList) instance, typeArgument);
+                    }
+                        break;
+
+                    default:
+                    {
+                        var propertyInfo = instanceType.GetProperty(key);
+                        if (propertyInfo != null && IsAutoProperty(propertyInfo))
+                        {
+                            propertyInfo.SetValue(instance, propertyInfo.PropertyType.IsEnum
+                                ? Enum.ToObject(propertyInfo.PropertyType, (long) value)
+                                : value);
+                        }
+                    }
+                        break;
+                }
+            }
+
+            return instance;
         }
 
-        private void Build(IEnumerable<object> list, IList instance, Type instanceType)
+        private void AddEnumerableObject(IEnumerable<object> list, IList instance, Type instanceType)
         {
             foreach (var obj in list)
             {
@@ -100,7 +98,7 @@ namespace Library.Communication.Converter
                 {
                     case Dictionary<string, object> dict:
                     {
-                        instance.Add(Build(dict, null));
+                        instance.Add(DictionaryToObject(dict, null));
                     }
                         break;
 
@@ -111,9 +109,9 @@ namespace Library.Communication.Converter
                     }
                         break;
 
-                    case long l:
+                    case long @long:
                     {
-                        instance.Add(l);
+                        instance.Add(@long);
                     }
                         break;
 
@@ -125,7 +123,8 @@ namespace Library.Communication.Converter
             }
         }
 
-        public Dictionary<string, object> ParseDictionary(ref Utf8JsonReader reader, JsonSerializerOptions options)
+        public Dictionary<string, object> ParseJsonToDictionary(ref Utf8JsonReader reader,
+            JsonSerializerOptions options)
         {
             if (reader.TokenType != JsonTokenType.StartObject)
             {
@@ -185,7 +184,7 @@ namespace Library.Communication.Converter
 
                     return reader.GetDecimal();
                 case JsonTokenType.StartObject:
-                    return ParseDictionary(ref reader, options);
+                    return ParseJsonToDictionary(ref reader, options);
                 case JsonTokenType.StartArray:
                     var list = new List<object>();
                     while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
@@ -205,7 +204,7 @@ namespace Library.Communication.Converter
             if (IsEnumerable.IsAssignableFrom(type))
             {
                 writer.WriteStartObject();
-                WriteArray(writer, value, options);
+                WriteArray(writer, (IEnumerable) value, options);
                 writer.WriteEndObject();
             }
             else
@@ -216,7 +215,6 @@ namespace Library.Communication.Converter
             }
         }
 
-
         private void WriteObject(Utf8JsonWriter writer, object value, Type type, JsonSerializerOptions options)
         {
             if (value == null)
@@ -224,8 +222,9 @@ namespace Library.Communication.Converter
 
             writer.WriteString("__Type__", type.AssemblyQualifiedName);
 
-            foreach (var property in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance |
-                                                        BindingFlags.Public))
+            var properties =
+                type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+            foreach (var property in properties)
             {
                 writer.WritePropertyName(property.Name);
                 if (property.PropertyType.IsInterface)
@@ -233,7 +232,7 @@ namespace Library.Communication.Converter
                     if (IsEnumerable.IsAssignableFrom(property.PropertyType))
                     {
                         writer.WriteStartObject();
-                        WriteArray(writer, property.GetValue(value), options);
+                        WriteArray(writer, (IEnumerable) property.GetValue(value), options);
                         writer.WriteEndObject();
                     }
                     else
@@ -250,63 +249,65 @@ namespace Library.Communication.Converter
             }
         }
 
-        private void WriteArray(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
+        private void WriteArray(Utf8JsonWriter writer, IEnumerable enumerable, JsonSerializerOptions options)
         {
-            if (value == null)
+            if (enumerable == null)
                 return;
 
-            var type = value.GetType();
+            var type = enumerable.GetType();
             writer.WriteString("__Type__", type.AssemblyQualifiedName);
             writer.WriteStartArray("__Array__");
 
-            if (value is IEnumerable array)
+            foreach (var element in enumerable)
             {
-                foreach (var element in array)
+                var eleType = element.GetType();
+                switch (Type.GetTypeCode(eleType))
                 {
-                    var eleType = element.GetType();
-                    switch (Type.GetTypeCode(eleType))
-                    {
-                        case TypeCode.Byte:
-                        case TypeCode.SByte:
-                        case TypeCode.UInt16:
-                        case TypeCode.UInt32:
-                        case TypeCode.UInt64:
-                        case TypeCode.Int16:
-                        case TypeCode.Int32:
-                        case TypeCode.Int64:
-                            writer.WriteNumberValue(Convert.ToInt64(element));
-                            break;
-                        case TypeCode.Decimal:
-                        case TypeCode.Double:
-                        case TypeCode.Single:
-                        case TypeCode.Empty:
-                            break;
-                        case TypeCode.Object:
-                            writer.WriteStartObject();
-                            WriteObject(writer, element, eleType, options);
-                            writer.WriteEndObject();
-                            break;
-                        case TypeCode.DBNull:
-                            break;
-                        case TypeCode.Boolean:
-                            break;
-                        case TypeCode.Char:
-                            break;
-                        case TypeCode.DateTime:
-                            break;
-                        case TypeCode.String:
-                            writer.WriteStringValue(element.ToString());
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    case TypeCode.Byte:
+                    case TypeCode.SByte:
+                    case TypeCode.UInt16:
+                    case TypeCode.UInt32:
+                    case TypeCode.UInt64:
+                    case TypeCode.Int16:
+                    case TypeCode.Int32:
+                    case TypeCode.Int64:
+                        writer.WriteNumberValue(Convert.ToInt64(element));
+                        break;
+                    case TypeCode.Decimal:
+                    case TypeCode.Double:
+                    case TypeCode.Single:
+                    case TypeCode.Empty:
+                        break;
+                    case TypeCode.Object:
+                        writer.WriteStartObject();
+                        WriteObject(writer, element, eleType, options);
+                        writer.WriteEndObject();
+                        break;
+                    case TypeCode.DBNull:
+                        break;
+                    case TypeCode.Boolean:
+                        break;
+                    case TypeCode.Char:
+                        break;
+                    case TypeCode.DateTime:
+                        break;
+                    case TypeCode.String:
+                        writer.WriteStringValue(element.ToString());
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
 
             writer.WriteEndArray();
         }
 
-        public static bool IsAutoProperty(PropertyInfo property)
+        /// <summary>
+        /// Verifies that the property is assignable with a backing field.
+        /// <br />Is: public string FullName { get; set; }
+        /// <br />Is not: public string FullName => $"{FirstName} {LastName}";
+        /// </summary>
+        private static bool IsAutoProperty(PropertyInfo property)
         {
             var backingFieldName = $"<{property?.Name}>k__BackingField";
             var backingField =

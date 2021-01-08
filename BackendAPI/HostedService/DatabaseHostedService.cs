@@ -5,10 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interfaces.Model.Book;
 using Interfaces.Model.Db;
+using Library;
 using Library.Service;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
 
 namespace BackendAPI.HostedService
 {
@@ -26,29 +26,28 @@ namespace BackendAPI.HostedService
             using var scope = _serviceProvider.CreateScope();
             var database = scope.ServiceProvider.GetRequiredService<IDatabaseContext>();
 
-            Log.Information("Start database");
-
-            await database.RunAsync();
-
-            var spellBooks = new List<ISpellBook>
+            TrackedLog.Information("Start database", async () =>
             {
-                SpellBooks.GetBookOfLight(),
-                SpellBooks.GetBookOfDarkness(),
-                SpellBooks.GetBookOfCreation(),
-                SpellBooks.GetBookOfDestruction(),
-                SpellBooks.GetBookOfAir(),
-                SpellBooks.GetBookOfWater(),
-                SpellBooks.GetBookOfFire(),
-                SpellBooks.GetBookOfEarth(),
-                SpellBooks.GetBookOfEssence(),
-                SpellBooks.GetBookOfIllusion(),
-                SpellBooks.GetBookOfNecromancy()
-            };
+                await database.RunAsync();
 
-            var tasks = spellBooks.Select(book => Task.Run(async () => await database.InsertAsync(book), cancellationToken)).ToList();
-            await Task.WhenAll(tasks);
+                var spellBooks = new List<ISpellBook>
+                {
+                    SpellBooks.GetBookOfLight(),
+                    SpellBooks.GetBookOfDarkness(),
+                    SpellBooks.GetBookOfCreation(),
+                    SpellBooks.GetBookOfDestruction(),
+                    SpellBooks.GetBookOfAir(),
+                    SpellBooks.GetBookOfWater(),
+                    SpellBooks.GetBookOfFire(),
+                    SpellBooks.GetBookOfEarth(),
+                    SpellBooks.GetBookOfEssence(),
+                    SpellBooks.GetBookOfIllusion(),
+                    SpellBooks.GetBookOfNecromancy()
+                };
 
-            Log.Information("Finished database");
+                var tasks = spellBooks.Select(book => Task.Run(async () => await database.InsertAsync(book), cancellationToken)).ToList();
+                Task.WhenAll(tasks).Wait(cancellationToken);
+            });
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

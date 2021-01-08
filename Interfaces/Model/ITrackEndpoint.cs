@@ -2,7 +2,7 @@
 
 namespace Interfaces.Model
 {
-    public interface IStore
+    public interface ITrackEndpoint
     {
         string TInterface { get; }
         Uri Uri { get; }
