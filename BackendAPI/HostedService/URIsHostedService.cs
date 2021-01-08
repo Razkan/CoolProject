@@ -24,8 +24,8 @@ namespace BackendAPI.HostedService
         {
             using var scope = _serviceProvider.CreateScope();
             var rpc = scope.ServiceProvider.GetRequiredService<IRemoteProcedureCall>();
-            
-            TrackedLog.Information("Sending URIs to tracker", () =>
+
+            TrackedLog.Information("Sending URIs to tracker", 3, () =>
             {
                 var tasks = new List<Task>
                 {
