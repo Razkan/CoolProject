@@ -25,7 +25,7 @@ namespace Library.Communication.Converter
             return (T) result;
         }
 
-        public object DictionaryToObject(Dictionary<string, object> dictionary,
+        private static object DictionaryToObject(IReadOnlyDictionary<string, object> dictionary,
             Type[] propertyTypeGenericTypeArguments)
         {
             if (!dictionary.ContainsKey("__Type__")) return default;
@@ -90,7 +90,7 @@ namespace Library.Communication.Converter
             return instance;
         }
 
-        private void AddEnumerableObject(IEnumerable<object> list, IList instance, Type instanceType)
+        private static void AddEnumerableObject(IEnumerable<object> list, IList instance, Type instanceType)
         {
             foreach (var obj in list)
             {
@@ -102,28 +102,20 @@ namespace Library.Communication.Converter
                     }
                         break;
 
-                    case long @enum when instanceType.IsEnum:
+                    default:
                     {
-                        var value = Enum.ToObject(instanceType, @enum);
+                        var value = instanceType.IsEnum
+                            ? Enum.ToObject(instanceType, obj)
+                            : obj;
+
                         instance.Add(value);
                     }
                         break;
-
-                    case long @long:
-                    {
-                        instance.Add(@long);
-                    }
-                        break;
-
-                    default:
-                    {
-                        throw new ArgumentOutOfRangeException();
-                    }
                 }
             }
         }
 
-        public Dictionary<string, object> ParseJsonToDictionary(ref Utf8JsonReader reader,
+        private static Dictionary<string, object> ParseJsonToDictionary(ref Utf8JsonReader reader,
             JsonSerializerOptions options)
         {
             if (reader.TokenType != JsonTokenType.StartObject)
@@ -159,7 +151,7 @@ namespace Library.Communication.Converter
             return dictionary;
         }
 
-        private object ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
+        private static object ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             switch (reader.TokenType)
             {
@@ -307,11 +299,11 @@ namespace Library.Communication.Converter
         /// <br />Is: public string FullName { get; set; }
         /// <br />Is not: public string FullName => $"{FirstName} {LastName}";
         /// </summary>
-        private static bool IsAutoProperty(PropertyInfo property)
+        private static bool IsAutoProperty(MemberInfo memberInfo)
         {
-            var backingFieldName = $"<{property?.Name}>k__BackingField";
+            var backingFieldName = $"<{memberInfo?.Name}>k__BackingField";
             var backingField =
-                property?.DeclaringType?.GetField(backingFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+                memberInfo?.DeclaringType?.GetField(backingFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 
             return backingField != null && backingField.GetCustomAttribute(typeof(CompilerGeneratedAttribute)) != null;
         }

@@ -49,6 +49,18 @@ namespace FrontendAPI.Controllers
             }
         }
 
+        [Route("test")]
+        public async Task Test()
+        {
+            Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
+            var result = await _remoteProcedureCall.GetAsync<ISpellBook>();
+            
+            await foreach (var stream in result.GetStreams())
+            {
+                await stream.CopyToAsync(HttpContext.Response.Body);
+            }
+        }
+
         [HttpGet]
         [Route("earth")]
         public async Task<IRPCResponse> Earth()

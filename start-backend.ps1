@@ -7,8 +7,8 @@ function Get-Command {
 
     $setWindow = "[console]::WindowWidth=90; [console]::WindowHeight=30; [console]::BufferWidth=[console]::WindowWidth"
     $setTitle = "`$host.ui.RawUI.WindowTitle = ""$Project"""
-    $runProject = "dotnet run --project .\$project\"
-    $command = "cmd /c start powershell -Command { $setWindow; $setTitle; $runProject }"
+    $runProject = "dotnet run --configuration Release --project .\$project\"
+    $command = "cmd -noexit /c start powershell -Command { $setWindow; $setTitle; $runProject }"
     return $command
 }
 
