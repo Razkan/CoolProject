@@ -1,0 +1,49 @@
+.List {
+
+}
+
+.spell-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    overflow-y: auto;
+}
+
+.spell-list {
+    width: 95%;
+}
+
+.spell-list-content {
+    margin-top: 70px;
+}
+
+div.spell-list-content > div.spell {
+    margin-bottom: 15px;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+/* width */
+div.spell-list-container::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+div.spell-list-container::-webkit-scrollbar-track {
+    background: #efefef;
+}
+
+/* Handle */
+div.spell-list-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+div.spell-list-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

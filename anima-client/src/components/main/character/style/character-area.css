@@ -1,0 +1,14 @@
+.character-area {
+    width: fit-content;
+    height: fit-content;
+    
+    margin: 10px;
+    
+    background-image: url('../../../../images/character/area-background.png');
+    background-size: cover;
+}
+
+.character-area-content {
+    
+    padding: 20px;
+}

@@ -30,23 +30,35 @@ namespace BackendAPI.HostedService
             {
                 await database.RunAsync();
 
-                var spellBooks = new List<ISpellBook>
                 {
-                    SpellBooks.GetBookOfLight(),
-                    SpellBooks.GetBookOfDarkness(),
-                    SpellBooks.GetBookOfCreation(),
-                    SpellBooks.GetBookOfDestruction(),
-                    SpellBooks.GetBookOfAir(),
-                    SpellBooks.GetBookOfWater(),
-                    SpellBooks.GetBookOfFire(),
-                    SpellBooks.GetBookOfEarth(),
-                    SpellBooks.GetBookOfEssence(),
-                    SpellBooks.GetBookOfIllusion(),
-                    SpellBooks.GetBookOfNecromancy()
-                };
+                    var spellBooks = new List<ISpellBook>
+                    {
+                        SpellBooks.GetBookOfLight(),
+                        SpellBooks.GetBookOfDarkness(),
+                        SpellBooks.GetBookOfCreation(),
+                        SpellBooks.GetBookOfDestruction(),
+                        SpellBooks.GetBookOfAir(),
+                        SpellBooks.GetBookOfWater(),
+                        SpellBooks.GetBookOfFire(),
+                        SpellBooks.GetBookOfEarth(),
+                        SpellBooks.GetBookOfEssence(),
+                        SpellBooks.GetBookOfIllusion(),
+                        SpellBooks.GetBookOfNecromancy()
+                    };
 
-                var tasks = spellBooks.Select(book => Task.Run(async () => await database.InsertAsync(book), cancellationToken)).ToList();
-                Task.WhenAll(tasks).Wait(cancellationToken);
+                    var tasks = spellBooks.Select(book => Task.Run(async () => await database.InsertAsync(book), cancellationToken)).ToList();
+                    Task.WhenAll(tasks).Wait(cancellationToken);
+                }
+
+                {
+                    var subPaths = new List<ISubPath>
+                    {
+                        SubPaths.GetNobility(),
+                    };
+
+                    var tasks = subPaths.Select(subPath => Task.Run(async () => await database.InsertAsync(subPath), cancellationToken)).ToList();
+                    Task.WhenAll(tasks).Wait(cancellationToken);
+                }
             });
         }
 

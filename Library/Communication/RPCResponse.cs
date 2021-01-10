@@ -27,7 +27,7 @@ namespace Library.Communication
             var enumerableTasks = Tasks.Select(task => task.ContinueWith(
                 async stream =>
                 {
-                    var response =await JsonSerializer.DeserializeAsync<ITrackedResult<T>>(await stream, _jsonSerializerOptions);
+                    var response = await JsonSerializer.DeserializeAsync<ITrackedResult<T>>(await stream, _jsonSerializerOptions);
                     return response.Get();
                 }).Unwrap());
 
@@ -38,6 +38,14 @@ namespace Library.Communication
                 {
                     yield return result;
                 }
+            }
+        }
+
+        public async IAsyncEnumerable<Stream> GetStreams()
+        {
+            foreach (var streamTask in Tasks)
+            {
+                yield return await streamTask;
             }
         }
     }

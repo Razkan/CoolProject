@@ -18,7 +18,7 @@ namespace Interfaces.Model.Book.Spell
         CharacterAttribute ZeonAttribute { get; }
         string Maintenance { get; }
         MaintenanceDuration MaintenanceDuration { get; }
-        IEnumerable<SpellType> Type { get; set; }
+        IEnumerable<SpellType> Type { get; }
         IEnumerable<IResistance> Resistances { get; }
         IEnumerable<Tag> Tags { get; }
     }

@@ -8,62 +8,75 @@ class Text extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.hasHighlight = this.props.hasHighlight
-			? this.props.hasHighlight
+		this.onHighlight = this.props.onHighlight
+			? this.props.onHighlight
 			: () => { };
 	}
 
-	getHighlightText(value, highlight) {
-		var highlight = highlight.toLowerCase();
+	getHighlightText(text, highlight) {
+		highlight = highlight.toLowerCase();
 		
-		const getIndex = (value) => {
-			return value.toLowerCase().indexOf(highlight);
+		const getIndex = (text) => {
+			return text.toLowerCase().indexOf(highlight);
 		}
 		
-		if(getIndex(value) == -1)
+		if(getIndex(text) === -1) {
 			return [];
-
-		var arr = [];
-		var values = value.split(" ");
-
-		for (var value of values) {
-
-			var valueArr = [];
-			for (var index = getIndex(value); index > -1; index = getIndex(value)) {
-
-				var begin = value.substring(0, index);
-				var match = value.substring(index, index + highlight.length);
-
-				value = value.substring(index + highlight.length, value.length);
-
-				valueArr.push({ begin, match, end: "" });
-			}
-
-			if (value)
-				valueArr.push({ begin: "", match: "", end: value });
-			arr.push(valueArr);
 		}
 
-		var textArr = [];
-		for (var wordArr of arr) {
-			var text = "<div style=\"display: flex; flex-wrap: wrap; white-space: pre;\">";
-			for (var word of wordArr) {
+		const findHighlightedWords = text => {
+			var arrayOfWordArray = [];
+			var textArr = text.split(" ");	
 
-				if (word.begin) {
-					text += word.begin;
-				}
-				if (word.match) {
-					text += "<div style=\"background-color: yellow;\">" + word.match + "</div>";
+			for (var word of textArr) {
 
+				var wordArr = [];
+				for (var index = getIndex(word); index > -1; index = getIndex(word)) {
+	
+					var begin = word.substring(0, index);
+					var match = word.substring(index, index + highlight.length);
+	
+					word = word.substring(index + highlight.length, word.length);
+	
+					wordArr.push({ begin, match, end: "" });
 				}
-				if (word.end) {
-					text += word.end;
+	
+				if (word) {
+					wordArr.push({ begin: "", match: "", end: word });
 				}
+
+				arrayOfWordArray.push(wordArr);
 			}
-			text += "<div>&nbsp;</div></div>";
-			textArr.push(text);
-		}
+			
+			return arrayOfWordArray;
+		};
 
+		const createHTML = array => {
+			var textArr = [];
+			for (var wordArr of array) {
+				var text = "<div style=\"display: flex; flex-wrap: wrap; white-space: pre;\">";
+				for (var word of wordArr) {
+	
+					if (word.begin) {
+						text += word.begin;
+					}
+					if (word.match) {
+						text += "<div style=\"background-color: yellow;\">" + word.match + "</div>";
+	
+					}
+					if (word.end) {
+						text += word.end;
+					}
+				}
+				text += "<div>&nbsp;</div></div>";
+				textArr.push(text);
+			}
+
+			return textArr;
+		};
+		
+		var arrayOfWordArray = findHighlightedWords(text);
+		var textArr = createHTML(arrayOfWordArray);
 		return textArr.join("");
 	}
 
@@ -73,10 +86,10 @@ class Text extends React.Component {
 
 		if (highlight) {
 
-			var highlightText = this.getHighlightText(value, highlight);
-			if (highlightText.length > 0) {
+			var html = this.getHighlightText(value, highlight);
+			if (html.length > 0) {
 
-				this.hasHighlight(true);
+				this.onHighlight(true, true);
 
 				const textContainer = {
 					display: "flex",
@@ -84,7 +97,7 @@ class Text extends React.Component {
 					whiteSpace: "pre"
 				}
 
-				var innerHtml = { __html: highlightText };
+				var innerHtml = { __html: html };
 				return (
 					<div style={textContainer} dangerouslySetInnerHTML={innerHtml}>
 					</div>
@@ -92,7 +105,7 @@ class Text extends React.Component {
 			}
 		}
 
-		this.hasHighlight(false);
+		this.onHighlight(!!highlight, false);
 		return (
 			<div>{value}</div>
 		);

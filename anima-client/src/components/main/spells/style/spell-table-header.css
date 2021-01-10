@@ -1,0 +1,13 @@
+.spell-table-header {
+    display: flex;
+    align-items: center;
+
+    height: 50px;
+    width: 100%;
+
+    background-color: white;
+}
+
+.spell-table-header > * {
+    margin-left: 10px;
+}

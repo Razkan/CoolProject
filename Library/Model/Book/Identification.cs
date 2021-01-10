@@ -13,5 +13,7 @@
         public const string BookOfEssence = nameof(BookOfEssence);
         public const string BookOfIllusion = nameof(BookOfIllusion);
         public const string BookOfNecromancy = nameof(BookOfNecromancy);
+        
+        public const string Nobility = nameof(Nobility);
     }
 }

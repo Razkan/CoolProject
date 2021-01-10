@@ -1,0 +1,67 @@
+.spell-list-header-container {
+    position: absolute;
+    z-index: 1;
+    
+    width: calc(95% - 30px);
+    
+    padding-top: 10px;
+    margin-left: 10px;
+    margin-right: 15px;
+    
+    background: #efefef;
+}
+
+.spell-list-header {    
+    display: flex;
+    align-items: center;
+    
+    width: 100%;
+    height: 45px;
+    
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+    
+    overflow: hidden;
+}
+
+.spell-list-header > div {
+    width: calc(25% - 28px);
+    color: #242527;
+}
+
+.spell-list-header > div:nth-child(1),
+.spell-list-header > div:nth-child(2) {
+    width: 0%;
+}
+
+.spell-list-header-icon {
+    min-width: 35px;
+    min-height: 35px;
+
+    margin: 0 20px 0 7px;
+}
+
+.spell-list-header-lv {
+    min-width: 50px;
+}
+
+.spell-list-header-name { 
+    min-width: 270px;
+}
+
+.spell-list-header-cost {
+    min-width: 150px;
+}
+
+.spell-list-header-maintenance {
+    min-width: 150px;
+}
+
+.spell-list-header-type {
+    min-width: 150px;
+}
+
+.spell-list-header-action {
+    min-width: 150px;
+}

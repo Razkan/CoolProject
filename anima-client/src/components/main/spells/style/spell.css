@@ -1,0 +1,269 @@
+.spell {
+    display: flex;
+    flex-direction: column;
+    
+    height: fit-content;
+
+    background-color: white;
+
+}
+
+.spell.spell-hidden {
+    display: none;
+}
+
+.spell-expandable-item {
+    display: flex;
+    flex-direction: column;
+
+    padding: 30px 26px 0;
+
+    border: 1px solid silver;
+    border-top: 0px;
+
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.spell-expandable-item-hidden {
+    display: none;
+}
+
+.spell-expandable-item-section1 {
+    display: flex;
+}
+
+.spell-expandable-item-section1-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.spell-expandable-item-section1-column > div {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    
+    padding: 10px;
+}
+
+.spell-expandable-item-section1-column-header {
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.spell-expandable-item-section1-column-value {
+    font-size: 16px;
+}
+
+.spell-expandable-item-breakline {
+
+    height: 3px;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    background-color: gray;
+}
+
+.spell-expandable-item-section2 {
+}
+
+.spell-expandable-item-section2-effect {
+    margin-bottom: 30px
+}
+
+.spell-expandable-item-section2-added-effect {
+    
+}
+
+.spell-expandable-item-section3 {
+    display: flex;
+    align-items: flex-end;
+    
+    padding-top: 40px;
+    margin-bottom: 20px;
+}
+
+.spell-header {
+    display: flex;
+    align-items: center;
+    
+    height: 60px;
+    
+    background: url('../../../../images/magic/spell-background.png') no-repeat;
+    background-size: cover;
+
+    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.25);
+    
+    overflow: hidden;
+}
+
+.spell-header:hover {
+    position: relative;
+    cursor: pointer;
+}
+
+.spell-header:hover::before {
+    content: "";
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    
+    background-color: black;
+    opacity: 0.2;
+}
+
+.spell-header > div {
+    width: calc(25% - 28px);
+}
+
+.spell-header > div:nth-child(1),
+.spell-header > div:nth-child(2) {
+    width: 0%;
+}
+
+
+.spell-header-icon {
+    min-width: 35px;
+    min-height: 35px;
+
+    margin: 0 20px 0 7px;
+
+    border-radius: 3px;
+    
+    background-size: cover;
+}
+
+.spell-header-lv {
+    min-width: 50px;
+    max-width: 50px;
+}
+
+.spell-header-name-container {
+    min-width: 270px;
+}
+
+.spell-header-name {
+    
+}
+
+.spell-header-school {
+    font-size: 10px;
+    color: #979aa4;
+    text-transform: uppercase;
+}
+
+.spell-header-cost {
+    min-width: 150px;
+}
+
+.spell-header-maintenance {
+    min-width: 150px;
+}
+
+.spell-header-type {
+    min-width: 150px;
+}
+
+.spell-header-action {
+    min-width: 150px;
+}
+
+.spell-tag {
+    border: 1px solid #cbc6c3;
+    background-color: #fff;
+    box-shadow: inset 0 0 4px 0 #dcd1c7;
+    padding: 4px 8px;
+    font-size: 9px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    display: inline-block;
+    margin: 0 2px;
+}
+
+/* .spell-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.spell-tag {
+    height: 15px;
+
+    background-color: #424B54;
+    color: white;
+    
+    padding: 0px 5px;
+    margin-right: 5px;
+    margin-bottom: 2px;
+
+    border-radius: 7px;
+    border: 1px solid #424B54;
+    
+    font-size: 10px;
+}
+
+.spell-description {
+    height: auto;
+    max-width: 325px;
+
+    font-size: 12px;
+    line-height: 16px;
+
+    position: relative;
+    overflow: hidden;
+    padding-right: 1rem;
+} */
+
+.spell-icon-light {
+    background-image: url('../../../../images/magic/school/light.png');
+}
+
+.spell-icon-darkness {
+    background-image: url('../../../../images/magic/school/darkness.png');
+}
+
+.spell-icon-creation {
+    background-image: url('../../../../images/magic/school/creation.png');
+}
+
+.spell-icon-destruction {
+    background-image: url('../../../../images/magic/school/destruction.png');
+}
+
+.spell-icon-air {
+    background-image: url('../../../../images/magic/school/air.png');
+}
+
+.spell-icon-water {
+    background-image: url('../../../../images/magic/school/water.png');
+}
+
+.spell-icon-fire {
+    background-image: url('../../../../images/magic/school/fire.png');
+}
+
+.spell-icon-earth {
+    background-image: url('../../../../images/magic/school/earth.png');
+}
+
+.spell-icon-essence {
+    background-image: url('../../../../images/magic/school/essence.png');
+}
+
+.spell-icon-illusion {
+    background-image: url('../../../../images/magic/school/illusion.png');
+}
+
+.spell-icon-necromancy {
+    background-image: url('../../../../images/magic/school/necromancy.png');
+}
+
+.spell-icon-nobility {
+    background-image: url('../../../../images/magic/school/nobility.png');
+}

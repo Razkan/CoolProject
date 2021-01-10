@@ -96,6 +96,7 @@ namespace Library.Service
             {
                 var streamTask = Task.Run(async () =>
                 {
+                    
                     var response = await client.GetAsync(uri);
                     if (response.IsSuccessStatusCode)
                     {
