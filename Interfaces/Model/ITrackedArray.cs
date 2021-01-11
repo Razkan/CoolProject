@@ -2,9 +2,9 @@
 
 namespace Interfaces.Model
 {
-    public interface ITrackedArray<T> 
+    public interface ITrackedArray<out T> 
     {
         string __Type__ { get; }
-        IEnumerable<T> __Array__ { get; set; }
+        IEnumerable<T> __Array__ { get; }
     }
 }
