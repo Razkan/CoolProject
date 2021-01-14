@@ -6,9 +6,9 @@ using Library.Model.Book.Spell.Resistance;
 
 namespace Library.Service
 {
-    public class SpellBooks
+    public class CoreSpellBooks
     {
-        public static ISpellBook GetBookOfLight()
+        public static ICoreSpellBook GetBookOfLight()
         {
             return new BookOfLight
             {
@@ -16,7 +16,7 @@ namespace Library.Service
                 School = "Light",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Create Light",
                         Action = SpellAction.Active,
@@ -37,7 +37,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Induce Calm",
                         Action = SpellAction.Active,
@@ -76,7 +76,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Blinding Flash",
                         Action = SpellAction.Active,
@@ -118,7 +118,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Shield of Light",
                         Action = SpellAction.Passive,
@@ -145,7 +145,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Perceive",
                         Action = SpellAction.Active,
@@ -173,7 +173,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Armor of Light",
                         Action = SpellAction.Active,
@@ -199,7 +199,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Banish Shadows",
                         Action = SpellAction.Active,
@@ -234,7 +234,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Detect Negative Emotions",
                         Action = SpellAction.Active,
@@ -267,7 +267,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Light Beam",
                         Action = SpellAction.Active,
@@ -292,7 +292,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Hologram",
                         Action = SpellAction.Active,
@@ -324,7 +324,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Bonds of Light",
                         Action = SpellAction.Active,
@@ -352,7 +352,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Control Light",
                         Action = SpellAction.Active,
@@ -385,7 +385,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Detect Life",
                         Action = SpellAction.Active,
@@ -417,7 +417,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Spy of Light",
                         Action = SpellAction.Active,
@@ -450,7 +450,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Ecstasy",
                         Action = SpellAction.Active,
@@ -485,7 +485,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Banish Negative Emotions",
                         Action = SpellAction.Active,
@@ -522,7 +522,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Healing Light",
                         Action = SpellAction.Active,
@@ -548,7 +548,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Seeking Sphere",
                         Action = SpellAction.Active,
@@ -577,7 +577,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Zone of Detection",
                         Action = SpellAction.Active,
@@ -613,7 +613,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Enter Another’s Dreams",
                         Action = SpellAction.Active,
@@ -658,7 +658,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Light Form",
                         Action = SpellAction.Active,
@@ -691,7 +691,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfDarkness()
+        public static ICoreSpellBook GetBookOfDarkness()
         {
             return new BookOfDarkness
             {
@@ -699,7 +699,7 @@ namespace Library.Service
                 School = "Darkness",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Create Darkness",
                         Action = SpellAction.Active,
@@ -725,7 +725,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfCreation()
+        public static ICoreSpellBook GetBookOfCreation()
         {
             return new BookOfCreation
             {
@@ -733,7 +733,7 @@ namespace Library.Service
                 School = "Creation",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Minor Creation",
                         Action = SpellAction.Active,
@@ -758,7 +758,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfDestruction()
+        public static ICoreSpellBook GetBookOfDestruction()
         {
             return new BookOfDestruction
             {
@@ -766,7 +766,7 @@ namespace Library.Service
                 School = "Destruction",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Fragility",
                         Action = SpellAction.Active,
@@ -795,7 +795,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfAir()
+        public static ICoreSpellBook GetBookOfAir()
         {
             return new BookOfAir
             {
@@ -803,7 +803,7 @@ namespace Library.Service
                 School = "Air",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Raise Wind",
                         Action = SpellAction.Active,
@@ -830,7 +830,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfWater()
+        public static ICoreSpellBook GetBookOfWater()
         {
             return new BookOfWater
             {
@@ -838,7 +838,7 @@ namespace Library.Service
                 School = "Water",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Spring",
                         Action = SpellAction.Active,
@@ -866,7 +866,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfFire()
+        public static ICoreSpellBook GetBookOfFire()
         {
             return new BookOfFire
             {
@@ -874,7 +874,7 @@ namespace Library.Service
                 School = "Fire",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Create Fire",
                         Action = SpellAction.Active,
@@ -901,7 +901,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfEarth()
+        public static ICoreSpellBook GetBookOfEarth()
         {
             return new BookOfEarth
             {
@@ -909,7 +909,7 @@ namespace Library.Service
                 School = "Earth",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Detect Minerals",
                         Action = SpellAction.Active,
@@ -932,7 +932,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Mineral Control",
                         Action = SpellAction.Active,
@@ -970,7 +970,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Weight Increment",
                         Action = SpellAction.Active,
@@ -994,7 +994,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Transform Mineral",
                         Action = SpellAction.Passive,
@@ -1021,7 +1021,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Firmness",
                         Action = SpellAction.Active,
@@ -1053,7 +1053,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Stone Barrier",
                         Action = SpellAction.Passive,
@@ -1082,7 +1082,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Slowness",
                         Action = SpellAction.Active,
@@ -1114,7 +1114,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Shell",
                         Action = SpellAction.Active,
@@ -1140,7 +1140,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Magnetic Shield",
                         Action = SpellAction.Passive,
@@ -1174,7 +1174,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Pass Through Solid Matter",
                         Action = SpellAction.Active,
@@ -1205,7 +1205,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Earth Spike",
                         Action = SpellAction.Active,
@@ -1236,7 +1236,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Breakage",
                         Action = SpellAction.Active,
@@ -1261,7 +1261,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Telemetry",
                         Action = SpellAction.Active,
@@ -1293,7 +1293,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Magnetic Control",
                         Action = SpellAction.Active,
@@ -1326,7 +1326,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Forge",
                         Action = SpellAction.Active,
@@ -1354,7 +1354,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Solid Body",
                         Action = SpellAction.Active,
@@ -1385,7 +1385,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Resistance",
                         Action = SpellAction.Active,
@@ -1415,7 +1415,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Petrify",
                         Action = SpellAction.Active,
@@ -1452,7 +1452,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Fissure",
                         Action = SpellAction.Active,
@@ -1483,7 +1483,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Reverse Gravity",
                         Action = SpellAction.Active,
@@ -1520,7 +1520,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Mineral Creation",
                         Action = SpellAction.Active,
@@ -1547,7 +1547,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Terrain Erudition",
                         Action = SpellAction.Active,
@@ -1576,7 +1576,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Earthquake",
                         Action = SpellAction.Active,
@@ -1608,7 +1608,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Gravity Destruction",
                         Action = SpellAction.Active,
@@ -1651,7 +1651,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfEssence()
+        public static ICoreSpellBook GetBookOfEssence()
         {
             return new BookOfEssence
             {
@@ -1659,7 +1659,7 @@ namespace Library.Service
                 School = "Essence",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Natural Affinity",
                         Action = SpellAction.Active,
@@ -1688,7 +1688,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfIllusion()
+        public static ICoreSpellBook GetBookOfIllusion()
         {
             return new BookOfIllusion
             {
@@ -1696,7 +1696,7 @@ namespace Library.Service
                 School = "Illusion",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Illusory Sound",
                         Action = SpellAction.Active,
@@ -1729,7 +1729,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Illusory Smell",
                         Action = SpellAction.Active,
@@ -1762,7 +1762,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Illusory Touch",
                         Action = SpellAction.Active,
@@ -1795,7 +1795,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Visual Illusion",
                         Action = SpellAction.Active,
@@ -1828,7 +1828,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Detect Illusion",
                         Action = SpellAction.Active,
@@ -1850,7 +1850,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Sweet Talk",
                         Action = SpellAction.Active,
@@ -1876,7 +1876,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Alter Appearance",
                         Action = SpellAction.Active,
@@ -1911,7 +1911,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Illusory Invisibility",
                         Action = SpellAction.Active,
@@ -1945,7 +1945,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Mirror Image",
                         Action = SpellAction.Active,
@@ -1978,7 +1978,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Total Illusion",
                         Action = SpellAction.Active,
@@ -2012,7 +2012,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Confusion",
                         Action = SpellAction.Active,
@@ -2048,7 +2048,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Create Illusory Being",
                         Action = SpellAction.Active,
@@ -2092,7 +2092,7 @@ namespace Library.Service
                             Tag.Area
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Resistance to Illusions",
                         Action = SpellAction.Active,
@@ -2115,7 +2115,7 @@ namespace Library.Service
                             Tag.Target
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Detect Lie",
                         Action = SpellAction.Active,
@@ -2152,7 +2152,7 @@ namespace Library.Service
                             Tag.Self
                         }
                     },
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Ghostly Illusion",
                         Action = SpellAction.Active,
@@ -2192,7 +2192,7 @@ namespace Library.Service
             };
         }
 
-        public static ISpellBook GetBookOfNecromancy()
+        public static ICoreSpellBook GetBookOfNecromancy()
         {
             return new BookOfNecromancy
             {
@@ -2200,7 +2200,7 @@ namespace Library.Service
                 School = "Necromancy",
                 Spells = new[]
                 {
-                    new Spell
+                    new CoreSpell
                     {
                         Name = "Feel Death",
                         Action = SpellAction.Active,

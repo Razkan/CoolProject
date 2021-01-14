@@ -6,9 +6,7 @@ import {
     faBookOpen,
     faStickyNote
 } from '@fortawesome/free-solid-svg-icons';
-import { connect } from 'react-redux';
-
-const mapDispatchToProps = dispatch => ({ dispatch });
+import { withRouter } from 'react-router-dom';
 
 class Sidebar extends React.Component {
 
@@ -16,17 +14,16 @@ class Sidebar extends React.Component {
         super(props);
 
         this.state = {
-            show: false,
-            activeItem: "Spells"
+            show: false
         };
 
-        this.props.dispatch({ type: "sidebar", sidebar: this.state.activeItem });
+        if(this.props.location.pathname === "/") {
+            this.props.history.push("/Spells");
+        }
     }
 
     open = () => this.setState({ show: true });
     close = () => this.setState({ show: false });
-
-    itemSelected = value => this.setState({ activeItem: value }, () => this.props.dispatch({ type: "sidebar", sidebar: value }));
 
     getSidebarClass() {
         var classes = ["sidebar"];
@@ -55,25 +52,22 @@ class Sidebar extends React.Component {
                 icon={faUser}
                 text={"Character"}
                 show={() => this.state.show}
-                active={this.state.activeItem}
-                onSelect={this.itemSelected} />,
+                active={this.props.location.pathname} />,
 
             <SidebarItem key={1}
                 icon={faBookOpen}
                 text={"Spells"}
                 show={() => this.state.show}
-                active={this.state.activeItem}
-                onSelect={this.itemSelected} />,
+                active={this.props.location.pathname} />,
 
             <SidebarItem key={2}
                 icon={faStickyNote}
                 text={"Notes"}
                 show={() => this.state.show}
-                active={this.state.activeItem}
-                onSelect={this.itemSelected} />,
+                active={this.props.location.pathname} />,
         ];
         return items
     }
 }
 
-export default connect(null, mapDispatchToProps)(Sidebar);
+export default withRouter(Sidebar);

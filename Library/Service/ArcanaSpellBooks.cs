@@ -5,9 +5,9 @@ using Library.Model.Book.Spell;
 
 namespace Library.Service
 {
-    public class SubPaths
+    public class ArcanaSpellBooks
     {
-        public static ISubPath GetNobility()
+        public static IArcanaSpellBook GetNobility()
         {
             return new Nobility
             {
@@ -15,7 +15,7 @@ namespace Library.Service
                 School = "Nobility",
                 Spells = new[]
                 {
-                    new SubPathSpell
+                    new ArcanaSpell
                     {
                         Name = "Visage",
                         Action = SpellAction.Active,

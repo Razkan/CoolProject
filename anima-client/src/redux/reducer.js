@@ -1,9 +1,6 @@
 const initialState = {
     highlight: {
         value: ""
-    },
-    sidebar: {
-        value: ""
     }
 };
 
@@ -13,13 +10,6 @@ export default function appReducer(state = initialState, action) {
             var newState = { ...state };
             newState.highlight = {
                 value: action.highlight
-            }
-            return newState;
-        }
-        case 'sidebar': {
-            var newState = { ...state };
-            newState.sidebar = {
-                value: action.sidebar
             }
             return newState;
         }

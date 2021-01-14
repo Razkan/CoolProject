@@ -1,6 +1,6 @@
 ﻿namespace Interfaces.Model.Book.Spell
 {
-    public interface IFreeSpell : ISpell
+    public interface IFreeCoreSpell : ICoreSpell
     {
         string LevelRange { get; }
     }

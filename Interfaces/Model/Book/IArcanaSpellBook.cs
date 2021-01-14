@@ -6,11 +6,11 @@ using Interfaces.Model.Db.Attribute;
 namespace Interfaces.Model.Book
 {
     [TableInterface]
-    public interface ISubPath : IDatabaseEntity
+    public interface IArcanaSpellBook : IDatabaseEntity
     {
         string Name { get; }
         string School { get; }
 
-        ICollection<ISubPathSpell> Spells { get; }
+        ICollection<IArcanaSpell> Spells { get; }
     }
 }

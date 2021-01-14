@@ -9,21 +9,21 @@ using Interfaces.Model.Enum;
 
 namespace Library.Model
 {
-    public class SpellBookFilter : ISpellBookFilter
+    public class CoreSpellBookFilter : ICoreSpellBookFilter
     {
-        public ValueTask<bool> BySchool(string[] filter, ISpellBook spellBook)
+        public ValueTask<bool> BySchool(string[] filter, ICoreSpellBook coreSpellBook)
         {
             return filter.Any()
-                ? new ValueTask<bool>(filter.Any(school =>string.Equals(school, spellBook.School, StringComparison.OrdinalIgnoreCase)))
+                ? new ValueTask<bool>(filter.Any(school =>string.Equals(school, coreSpellBook.School, StringComparison.OrdinalIgnoreCase)))
                 : new ValueTask<bool>(true);
         }
 
-        public ValueTask<ISpellBook> BySpell(string[] filter, ISpellBook spellBook)
+        public ValueTask<ICoreSpellBook> BySpell(string[] filter, ICoreSpellBook coreSpellBook)
         {
             if (filter.Any())
             {
-                var removeList = new List<ISpell>();
-                foreach (var spell in spellBook.Spells)
+                var removeList = new List<ICoreSpell>();
+                foreach (var spell in coreSpellBook.Spells)
                 {
                     var containsWord = false;
                     if (spell.Tags != null && spell.Tags.Any())
@@ -45,20 +45,20 @@ namespace Library.Model
 
                 foreach (var spell in removeList)
                 {
-                    spellBook.Spells.Remove(spell);
+                    coreSpellBook.Spells.Remove(spell);
                 }
             }
 
-            return new ValueTask<ISpellBook>(spellBook);
+            return new ValueTask<ICoreSpellBook>(coreSpellBook);
         }
 
-        public ValueTask<ISpellBook> ByTag(string[] filter, ISpellBook spellBook)
+        public ValueTask<ICoreSpellBook> ByTag(string[] filter, ICoreSpellBook coreSpellBook)
         {
             if (filter.Any())
             {
-                var removeList = new List<ISpell>();
+                var removeList = new List<ICoreSpell>();
                 var enumTags = filter.Select(Enum.Parse<Tag>).ToArray();
-                foreach (var spell in spellBook.Spells)
+                foreach (var spell in coreSpellBook.Spells)
                 {
                     var containsTag = false;
                     if (spell.Tags != null && spell.Tags.Any())
@@ -80,16 +80,16 @@ namespace Library.Model
 
                 foreach (var spell in removeList)
                 {
-                    spellBook.Spells.Remove(spell);
+                    coreSpellBook.Spells.Remove(spell);
                 }
             }
 
-            return new ValueTask<ISpellBook>(spellBook);
+            return new ValueTask<ICoreSpellBook>(coreSpellBook);
         }
 
-        public ValueTask<ISpellBook> BySpecial(string[] filter, ISpellBook spellBook)
+        public ValueTask<ICoreSpellBook> BySpecial(string[] filter, ICoreSpellBook coreSpellBook)
         {
-            return new ValueTask<ISpellBook>(spellBook);
+            return new ValueTask<ICoreSpellBook>(coreSpellBook);
         }
     }
 }

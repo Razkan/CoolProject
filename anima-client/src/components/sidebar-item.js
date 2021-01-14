@@ -1,11 +1,12 @@
 import React from 'react';
 import './style/sidebar-item.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Link } from 'react-router-dom';
 
 class SidebarItem extends React.Component {
 
     isActive() {
-        return this.props.text === this.props.active;
+        return ("/" + this.props.text) === this.props.active;
     }
 
     getStyle() {
@@ -36,10 +37,11 @@ class SidebarItem extends React.Component {
     render() {
 
         return (
-            <div className={this.getStyle()}
-                onMouseDown={() => this.props.onSelect(this.props.text)}>
-                {this.getContent()}
-            </div>
+            <Link to={"/" + this.props.text}>
+                <div className={this.getStyle()}>
+                    {this.getContent()}
+                </div>
+            </Link>
         );
     }
 }

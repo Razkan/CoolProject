@@ -29,8 +29,8 @@ namespace BackendAPI.HostedService
             {
                 var tasks = new List<Task>
                 {
-                    rpc.Register<ISpellBook>(new Uri("http://localhost:9000/book/all")),
-                    rpc.Register<ISubPath>(new Uri("http://localhost:9000/subpath/all")),
+                    rpc.Register<ICoreSpellBook>(new Uri("http://localhost:9000/core/all")),
+                    rpc.Register<IArcanaSpellBook>(new Uri("http://localhost:9000/arcana/all")),
 
                     //rpc.Register<IBookOfLight>(new Uri("http://localhost:9000/book/light")),
                     //rpc.Register<IBookOfDarkness>(new Uri("http://localhost:9000/book/darkness")),

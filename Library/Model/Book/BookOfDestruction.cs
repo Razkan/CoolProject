@@ -17,6 +17,6 @@ namespace Library.Model.Book
         public string School { get; set; }
 
         [DbObjectCollection]
-        public ICollection<ISpell> Spells { get; set; }
+        public ICollection<ICoreSpell> Spells { get; set; }
     }
 }

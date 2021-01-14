@@ -11,9 +11,36 @@ class SpellList extends React.Component {
     getSpells() {
         var spells = [];
 
-        for (var spell of this.props.data) {
-            spells.push(<Spell key={spell.data.name} data={spell.data} school={spell.school} />);
+        for(const [key, value] of Object.entries(this.props.books)) {
+            for(var book of value) {
+                for(var spell of book.spells) {
+                    
+                    switch(key) {
+                        case 'core':
+                            spells.push(<Spell key={spell.name} data={spell} school={book.school} />);
+                            break;
+    
+                        case 'arcana':
+                            spells.push(<Spell key={spell.name} data={spell} school={book.school} />);
+                            break;
+                    } 
+                }
+
+            }
         }
+
+        spells = spells.sort((a, b) => {
+            if (a.props.data.level > b.props.data.level) return 1;
+            if (a.props.data.level < b.props.data.level) return -1;
+
+            if (a.props.data.cost > b.props.data.cost) return 1;
+            if (a.props.data.cost < b.props.data.cost) return -1;
+
+            if (a.props.data.name > b.props.data.name) return 1;
+            if (a.props.data.name < b.props.data.name) return -1;
+
+            return 0;
+        });
 
         return spells;
     }

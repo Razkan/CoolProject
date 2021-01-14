@@ -1,6 +1,6 @@
 ﻿namespace Interfaces.Model.Book
 {
-    public interface IBookOfWater : ISpellBook
+    public interface IBookOfWater : ICoreSpellBook
     {
     }
 }

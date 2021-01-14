@@ -10,23 +10,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace FrontendAPI.Controllers
 {
     [ApiController]
-    [Route("book")]
-    public class BookController : ControllerBase
+    [Route("core")]
+    public class CoreController : ControllerBase
     {
         private readonly IRemoteProcedureCall _remoteProcedureCall;
-        private readonly ISpellBookFilter _spellBookFilter;
+        private readonly ICoreSpellBookFilter _coreSpellBookFilter;
 
-        public BookController(
+        public CoreController(
             IRemoteProcedureCall remoteProcedureCall,
-            ISpellBookFilter spellBookFilter)
+            ICoreSpellBookFilter coreSpellBookFilter)
         {
             _remoteProcedureCall = remoteProcedureCall;
-            _spellBookFilter = spellBookFilter;
+            _coreSpellBookFilter = coreSpellBookFilter;
         }
+
 
         [HttpGet]
         [Route("all")]
-        public async IAsyncEnumerable<ISpellBook> All(
+        public async IAsyncEnumerable<ICoreSpellBook> All(
             [FromQuery] string[] contains,
             [FromQuery] string[] schools,
             [FromQuery] string[] tags,
@@ -34,13 +35,13 @@ namespace FrontendAPI.Controllers
         {
             Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
             Response.Headers.Add("Content-Type", "application/json");
-            var result = await _remoteProcedureCall.GetAsync<ISpellBook>();
+            var result = await _remoteProcedureCall.GetAsync<ICoreSpellBook>();
 
-            var filteredResult = result.GetResult<ISpellBook>()
-                .WhereAwait(spellBook => _spellBookFilter.BySchool(schools, spellBook))
-                .SelectAwait(spellBook => _spellBookFilter.BySpell(contains, spellBook))
-                .SelectAwait(spellBook => _spellBookFilter.ByTag(tags, spellBook))
-                .SelectAwait(spellBook => _spellBookFilter.BySpecial(specials, spellBook))
+            var filteredResult = result.GetResult<ICoreSpellBook>()
+                .WhereAwait(spellBook => _coreSpellBookFilter.BySchool(schools, spellBook))
+                .SelectAwait(spellBook => _coreSpellBookFilter.BySpell(contains, spellBook))
+                .SelectAwait(spellBook => _coreSpellBookFilter.ByTag(tags, spellBook))
+                .SelectAwait(spellBook => _coreSpellBookFilter.BySpecial(specials, spellBook))
                 .WhereAwait(spellBook => new ValueTask<bool>(spellBook.Spells != null && spellBook.Spells.Any()));
 
             await foreach (var filterResult in filteredResult)
@@ -53,7 +54,7 @@ namespace FrontendAPI.Controllers
         public async Task Test()
         {
             Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
-            var result = await _remoteProcedureCall.GetAsync<ISpellBook>();
+            var result = await _remoteProcedureCall.GetAsync<ICoreSpellBook>();
             
             await foreach (var stream in result.GetStreams())
             {

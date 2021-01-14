@@ -6,6 +6,12 @@
     transition: min-width 0.5s;
 }
 
+.sidebar > a {
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 .sidebar-collapsed {
     min-width: 40px;
 }

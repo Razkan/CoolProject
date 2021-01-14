@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
 import Navigation from './components/navigation';
-import Sidebar from './components/sidebar';
-import Main from './components/main';
+import SidebarPage from './pages/sidebar-page';
+import MainPage from './pages/main-page';
 
 class App extends React.Component {
 
@@ -12,8 +12,9 @@ class App extends React.Component {
 				
 				{/* <Navigation /> */}
 				<div className="content">
-					<Sidebar />
-					<Main />
+					{/* <Sidebar /> */}
+					<SidebarPage />
+					<MainPage />
 				</div>
 			</div>
 		);

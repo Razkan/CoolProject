@@ -6,7 +6,7 @@ using Interfaces.Model.Enum;
 namespace Library.Model.Book.Spell
 {
     [Table]
-    public class FreeSpell : IFreeSpell
+    public class FreeCoreSpell : IFreeCoreSpell
     {
         public string Id => Name;
 
