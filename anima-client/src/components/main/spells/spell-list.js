@@ -1,6 +1,7 @@
 import React from 'react';
 import './style/spell-list.css';
-import Spell from './spell';
+import CoreSpell from './core-spell';
+import ArcanaSpell from './arcana-spell';
 
 class SpellList extends React.Component {
 
@@ -17,11 +18,11 @@ class SpellList extends React.Component {
                     
                     switch(key) {
                         case 'core':
-                            spells.push(<Spell key={spell.name} data={spell} school={book.school} />);
+                            spells.push(<CoreSpell key={spell.name} data={spell} school={book.school} />);
                             break;
     
                         case 'arcana':
-                            spells.push(<Spell key={spell.name} data={spell} school={book.school} />);
+                            spells.push(<ArcanaSpell key={spell.name} data={spell} school={book.school} />);
                             break;
                     } 
                 }

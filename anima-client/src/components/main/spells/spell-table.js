@@ -48,7 +48,7 @@ class SpellTable extends React.Component {
     handleFilters = query => this.getData(query);
 
     componentDidMount() {
-        this.getData("");
+        this.getData();
     }
 
     createFilter() {
@@ -58,7 +58,7 @@ class SpellTable extends React.Component {
         for (const school of this.state.filters.schools) {
             schools[school.value] = school.value;
         }
-        
+
         for (const tag of this.state.filters.tags) {
             tags[tag.value] = tag.value;
         }
@@ -82,13 +82,17 @@ class SpellTable extends React.Component {
             return Object.values(obj).map(objValue => ({ value: objValue, label: objValue }));
         }
 
-        this.setState({filters: {
-            schools: toFilter(schools),
-            tags: toFilter(tags),
-        }});
+        this.setState({
+            filters: {
+                schools: toFilter(schools),
+                tags: toFilter(tags),
+            }
+        });
     }
 
     async getData(query) {
+        query = query || "";
+
         const getCore = data => this.setState({
             books: { core: data, arcana: this.state.books.arcana || [] },
         });
@@ -97,8 +101,19 @@ class SpellTable extends React.Component {
             books: { arcana: data, core: this.state.books.core || [] }
         });
 
-        await this.fetch(this.coreUrl + query, getCore, this.retryFetch);
-        await this.fetch(this.arcanaUrl + query, getArcana, this.retryFetch);
+        var core = null;
+        var arcana = null;
+        
+        await this.fetch(this.coreUrl + query, result => core = result, this.retryFetch);
+        await this.fetch(this.arcanaUrl + query, result => arcana = result, this.retryFetch);
+
+        if (core) {
+            getCore(core);
+        }
+        if(arcana) {
+            getArcana(arcana);
+        }
+
         this.createFilter();
     }
 

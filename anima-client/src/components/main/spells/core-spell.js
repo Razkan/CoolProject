@@ -1,8 +1,8 @@
 import React from 'react';
-import './style/spell.css';
+import './style/core-spell.css';
 import Text from '../../../redux/highlight/text';
 
-class Spell extends React.Component {
+class CoreSpell extends React.Component {
 
     constructor(props) {
         super(props);
@@ -31,7 +31,7 @@ class Spell extends React.Component {
             }
         }
 
-        return tags.map(tag => <div key={tag} className="spell-tag">{tag}</div>);
+        return tags.map(tag => <div key={tag} className="core-spell-tag">{tag}</div>);
     }
 
     getResistance() {
@@ -66,10 +66,10 @@ class Spell extends React.Component {
     }
 
     getExpandedClass() {
-        var classes = ["spell-expandable-item"];
+        var classes = ["core-spell-expandable-item"];
 
         if (!this.state.show && !this.state.hasHighlight) {
-            classes.push("spell-expandable-item-hidden");
+            classes.push("core-spell-expandable-item-hidden");
         }
 
         return classes.join(" ");
@@ -78,103 +78,103 @@ class Spell extends React.Component {
     getExpanded() {
         return (
             <div className={this.getExpandedClass()}>
-                <div className="spell-expandable-item-section1">
-                    <div className="spell-expandable-item-section1-column">
+                <div className="core-spell-expandable-item-section1">
+                    <div className="core-spell-expandable-item-section1-column">
                         <div>
-                            <div className="spell-expandable-item-section1-column-header">
+                            <div className="core-spell-expandable-item-section1-column-header">
                                 Level
                                 </div>
-                            <div className="spell-expandable-item-section1-column-value">
+                            <div className="core-spell-expandable-item-section1-column-value">
                                 {this.props.data.level}
                             </div>
                         </div>
                         <div>
-                            <div className="spell-expandable-item-section1-column-header">
+                            <div className="core-spell-expandable-item-section1-column-header">
                                 School
                             </div>
-                            <div className="spell-expandable-item-section1-column-value">
+                            <div className="core-spell-expandable-item-section1-column-value">
                                 {this.props.school}
                             </div>
                         </div>
                     </div>
-                    <div className="spell-expandable-item-section1-column">
+                    <div className="core-spell-expandable-item-section1-column">
                         <div>
-                            <div className="spell-expandable-item-section1-column-header">
+                            <div className="core-spell-expandable-item-section1-column-header">
                                 Cost
                                 </div>
-                            <div className="spell-expandable-item-section1-column-value">
+                            <div className="core-spell-expandable-item-section1-column-value">
                                 {this.props.data.cost}
                             </div>
                         </div>
                         <div>
-                            <div className="spell-expandable-item-section1-column-header">
+                            <div className="core-spell-expandable-item-section1-column-header">
                                 Resistance(s)
                             </div>
-                            <div className="spell-expandable-item-section1-column-value">
+                            <div className="core-spell-expandable-item-section1-column-value">
                                 {this.getResistance()}
                             </div>
 
                         </div>
                     </div>
-                    <div className="spell-expandable-item-section1-column">
+                    <div className="core-spell-expandable-item-section1-column">
                         <div>
-                            <div className="spell-expandable-item-section1-column-header">
+                            <div className="core-spell-expandable-item-section1-column-header">
                                 Maximum Zeon
                             </div>
-                            <div className="spell-expandable-item-section1-column-value">
+                            <div className="core-spell-expandable-item-section1-column-value">
                                 {this.props.data.zeonAttribute} {this.props.data.maximumZeon}
                             </div>
                         </div>
                         <div>
-                            <div className="spell-expandable-item-section1-column-header">
+                            <div className="core-spell-expandable-item-section1-column-header">
                                 Action
                                 </div>
-                            <div className="spell-expandable-item-section1-column-value">
+                            <div className="core-spell-expandable-item-section1-column-value">
                                 {this.props.data.action}
                             </div>
                         </div>
                     </div>
-                    <div className="spell-expandable-item-section1-column">
+                    <div className="core-spell-expandable-item-section1-column">
                         <div>
-                            <div className="spell-expandable-item-section1-column-header">
+                            <div className="core-spell-expandable-item-section1-column-header">
                                 Maintenance
                                 </div>
-                            <div className="spell-expandable-item-section1-column-value">
+                            <div className="core-spell-expandable-item-section1-column-value">
                                 {this.props.data.maintenance}
                             </div>
 
                         </div>
                         <div>
-                            <div className="spell-expandable-item-section1-column-header">
+                            <div className="core-spell-expandable-item-section1-column-header">
                                 Type
                                 </div>
-                            <div className="spell-expandable-item-section1-column-value">
+                            <div className="core-spell-expandable-item-section1-column-value">
                                 {this.getType()}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="spell-expandable-item-breakline" />
-                <div className="spell-expandable-item-section2">
-                    <div className="spell-expandable-item-section2-effect">
+                <div className="core-spell-expandable-item-breakline" />
+                <div className="core-spell-expandable-item-section2">
+                    <div className="core-spell-expandable-item-section2-effect">
                         <strong>Effect:</strong> <Text value={this.props.data.effect} onHighlight={this.onHighlight} />
                     </div>
-                    <div className="spell-expandable-item-section2-added-effect">
+                    <div className="core-spell-expandable-item-section2-added-effect">
                         <strong>Added Effect:</strong> {this.props.data.addedEffect}
                     </div>
                 </div>
-                <div className="spell-expandable-item-section3">
+                <div className="core-spell-expandable-item-section3">
                     <div>Tags:</div> {this.getTags()}
                 </div>
             </div>
         );
     }
 
-    getSpellClass() {
-        var classes = ["spell"];
+    getCoreSpellClasses() {
+        var classes = ["core-spell"];
 
         if (this.state.isHighlight && !this.state.hasHighlight) {
-            classes.push("spell-hidden");
+            classes.push("core-spell-hidden");
         }
 
         return classes.join(" ")
@@ -183,34 +183,34 @@ class Spell extends React.Component {
     render() {
         return (
 
-            <div className={this.getSpellClass()}>
-                <div className="spell-header"
+            <div className={this.getCoreSpellClasses()}>
+                <div className="core-spell-header"
                     onMouseDown={this.toggleShow}
                 >
-                    <div className={"spell-header-icon spell-icon-" + this.props.school.toLowerCase()} />
+                    <div className={"core-spell-header-icon core-spell-icon-" + this.props.school.toLowerCase()} />
 
-                    <div className="spell-header-lv">
+                    <div className="core-spell-header-lv">
                         {this.props.data.level}
                     </div>
 
-                    <div className="spell-header-name-container">
-                        <div className="spell-header-name">{this.props.data.name}</div>
-                        <div className="spell-header-school">{this.props.school}</div>
+                    <div className="core-spell-header-name-container">
+                        <div className="core-spell-header-name">{this.props.data.name}</div>
+                        <div className="core-spell-header-school">{this.props.school}</div>
                     </div>
 
-                    <div className="spell-header-cost">
+                    <div className="core-spell-header-cost">
                         {this.props.data.cost}
                     </div>
 
-                    <div className="spell-header-maintenance">
+                    <div className="core-spell-header-maintenance">
                         {this.props.data.maintenanceDuration}
                     </div>
 
-                    <div className="spell-header-type">
+                    <div className="core-spell-header-type">
                         {this.getType()}
                     </div>
 
-                    <div className="spell-header-action">
+                    <div className="core-spell-header-action">
                         {this.props.data.action}
                     </div>
                 </div>
@@ -221,4 +221,4 @@ class Spell extends React.Component {
     }
 }
 
-export default Spell;
+export default CoreSpell;

@@ -29,6 +29,7 @@ namespace FrontendAPI
             services.AddHttpClient("client");
             services.AddScoped<IRemoteProcedureCall, RemoteProcedureCall>();
             services.AddScoped<ICoreSpellBookFilter, CoreSpellBookFilter>();
+            services.AddScoped<IArcanaSpellBookFilter, ArcanaSpellBookFilter>();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)

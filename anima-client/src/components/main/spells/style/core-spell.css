@@ -1,0 +1,231 @@
+.core-spell {
+    display: flex;
+    flex-direction: column;
+    
+    height: fit-content;
+
+    background-color: white;
+
+}
+
+.core-spell.core-spell-hidden {
+    display: none;
+}
+
+.core-spell-expandable-item {
+    display: flex;
+    flex-direction: column;
+
+    padding: 30px 26px 0;
+
+    border: 1px solid silver;
+    border-top: 0px;
+
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.core-spell-expandable-item-hidden {
+    display: none;
+}
+
+.core-spell-expandable-item-section1 {
+    display: flex;
+}
+
+.core-spell-expandable-item-section1-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.core-spell-expandable-item-section1-column > div {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    
+    padding: 10px;
+}
+
+.core-spell-expandable-item-section1-column-header {
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.core-spell-expandable-item-section1-column-value {
+    font-size: 16px;
+}
+
+.core-spell-expandable-item-breakline {
+
+    height: 3px;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    background-color: gray;
+}
+
+.core-spell-expandable-item-section2 {
+}
+
+.core-spell-expandable-item-section2-effect {
+    margin-bottom: 30px
+}
+
+.core-spell-expandable-item-section2-added-effect {
+    
+}
+
+.core-spell-expandable-item-section3 {
+    display: flex;
+    align-items: flex-end;
+    
+    padding-top: 40px;
+    margin-bottom: 20px;
+}
+
+.core-spell-header {
+    display: flex;
+    align-items: center;
+    
+    height: 60px;
+    
+    background: url('../../../../images/spell/background.png') no-repeat;
+    background-size: cover;
+
+    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.25);
+    
+    overflow: hidden;
+}
+
+.core-spell-header:hover {
+    position: relative;
+    cursor: pointer;
+}
+
+.core-spell-header:hover::before {
+    content: "";
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    
+    background-color: black;
+    opacity: 0.2;
+}
+
+.core-spell-header > div {
+    width: calc(25% - 28px);
+}
+
+.core-spell-header > div:nth-child(1),
+.core-spell-header > div:nth-child(2) {
+    width: 0%;
+}
+
+
+.core-spell-header-icon {
+    min-width: 35px;
+    min-height: 35px;
+
+    margin: 0 20px 0 7px;
+
+    border-radius: 3px;
+    
+    background-size: cover;
+}
+
+.core-spell-header-lv {
+    min-width: 50px;
+    max-width: 50px;
+}
+
+.core-spell-header-name-container {
+    min-width: 270px;
+}
+
+.core-spell-header-name {
+    
+}
+
+.core-spell-header-school {
+    font-size: 10px;
+    color: #979aa4;
+    text-transform: uppercase;
+}
+
+.core-spell-header-cost {
+    min-width: 150px;
+}
+
+.core-spell-header-maintenance {
+    min-width: 150px;
+}
+
+.core-spell-header-type {
+    min-width: 150px;
+}
+
+.core-spell-header-action {
+    min-width: 150px;
+}
+
+.core-spell-tag {
+    border: 1px solid #cbc6c3;
+    background-color: #fff;
+    box-shadow: inset 0 0 4px 0 #dcd1c7;
+    padding: 4px 8px;
+    font-size: 9px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    display: inline-block;
+    margin: 0 2px;
+}
+
+.core-spell-icon-light {
+    background-image: url('../../../../images/spell/core/light.png');
+}
+
+.core-spell-icon-darkness {
+    background-image: url('../../../../images/spell/core/darkness.png');
+}
+
+.core-spell-icon-creation {
+    background-image: url('../../../../images/spell/core/creation.png');
+}
+
+.core-spell-icon-destruction {
+    background-image: url('../../../../images/spell/core/destruction.png');
+}
+
+.core-spell-icon-air {
+    background-image: url('../../../../images/spell/core/air.png');
+}
+
+.core-spell-icon-water {
+    background-image: url('../../../../images/spell/core/water.png');
+}
+
+.core-spell-icon-fire {
+    background-image: url('../../../../images/spell/core/fire.png');
+}
+
+.core-spell-icon-earth {
+    background-image: url('../../../../images/spell/core/earth.png');
+}
+
+.core-spell-icon-essence {
+    background-image: url('../../../../images/spell/core/essence.png');
+}
+
+.core-spell-icon-illusion {
+    background-image: url('../../../../images/spell/core/illusion.png');
+}
+
+.core-spell-icon-necromancy {
+    background-image: url('../../../../images/spell/core/necromancy.png');
+}

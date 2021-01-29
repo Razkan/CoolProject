@@ -9,20 +9,20 @@ using Interfaces.Model.Enum;
 
 namespace Library.Model
 {
-    public class CoreSpellBookFilter : ICoreSpellBookFilter
+    public class ArcanaSpellBookFilter : IArcanaSpellBookFilter
     {
-        public ValueTask<bool> BySchool(string[] filter, ICoreSpellBook spellBook)
+        public ValueTask<bool> BySchool(string[] filter, IArcanaSpellBook spellBook)
         {
             return filter.Any()
                 ? new ValueTask<bool>(filter.Any(school =>string.Equals(school, spellBook.School, StringComparison.OrdinalIgnoreCase)))
                 : new ValueTask<bool>(true);
         }
 
-        public ValueTask<ICoreSpellBook> BySpell(string[] filter, ICoreSpellBook spellBook)
+        public ValueTask<IArcanaSpellBook> BySpell(string[] filter, IArcanaSpellBook spellBook)
         {
             if (filter.Any())
             {
-                var removeList = new List<ICoreSpell>();
+                var removeList = new List<IArcanaSpell>();
                 foreach (var spell in spellBook.Spells)
                 {
                     var containsWord = false;
@@ -49,14 +49,14 @@ namespace Library.Model
                 }
             }
 
-            return new ValueTask<ICoreSpellBook>(spellBook);
+            return new ValueTask<IArcanaSpellBook>(spellBook);
         }
 
-        public ValueTask<ICoreSpellBook> ByTag(string[] filter, ICoreSpellBook spellBook)
+        public ValueTask<IArcanaSpellBook> ByTag(string[] filter, IArcanaSpellBook spellBook)
         {
             if (filter.Any())
             {
-                var removeList = new List<ICoreSpell>();
+                var removeList = new List<IArcanaSpell>();
                 var enumTags = filter.Select(Enum.Parse<Tag>).ToArray();
                 foreach (var spell in spellBook.Spells)
                 {
@@ -84,12 +84,12 @@ namespace Library.Model
                 }
             }
 
-            return new ValueTask<ICoreSpellBook>(spellBook);
+            return new ValueTask<IArcanaSpellBook>(spellBook);
         }
 
-        public ValueTask<ICoreSpellBook> BySpecial(string[] filter, ICoreSpellBook spellBook)
+        public ValueTask<IArcanaSpellBook> BySpecial(string[] filter, IArcanaSpellBook spellBook)
         {
-            return new ValueTask<ICoreSpellBook>(spellBook);
+            return new ValueTask<IArcanaSpellBook>(spellBook);
         }
     }
 }
