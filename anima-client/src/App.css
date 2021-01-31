@@ -14,14 +14,14 @@ html {
 	display: flex;
 }
 
-.main {
+.main-page {
 	transition: width 0.5s;
 }
 
-.sidebar ~ .main {
+.sidebar ~ .main-page {
 	width: calc(100% - 250px);
 }
 
-.sidebar-collapsed ~ .main {
+.sidebar-collapsed ~ .main-page {
 	width: calc(100% - 40px);
 }
