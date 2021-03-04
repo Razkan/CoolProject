@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interfaces.Model;
 using Interfaces.Model.Book;
 using Library.Communication;
@@ -76,9 +77,10 @@ namespace BackendAPI.Controllers
         }
 
         [HttpGet("earth")]
-        public async Task<ITrackedObject<ICoreSpellBook>> Earth()
+        public async Task<ICoreSpellBook> Earth()
         {
-            return await GetBook(Identification.BookOfEarth);
+            //return await GetBook(Identification.BookOfEarth);
+            return await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfEarth);
         }
 
         [HttpGet("air")]

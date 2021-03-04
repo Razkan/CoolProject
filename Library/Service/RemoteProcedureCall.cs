@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Interfaces.Model;
 using Library.Communication;
@@ -99,7 +100,8 @@ namespace Library.Service
                     var response = await client.GetAsync(uri);
                     if (response.IsSuccessStatusCode)
                     {
-                        return await response.Content.ReadAsStreamAsync();
+                        var res =  await response.Content.ReadAsStreamAsync();
+                        return res;
                     }
 
                     return Stream.Null;
