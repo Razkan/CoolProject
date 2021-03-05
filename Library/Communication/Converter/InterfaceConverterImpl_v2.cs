@@ -23,7 +23,9 @@ namespace Library.Communication.Converter
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var dict = ParseJsonToDictionary(ref reader, options);
-            var obj = DictionaryToObject(dict, typeof(T));
+            //var obj = DictionaryToObject2(dict, null);
+            var obj = DictionaryToObject2(dict, typeToConvert);
+            //var obj = DictionaryToObject(dict, typeof(T));
 
             //var resultType = typeof(T);
             //var trackedResultType = typeof(TrackedResult<>);
@@ -33,6 +35,213 @@ namespace Library.Communication.Converter
             //return (T)result;
 
             return (T) obj;
+        }
+
+        private object DictionaryToObject2(IReadOnlyDictionary<string, object> dictionary, Type interfaceType)
+        {
+            object instance;
+            if (IsEnumerable.IsAssignableFrom(interfaceType))
+            {
+                var arguments = interfaceType.GenericTypeArguments;
+                if (arguments.Length > 1)
+                    throw new Exception("Only handling of one generic array type allowed");
+
+                var listType = typeof(List<>);
+                var constructedListType = listType.MakeGenericType(arguments);
+                instance = Activator.CreateInstance(constructedListType);
+            }
+            else
+            {
+                if (!TypeCache.TryGetValue(interfaceType, out var type))
+                {
+                    var classBuilder = new ClassBuilder();
+
+                    classBuilder.AddInterface(interfaceType);
+                    foreach (var @interface in interfaceType.GetInterfaces())
+                    {
+                        classBuilder.AddInterface(@interface);
+                    }
+
+                    type = classBuilder.CreateType();
+                    TypeCache.Add(interfaceType, type);
+                }
+
+                instance = Activator.CreateInstance(type);
+            }
+
+            var instanceType = instance.GetType();
+
+            foreach (var (key, value) in dictionary)
+            {
+                switch (value)
+                {
+                    // Is nested object
+                    case Dictionary<string, object> dict:
+                        {
+                            var propertyInfo = GetPropertyIgnoreCase(instanceType, key);
+                            if (propertyInfo != null)
+                            {
+                                var obj = DictionaryToObject(dict, propertyInfo.PropertyType);
+                                propertyInfo.SetValue(instance, obj);
+                            }
+                        }
+                        break;
+
+                    // Is nested array
+                    case List<object> list:
+                        {
+                            var propertyInfo = GetPropertyIgnoreCase(instanceType, key);
+                            if (propertyInfo != null)
+                            {
+                                var arguments = propertyInfo.PropertyType.GenericTypeArguments;
+                                if (arguments.Length > 1)
+                                    throw new Exception("Only handling of one generic array type allowed");
+
+                                var listType = typeof(List<>);
+                                var constructedListType = listType.MakeGenericType(arguments);
+                                var l = Activator.CreateInstance(constructedListType);
+
+                                var typeArgument = arguments[0];
+                                AddEnumerableObject(list, (IList)l, typeArgument);
+                                
+                                propertyInfo.SetValue(instance, l);
+                            }
+
+                            //foreach (var ele in list)
+                            //{
+                            //    switch (ele)
+                            //    {
+                            //        case Dictionary<string, object> innerDict:
+                            //            {
+                            //                var propertyInfo = GetPropertyIgnoreCase(interfaceType, key);
+                            //                if (propertyInfo != null)
+                            //                {
+                            //                    if (propertyInfo.PropertyType.GenericTypeArguments.Length > 1)
+                            //                        throw new Exception("Only handling of one generic array type allowed");
+
+                            //                    var concreteType = propertyInfo.PropertyType.GenericTypeArguments[0];
+                            //                    if (!TypeCache.TryGetValue(concreteType, out _))
+                            //                    {
+                            //                        var obj = DictionaryToObject(innerDict, concreteType, classBuilder);
+                            //                        TypeCache.Add(concreteType, obj.GetType());
+                            //                    }
+                            //                }
+                            //            }
+                            //            break;
+                            //    }
+                            //}
+                        }
+                        break;
+
+                    default:
+                    {
+                        var propertyInfo = GetPropertyIgnoreCase(instanceType, key);
+                        if (propertyInfo != null)
+                        {
+                            propertyInfo.SetValue(instance, propertyInfo.PropertyType.IsEnum
+                                ? Enum.ToObject(propertyInfo.PropertyType, (long) value)
+                                : value);
+                        }
+                    }
+                        break;
+                }
+            }
+
+            return instance;
+
+            //Type classType = classBuilder.CreateType();
+            //object o = Activator.CreateInstance(classType);
+
+            //InjectValues(o, dictionary);
+
+            //void InjectValues(object instance, IReadOnlyDictionary<string, object> dict)
+            //{
+            //    var instanceType = instance.GetType();
+            //    foreach (var (key, value) in dict)
+            //    {
+            //        if (value == null) continue;
+
+            //        var valueType = value.GetType();
+            //        if (valueType.IsPrimitive || valueType == StringType)
+            //        {
+            //            PropertyInfo pi = GetPropertyIgnoreCase(instanceType, key);
+            //            pi.SetValue(instance, pi.PropertyType.IsEnum
+            //                ? Enum.ToObject(pi.PropertyType, (long)value)
+            //                : value);
+            //        }
+            //        else if (IsEnumerable.IsAssignableFrom(valueType))
+            //        {
+            //            var pi = GetPropertyIgnoreCase(instanceType, key);
+            //            if (pi.PropertyType.GenericTypeArguments.Length > 1)
+            //                throw new Exception("Only handling of one generic array type allowed");
+
+            //            var listType = typeof(List<>);
+            //            var constructedListType = listType.MakeGenericType(pi.PropertyType.GenericTypeArguments);
+            //            var list = (IList)Activator.CreateInstance(constructedListType);
+
+            //            foreach (var ele in (IEnumerable)value)
+            //            {
+            //                switch (ele)
+            //                {
+            //                    case Dictionary<string, object> innerDict:
+            //                        {
+            //                            var obj = DictionaryToObject(innerDict, pi.PropertyType.GenericTypeArguments[0], classBuilder);
+            //                            list.Add(obj);
+            //                        }
+            //                        break;
+            //                    default:
+            //                        {
+            //                            var type = pi.PropertyType.GenericTypeArguments[0];
+            //                            var concrete = type.IsEnum
+            //                                ? Enum.ToObject(type, ele)
+            //                                : ele;
+
+            //                            list.Add(concrete);
+            //                        }
+            //                        break;
+            //                }
+            //            }
+
+            //            pi = GetPropertyIgnoreCase(instance.GetType(), key);
+            //            pi.SetValue(instance, list);
+            //        }
+            //        else
+            //        {
+            //            PropertyInfo pi = GetPropertyIgnoreCase(instance.GetType(), key);
+            //            if (ImplementationCache.TryGetValue(pi.PropertyType, out var impl))
+            //            {
+            //                pi.SetValue(instance, impl);
+            //            }
+            //        }
+            //    }
+            //}
+
+            //return o;
+        }
+
+        private void AddEnumerableObject(IEnumerable<object> list, IList instance, Type instanceType)
+        {
+            foreach (var obj in list)
+            {
+                switch (obj)
+                {
+                    case Dictionary<string, object> dict:
+                    {
+                        instance.Add(DictionaryToObject2(dict, instanceType));
+                    }
+                        break;
+
+                    default:
+                    {
+                        var value = instanceType.IsEnum
+                            ? Enum.ToObject(instanceType, obj)
+                            : obj;
+
+                        instance.Add(value);
+                    }
+                        break;
+                }
+            }
         }
 
         private object DictionaryToObject(IReadOnlyDictionary<string, object> dictionary, Type interfaceType,
