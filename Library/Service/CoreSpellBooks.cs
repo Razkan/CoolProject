@@ -1,5 +1,6 @@
 ﻿using Interfaces.Model.Book;
 using Interfaces.Model.Enum;
+using Library.Emit;
 using Library.Model.Book;
 using Library.Model.Book.Spell;
 using Library.Model.Book.Spell.Resistance;
@@ -832,14 +833,18 @@ namespace Library.Service
 
         public static ICoreSpellBook GetBookOfWater()
         {
-            return new BookOfWater
+            return InterfaceFactory
+                .New()
+                .WithValues(new
             {
+                Id = Identification.BookOfWater,
                 Name = "Book of Water",
                 School = "Water",
                 Spells = new[]
                 {
-                    new CoreSpell
+                    new
                     {
+                        Id = "Spring",
                         Name = "Spring",
                         Action = SpellAction.Active,
                         Level = 2,
@@ -863,7 +868,40 @@ namespace Library.Service
                         }
                     }
                 }
-            };
+            }).Build<ICoreSpellBook>();
+
+            //return new BookOfWater
+            //{
+            //    Name = "Book of Water",
+            //    School = "Water",
+            //    Spells = new[]
+            //    {
+            //        new CoreSpell
+            //        {
+            //            Name = "Spring",
+            //            Action = SpellAction.Active,
+            //            Level = 2,
+            //            Cost = 30,
+            //            Effect = "This spell draws forth any nearby underground current or stream, " +
+            //                     "causing a spring to flow from the spot designated by the caster. The spell " +
+            //                     "affects natural liquids within 300 feet of the character casting the spell, but it " +
+            //                     "can not overcome energy barriers",
+            //            AddedEffect = "+100 feet to radius.",
+            //            MaximumZeon = "x20",
+            //            ZeonAttribute = CharacterAttribute.Int,
+            //            Maintenance = "1 every 10 (3)",
+            //            MaintenanceDuration = MaintenanceDuration.Daily,
+            //            Type = new[]
+            //            {
+            //                SpellType.Effect
+            //            },
+            //            Tags = new[]
+            //            {
+            //                Tag.Area
+            //            }
+            //        }
+            //    }
+            //};
         }
 
         public static ICoreSpellBook GetBookOfFire()

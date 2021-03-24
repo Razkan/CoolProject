@@ -106,30 +106,6 @@ namespace Library.Communication.Converter
                                 
                                 propertyInfo.SetValue(instance, l);
                             }
-
-                            //foreach (var ele in list)
-                            //{
-                            //    switch (ele)
-                            //    {
-                            //        case Dictionary<string, object> innerDict:
-                            //            {
-                            //                var propertyInfo = GetPropertyIgnoreCase(interfaceType, key);
-                            //                if (propertyInfo != null)
-                            //                {
-                            //                    if (propertyInfo.PropertyType.GenericTypeArguments.Length > 1)
-                            //                        throw new Exception("Only handling of one generic array type allowed");
-
-                            //                    var concreteType = propertyInfo.PropertyType.GenericTypeArguments[0];
-                            //                    if (!TypeCache.TryGetValue(concreteType, out _))
-                            //                    {
-                            //                        var obj = DictionaryToObject(innerDict, concreteType, classBuilder);
-                            //                        TypeCache.Add(concreteType, obj.GetType());
-                            //                    }
-                            //                }
-                            //            }
-                            //            break;
-                            //    }
-                            //}
                         }
                         break;
 
@@ -148,75 +124,6 @@ namespace Library.Communication.Converter
             }
 
             return instance;
-
-            //Type classType = classBuilder.CreateType();
-            //object o = Activator.CreateInstance(classType);
-
-            //InjectValues(o, dictionary);
-
-            //void InjectValues(object instance, IReadOnlyDictionary<string, object> dict)
-            //{
-            //    var instanceType = instance.GetType();
-            //    foreach (var (key, value) in dict)
-            //    {
-            //        if (value == null) continue;
-
-            //        var valueType = value.GetType();
-            //        if (valueType.IsPrimitive || valueType == StringType)
-            //        {
-            //            PropertyInfo pi = GetPropertyIgnoreCase(instanceType, key);
-            //            pi.SetValue(instance, pi.PropertyType.IsEnum
-            //                ? Enum.ToObject(pi.PropertyType, (long)value)
-            //                : value);
-            //        }
-            //        else if (IsEnumerable.IsAssignableFrom(valueType))
-            //        {
-            //            var pi = GetPropertyIgnoreCase(instanceType, key);
-            //            if (pi.PropertyType.GenericTypeArguments.Length > 1)
-            //                throw new Exception("Only handling of one generic array type allowed");
-
-            //            var listType = typeof(List<>);
-            //            var constructedListType = listType.MakeGenericType(pi.PropertyType.GenericTypeArguments);
-            //            var list = (IList)Activator.CreateInstance(constructedListType);
-
-            //            foreach (var ele in (IEnumerable)value)
-            //            {
-            //                switch (ele)
-            //                {
-            //                    case Dictionary<string, object> innerDict:
-            //                        {
-            //                            var obj = DictionaryToObject(innerDict, pi.PropertyType.GenericTypeArguments[0], classBuilder);
-            //                            list.Add(obj);
-            //                        }
-            //                        break;
-            //                    default:
-            //                        {
-            //                            var type = pi.PropertyType.GenericTypeArguments[0];
-            //                            var concrete = type.IsEnum
-            //                                ? Enum.ToObject(type, ele)
-            //                                : ele;
-
-            //                            list.Add(concrete);
-            //                        }
-            //                        break;
-            //                }
-            //            }
-
-            //            pi = GetPropertyIgnoreCase(instance.GetType(), key);
-            //            pi.SetValue(instance, list);
-            //        }
-            //        else
-            //        {
-            //            PropertyInfo pi = GetPropertyIgnoreCase(instance.GetType(), key);
-            //            if (ImplementationCache.TryGetValue(pi.PropertyType, out var impl))
-            //            {
-            //                pi.SetValue(instance, impl);
-            //            }
-            //        }
-            //    }
-            //}
-
-            //return o;
         }
 
         private void AddEnumerableObject(IEnumerable<object> list, IList instance, Type instanceType)

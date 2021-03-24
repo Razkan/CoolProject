@@ -18,8 +18,14 @@ namespace Interfaces.Model.Book.Spell
         CharacterAttribute ZeonAttribute { get; }
         string Maintenance { get; }
         MaintenanceDuration MaintenanceDuration { get; }
+
+        [DbPrimitiveCollection]
         IEnumerable<SpellType> Type { get; }
+
+        [DbObjectCollection]
         IEnumerable<IResistance> Resistances { get; }
+
+        [DbPrimitiveCollection]
         IEnumerable<Tag> Tags { get; }
     }
 }

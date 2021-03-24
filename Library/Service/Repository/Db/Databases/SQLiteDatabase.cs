@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Interfaces.Model.Db;
 using Interfaces.Model.Db.Attribute;
+using Library.Emit;
 using Library.Model.DbEntity;
 using Library.Service.Repository.Db.Setting;
 using Serilog;
@@ -59,7 +60,7 @@ namespace Library.Service.Repository.Db.Databases
             Setup();
             await EnsureDbConnection();
             await CreateInterfaceTables();
-            await CreateImplementationTables();
+            //await CreateImplementationTables();
         }
 
         private void Setup()
@@ -95,8 +96,8 @@ namespace Library.Service.Repository.Db.Databases
                         var cmd = new SQLiteCommand
                         {
                             CommandType = CommandType.Text,
-                            CommandText = $"CREATE TABLE IF NOT EXISTS {type.Name} (" +
-                                          $"{CreateQueryFromProperties(templateType)});"
+                            CommandText = $"CREATE TABLE IF NOT EXISTS {type.Name.ToSqlLiteral()} (" +
+                                          $"{CreateQueryFromInterface(type)});"
                         };
                         await ExecuteNonQueryAsync(cmd);
                     }
@@ -123,7 +124,7 @@ namespace Library.Service.Repository.Db.Databases
                         var cmd = new SQLiteCommand
                         {
                             CommandType = CommandType.Text,
-                            CommandText = $"CREATE TABLE IF NOT EXISTS {type.Name} (" +
+                            CommandText = $"CREATE TABLE IF NOT EXISTS {type.Name.ToSqlLiteral()} (" +
                                           $"{CreateQueryFromProperties(type)});"
                         };
                         await ExecuteNonQueryAsync(cmd);
@@ -149,6 +150,15 @@ namespace Library.Service.Repository.Db.Databases
                 if (IsUnique(e)) return $"[{e.Name}] TEXT NON NULL UNIQUE";
                 return $"[{e.Name}] {ToSQLType(e.PropertyType)} NON NULL";
             }));
+
+        private static string CreateQueryFromInterface(Type t) => string.Join(", ",
+            t.GetAllPublicProperties().Select(e =>
+            {
+                if (IsPrimaryKey(e)) return $"[{e.Name}] TEXT NON NULL PRIMARY KEY";
+                if (IsUnique(e)) return $"[{e.Name}] TEXT NON NULL UNIQUE";
+                return $"[{e.Name}] {ToSQLType(e.PropertyType)} NON NULL";
+            }));
+
 
         private static string ToSQLType(Type t)
         {
@@ -184,7 +194,7 @@ namespace Library.Service.Repository.Db.Databases
             var cmd = new SQLiteCommand
             {
                 CommandType = CommandType.Text,
-                CommandText = $"INSERT OR IGNORE INTO {interfaceType.Name}({GetPropertyNames(entityType)}) " +
+                CommandText = $"INSERT OR IGNORE INTO {interfaceType.Name.ToSqlLiteral()}({GetPropertyNames(entityType)}) " +
                               $"VALUES({GetPropertyParameterizedNamesInsert(entityType)});"
             };
             AddPropertyValues(cmd, entity, entityType);
@@ -194,7 +204,7 @@ namespace Library.Service.Repository.Db.Databases
         private async Task<TableInterfaceObject> SelectLookupAsync(Type interfaceType, string id)
         {
             var cmd = new SQLiteCommand {CommandType = CommandType.Text};
-            cmd.CommandText = $"SELECT * FROM {interfaceType.Name} " +
+            cmd.CommandText = $"SELECT * FROM {interfaceType.Name.ToSqlLiteral()} " +
                               "WHERE id=@id;";
             cmd.Parameters.AddWithValue("@id", id);
             return await ExecuteReaderAsync(cmd, async reader =>
@@ -209,12 +219,12 @@ namespace Library.Service.Repository.Db.Databases
         public async Task<T> SelectAsync<T>(string id)
         {
             await EnsureDbConnection();
-
-            var type = await GetTableReference<T>(id);
+            var type = typeof(T);
+            //var type = await GetTableReference<T>(id);
 
             var cmd = new SQLiteCommand();
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = $"SELECT * FROM {type.Name} " +
+            cmd.CommandText = $"SELECT * FROM {type.Name.ToSqlLiteral()} " +
                               "WHERE id=@id;";
             cmd.Parameters.AddWithValue("@id", id);
 
@@ -235,7 +245,7 @@ namespace Library.Service.Repository.Db.Databases
             var cmd = new SQLiteCommand
             {
                 CommandType = CommandType.Text,
-                CommandText = $"SELECT * FROM {type.Name};"
+                CommandText = $"SELECT * FROM {type.Name.ToSqlLiteral()};"
             };
 
             return await ExecuteReaderAsync(cmd, async reader =>
@@ -256,7 +266,7 @@ namespace Library.Service.Repository.Db.Databases
 
             var type = typeof(T);
             var cmd = new SQLiteCommand {CommandType = CommandType.Text};
-            cmd.CommandText = $"SELECT * FROM {type.Name} " +
+            cmd.CommandText = $"SELECT * FROM {type.Name.ToSqlLiteral()} " +
                               "WHERE id=@id " +
                               "LIMIT 1;";
             cmd.Parameters.AddWithValue("@id", id);
@@ -274,13 +284,13 @@ namespace Library.Service.Repository.Db.Databases
 
             var parameterType = typeof(T);
             var entityType = entity.GetType();
-            await CreateTableReference(parameterType, entityType, GetPropertyId(entity));
+            //await CreateTableReference(parameterType, entityType, GetPropertyId(entity));
 
             await RecursiveInsert(entity, entityType);
             var cmd = new SQLiteCommand
             {
                 CommandType = CommandType.Text,
-                CommandText = $"INSERT OR IGNORE INTO {entityType.Name}({GetPropertyNames(entityType)}) " +
+                CommandText = $"INSERT OR IGNORE INTO {parameterType.Name.ToSqlLiteral()}({GetPropertyNames(entityType)}) " +
                               $"VALUES({GetPropertyParameterizedNamesInsert(entityType)});"
             };
             AddPropertyValues(cmd, entity, entityType);
@@ -314,12 +324,12 @@ namespace Library.Service.Repository.Db.Databases
         public async Task UpdateAsync<T>(T entity)
         {
             await EnsureDbConnection();
-
-            var type = await GetTableReference<T>(GetPropertyId(entity));
+            var type = typeof(T);
+            //var type = await GetTableReference<T>(GetPropertyId(entity));
             var cmd = new SQLiteCommand
             {
                 CommandType = CommandType.Text,
-                CommandText = $"UPDATE {type.Name} " +
+                CommandText = $"UPDATE {type.Name.ToSqlLiteral()} " +
                               $"SET {GetPropertyParameterizedNamesUpdate(type)} " +
                               "WHERE id = @entityId;"
             };
@@ -331,12 +341,12 @@ namespace Library.Service.Repository.Db.Databases
         public async Task DeleteAsync<T>(T entity)
         {
             await EnsureDbConnection();
-
-            var type = await GetTableReference<T>(GetPropertyId(entity));
+            var type = typeof(T);
+            //var type = await GetTableReference<T>(GetPropertyId(entity));
             var cmd = new SQLiteCommand
             {
                 CommandType = CommandType.Text,
-                CommandText = $"DELETE FROM {type.Name} " +
+                CommandText = $"DELETE FROM {type.Name.ToSqlLiteral()} " +
                               "WHERE id = @id;"
             };
             cmd.Parameters.AddWithValue("@id", GetPropertyId(entity));
@@ -352,7 +362,7 @@ namespace Library.Service.Repository.Db.Databases
             {
                 CommandType = CommandType.Text,
                 CommandText = "SELECT COUNT(*) " +
-                              $"FROM {type.Name}"
+                              $"FROM {type.Name.ToSqlLiteral()}"
             };
 
             return await ExecuteReaderAsync(cmd, async reader =>
@@ -400,13 +410,15 @@ namespace Library.Service.Repository.Db.Databases
 
         private async Task<object> ToObjectAsync(IDataRecord reader, Type entityType)
         {
-            var entity = Activator.CreateInstance(entityType);
+            var entity = InterfaceFactory.New().Build(entityType);
+            entityType = entity.GetType();
+                //Activator.CreateInstance(entityType);
 
             for (var i = 0; i < reader.FieldCount; i++)
             {
                 var propertyInfo = entityType.GetProperty(reader.GetName(i));
                 if (propertyInfo == null) continue;
-                if (!IsAutoProperty(propertyInfo)) continue;
+                //if (!IsAutoProperty(propertyInfo)) continue;
 
                 propertyInfo.SetValue(entity, await ToObject(reader.GetValue(i)));
 
@@ -613,6 +625,14 @@ namespace Library.Service.Repository.Db.Databases
         {
             _dbConnection.Close();
             _dbConnection.Dispose();
+        }
+    }
+
+    internal static class SqlExtensions
+    {
+        internal static string ToSqlLiteral(this string s)
+        {
+            return $"'{s}'";
         }
     }
 }

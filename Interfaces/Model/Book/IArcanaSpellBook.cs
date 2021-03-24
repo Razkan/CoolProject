@@ -11,6 +11,7 @@ namespace Interfaces.Model.Book
         string Name { get; }
         string School { get; }
 
+        [DbObjectCollection]
         ICollection<IArcanaSpell> Spells { get; }
     }
 }
