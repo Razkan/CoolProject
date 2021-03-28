@@ -4,21 +4,20 @@ using System.Collections.Generic;
 
 namespace Library.Emit
 {
-    public class InterfaceFactory
+    public class InterfaceBuilder
     {
+        private static Dictionary<Type, Type> TypeCache { get; } = new Dictionary<Type, Type>();
         private Type StringType { get; } = typeof(string);
         private Type IsEnumerable { get; } = typeof(IEnumerable);
-        private Dictionary<Type, object> ImplementationCache { get; } = new Dictionary<Type, object>();
-        private Dictionary<Type, Type> TypeCache { get; } = new Dictionary<Type, Type>();
 
         private object Values { get; set; }
 
-        public static InterfaceFactory New()
+        public static InterfaceBuilder New()
         {
-            return new InterfaceFactory();
+            return new InterfaceBuilder();
         }
 
-        public InterfaceFactory WithValues(object values)
+        public InterfaceBuilder AddValues(object values)
         {
             Values = values;
             return this;
@@ -40,9 +39,14 @@ namespace Library.Emit
 
         private static object CreateInstanceWithoutValues(Type interfaceType)
         {
-            var classBuilder = new ClassBuilder();
-            classBuilder.AddAllInterfaces(interfaceType);
-            var type = classBuilder.CreateType();
+            if (!TypeCache.TryGetValue(interfaceType, out var type))
+            {
+                var classBuilder = new ClassBuilder();
+                classBuilder.AddAllInterfaces(interfaceType);
+                type = classBuilder.CreateType();
+                TypeCache.Add(interfaceType, type);
+            }
+
             return Activator.CreateInstance(type);
         }
 

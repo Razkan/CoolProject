@@ -1,5 +1,6 @@
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Text.Json.Serialization;
 using BackendAPI.HostedService;
 using Interfaces.Model;
 using Interfaces.Model.Db;

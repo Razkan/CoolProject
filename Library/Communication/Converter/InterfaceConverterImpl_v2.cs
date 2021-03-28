@@ -10,29 +10,22 @@ namespace Library.Communication.Converter
 {
     public class InterfaceConverterImpl_v2<T> : JsonConverter<T>
     {
-        private Type StringType { get; } = typeof(string);
-        private Type IsEnumerable { get; } = typeof(IEnumerable);
-        private Dictionary<Type, object> ImplementationCache { get; } = new Dictionary<Type, object>();
+        private Type Enumerable { get; } = typeof(IEnumerable);
         private Dictionary<Type, Type> TypeCache { get; } = new Dictionary<Type, Type>();
-
+        
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
-            JsonSerializer.Serialize(writer, value);
+            var serializeType = Enumerable.IsInstanceOfType(value)
+                ? typeof(IEnumerable<object>)
+                : typeof(object);
+
+            JsonSerializer.Serialize(writer, value, serializeType);
         }
 
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var dict = ParseJsonToDictionary(ref reader, options);
-            //var obj = DictionaryToObject2(dict, null);
             var obj = DictionaryToObject2(dict, typeToConvert);
-            //var obj = DictionaryToObject(dict, typeof(T));
-
-            //var resultType = typeof(T);
-            //var trackedResultType = typeof(TrackedResult<>);
-            //var constructedTrackedResult = trackedResultType.MakeGenericType(resultType.GetGenericArguments());
-            //var result = Activator.CreateInstance(constructedTrackedResult, obj);
-
-            //return (T)result;
 
             return (T) obj;
         }
@@ -40,7 +33,7 @@ namespace Library.Communication.Converter
         private object DictionaryToObject2(IReadOnlyDictionary<string, object> dictionary, Type interfaceType)
         {
             object instance;
-            if (IsEnumerable.IsAssignableFrom(interfaceType))
+            if (Enumerable.IsAssignableFrom(interfaceType))
             {
                 var arguments = interfaceType.GenericTypeArguments;
                 if (arguments.Length > 1)
@@ -77,36 +70,36 @@ namespace Library.Communication.Converter
                 {
                     // Is nested object
                     case Dictionary<string, object> dict:
+                    {
+                        var propertyInfo = GetPropertyIgnoreCase(instanceType, key);
+                        if (propertyInfo != null)
                         {
-                            var propertyInfo = GetPropertyIgnoreCase(instanceType, key);
-                            if (propertyInfo != null)
-                            {
-                                var obj = DictionaryToObject(dict, propertyInfo.PropertyType);
-                                propertyInfo.SetValue(instance, obj);
-                            }
+                            var obj = DictionaryToObject2(dict, propertyInfo.PropertyType);
+                            propertyInfo.SetValue(instance, obj);
                         }
+                    }
                         break;
 
                     // Is nested array
-                    case List<object> list:
+                    case List<object> objects:
+                    {
+                        var propertyInfo = GetPropertyIgnoreCase(instanceType, key);
+                        if (propertyInfo != null)
                         {
-                            var propertyInfo = GetPropertyIgnoreCase(instanceType, key);
-                            if (propertyInfo != null)
-                            {
-                                var arguments = propertyInfo.PropertyType.GenericTypeArguments;
-                                if (arguments.Length > 1)
-                                    throw new Exception("Only handling of one generic array type allowed");
+                            var arguments = propertyInfo.PropertyType.GenericTypeArguments;
+                            if (arguments.Length > 1)
+                                throw new Exception("Only handling of one generic array type allowed");
 
-                                var listType = typeof(List<>);
-                                var constructedListType = listType.MakeGenericType(arguments);
-                                var l = Activator.CreateInstance(constructedListType);
+                            var listType = typeof(List<>);
+                            var constructedListType = listType.MakeGenericType(arguments);
+                            var list = Activator.CreateInstance(constructedListType);
 
-                                var typeArgument = arguments[0];
-                                AddEnumerableObject(list, (IList)l, typeArgument);
-                                
-                                propertyInfo.SetValue(instance, l);
-                            }
+                            var typeArgument = arguments[0];
+                            AddEnumerableObject(objects, (IList) list, typeArgument);
+
+                            propertyInfo.SetValue(instance, list);
                         }
+                    }
                         break;
 
                     default:
@@ -151,137 +144,7 @@ namespace Library.Communication.Converter
             }
         }
 
-        private object DictionaryToObject(IReadOnlyDictionary<string, object> dictionary, Type interfaceType,
-            ClassBuilder cBuilder = null)
-        {
-            var classBuilder = cBuilder == null
-                ? new ClassBuilder()
-                : new ClassBuilder(cBuilder);
-
-            classBuilder.AddInterface(interfaceType);
-            foreach (var @interface in interfaceType.GetInterfaces())
-            {
-                classBuilder.AddInterface(@interface);
-            }
-
-            foreach (var (key, value) in dictionary)
-            {
-                switch (value)
-                {
-                    // Is nested object
-                    case Dictionary<string, object> dict:
-                    {
-                        var propertyInfo = GetPropertyIgnoreCase(interfaceType, key);
-                        if (propertyInfo != null)
-                        {
-                            var obj = DictionaryToObject(dict, propertyInfo.PropertyType, classBuilder);
-                            ImplementationCache.Add(propertyInfo.PropertyType, obj);
-                        }
-                    }
-                        break;
-
-                    // Is nested array
-                    case List<object> list:
-                    {
-                        foreach (var ele in list)
-                        {
-                            switch (ele)
-                            {
-                                case Dictionary<string, object> innerDict:
-                                {
-                                    var propertyInfo = GetPropertyIgnoreCase(interfaceType, key);
-                                    if (propertyInfo != null)
-                                    {
-                                        if (propertyInfo.PropertyType.GenericTypeArguments.Length > 1)
-                                            throw new Exception("Only handling of one generic array type allowed");
-
-                                        var concreteType = propertyInfo.PropertyType.GenericTypeArguments[0];
-                                        if (!TypeCache.TryGetValue(concreteType, out _))
-                                        {
-                                            var obj = DictionaryToObject(innerDict, concreteType, classBuilder);
-                                            TypeCache.Add(concreteType, obj.GetType());
-                                        }
-                                    }
-                                }
-                                    break;
-                            }
-                        }
-                    }
-                        break;
-                }
-            }
-
-            Type classType = classBuilder.CreateType();
-            object o = Activator.CreateInstance(classType);
-
-            InjectValues(o, dictionary);
-
-            void InjectValues(object instance, IReadOnlyDictionary<string, object> dict)
-            {
-                var instanceType = instance.GetType();
-                foreach (var (key, value) in dict)
-                {
-                    if (value == null) continue;
-
-                    var valueType = value.GetType();
-                    if (valueType.IsPrimitive || valueType == StringType)
-                    {
-                        PropertyInfo pi = GetPropertyIgnoreCase(instanceType, key);
-                        pi.SetValue(instance, pi.PropertyType.IsEnum
-                            ? Enum.ToObject(pi.PropertyType, (long) value)
-                            : value);
-                    }
-                    else if (IsEnumerable.IsAssignableFrom(valueType))
-                    {
-                        var pi = GetPropertyIgnoreCase(instanceType, key);
-                        if (pi.PropertyType.GenericTypeArguments.Length > 1)
-                            throw new Exception("Only handling of one generic array type allowed");
-
-                        var listType = typeof(List<>);
-                        var constructedListType = listType.MakeGenericType(pi.PropertyType.GenericTypeArguments);
-                        var list = (IList) Activator.CreateInstance(constructedListType);
-
-                        foreach (var ele in (IEnumerable) value)
-                        {
-                            switch (ele)
-                            {
-                                case Dictionary<string, object> innerDict:
-                                {
-                                    var obj = DictionaryToObject(innerDict, pi.PropertyType.GenericTypeArguments[0], classBuilder);
-                                    list.Add(obj);
-                                }
-                                    break;
-                                default:
-                                {
-                                    var type = pi.PropertyType.GenericTypeArguments[0];
-                                    var concrete = type.IsEnum
-                                        ? Enum.ToObject(type, ele)
-                                        : ele;
-
-                                    list.Add(concrete);
-                                }
-                                    break;
-                            }
-                        }
-
-                        pi = GetPropertyIgnoreCase(instance.GetType(), key);
-                        pi.SetValue(instance, list);
-                    }
-                    else
-                    {
-                        PropertyInfo pi = GetPropertyIgnoreCase(instance.GetType(), key);
-                        if (ImplementationCache.TryGetValue(pi.PropertyType, out var impl))
-                        {
-                            pi.SetValue(instance, impl);
-                        }
-                    }
-                }
-            }
-
-            return o;
-        }
-
-        private static PropertyInfo GetPropertyIgnoreCase(Type type, string key)
+        private static PropertyInfo GetPropertyIgnoreCase(IReflect type, string key)
         {
             return type.GetProperty(key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
         }

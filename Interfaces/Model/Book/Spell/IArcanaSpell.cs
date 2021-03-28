@@ -18,13 +18,13 @@ namespace Interfaces.Model.Book.Spell
         [DbObjectCollection]
         IEnumerable<ISpellLevel> SpellLevel { get; }
 
-        [DbObjectCollection]
+        [DbPrimitiveCollection]
         IEnumerable<SpellType> Type { get; }
 
         [DbObjectCollection]
         IEnumerable<IResistance> Resistances { get; }
 
-        [DbObjectCollection]
+        [DbPrimitiveCollection]
         IEnumerable<Tag> Tags { get; }
     }
 }

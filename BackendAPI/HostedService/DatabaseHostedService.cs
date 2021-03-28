@@ -33,17 +33,17 @@ namespace BackendAPI.HostedService
                 {
                     var spellBooks = new List<ICoreSpellBook>
                     {
-                        //CoreSpellBooks.GetBookOfLight(),
-                        //CoreSpellBooks.GetBookOfDarkness(),
-                        //CoreSpellBooks.GetBookOfCreation(),
-                        //CoreSpellBooks.GetBookOfDestruction(),
-                        //CoreSpellBooks.GetBookOfAir(),
+                        CoreSpellBooks.GetBookOfLight(),
+                        CoreSpellBooks.GetBookOfDarkness(),
+                        CoreSpellBooks.GetBookOfCreation(),
+                        CoreSpellBooks.GetBookOfDestruction(),
+                        CoreSpellBooks.GetBookOfAir(),
                         CoreSpellBooks.GetBookOfWater(),
-                        //CoreSpellBooks.GetBookOfFire(),
-                        //CoreSpellBooks.GetBookOfEarth(),
-                        //CoreSpellBooks.GetBookOfEssence(),
-                        //CoreSpellBooks.GetBookOfIllusion(),
-                        //CoreSpellBooks.GetBookOfNecromancy()
+                        CoreSpellBooks.GetBookOfFire(),
+                        CoreSpellBooks.GetBookOfEarth(),
+                        CoreSpellBooks.GetBookOfEssence(),
+                        CoreSpellBooks.GetBookOfIllusion(),
+                        CoreSpellBooks.GetBookOfNecromancy()
                     };
 
                     var tasks = spellBooks.Select(book => Task.Run(async () => await database.InsertAsync(book), cancellationToken)).ToList();

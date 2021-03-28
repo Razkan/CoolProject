@@ -21,9 +21,10 @@ namespace Library.Service.Repository
             return await repository.SelectAsync(id);
         }
 
-        public Task<IEnumerable<T>> GetAllAsync<T>()
+        public async Task<IEnumerable<T>> GetAllAsync<T>()
         {
-            throw new System.NotImplementedException();
+            var repository = GetRepository<T>();
+            return await repository.SelectAllAsync();
         }
 
         private IRepository<T> GetRepository<T>()
