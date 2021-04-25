@@ -38,7 +38,7 @@ namespace BackendAPI.HostedService
                     //rpc.Register<IBookOfDestruction>(new Uri("http://localhost:9000/book/destruction")),
                     //rpc.Register<IBookOfFire>(new Uri("http://localhost:9000/book/fire")),
                     //rpc.Register<IBookOfWater>(new Uri("http://localhost:9000/book/water")),
-                    //rpc.Register<IBookOfEarth>(new Uri("http://localhost:9000/book/earth")),
+                    //rpc.Register<IBookOfEarth>(new Uri("http://localhost:9000/core/earth")),
                     //rpc.Register<IBookOfAir>(new Uri("http://localhost:9000/book/air")),
                     //rpc.Register<IBookOfEssence>(new Uri("http://localhost:9000/book/essence")),
                     //rpc.Register<IBookOfIllusion>(new Uri("http://localhost:9000/book/illusion")),

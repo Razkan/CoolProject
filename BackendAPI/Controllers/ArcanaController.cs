@@ -22,12 +22,13 @@ namespace BackendAPI.Controllers
         [HttpGet("all")]
         public async Task<ITrackedArray<IArcanaSpellBook>> All()
         {
-            var arr = new[]
-            {
-                await _repository.GetAsync<IArcanaSpellBook>(Identification.Nobility),
-            };
+            //var arr = new[]
+            //{
+            //    await _repository.GetAsync<IArcanaSpellBook>(Identification.Nobility),
+            //};
 
-            return new TrackedArray<IArcanaSpellBook>(arr);
+            //return new TrackedArray<IArcanaSpellBook>(arr);
+            return new TrackedArray<IArcanaSpellBook>(await _repository.GetAllAsync<IArcanaSpellBook>());
         }
 
         [HttpGet("nobility")]

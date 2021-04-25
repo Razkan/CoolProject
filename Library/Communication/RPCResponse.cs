@@ -17,7 +17,7 @@ namespace Library.Communication
         static RPCResponse()
         {
             _jsonSerializerOptions = new JsonSerializerOptions();
-            _jsonSerializerOptions.Converters.Add(new InterfaceConverter());
+            _jsonSerializerOptions.Converters.Add(new InterfaceConverter_v2());
         }
 
         public List<Task<Stream>> Tasks { get; set; }
@@ -27,8 +27,11 @@ namespace Library.Communication
             var enumerableTasks = Tasks.Select(task => task.ContinueWith(
                 async stream =>
                 {
-                    var response = await JsonSerializer.DeserializeAsync<ITrackedResult<T>>(await stream, _jsonSerializerOptions);
-                    return response.Get();
+                    var response2 = await JsonSerializer.DeserializeAsync<ITrackedArray<T>>(await stream, _jsonSerializerOptions);
+                    return response2.__Array__;
+                    //var response = await JsonSerializer.DeserializeAsync<ITrackedResult<T>>(await stream, _jsonSerializerOptions);
+                    //return response.Get();
+                    //return new TrackedResult<T>((ITrackedObject<T>)null).Get();
                 }).Unwrap());
 
             foreach (var enumerableTask in enumerableTasks)

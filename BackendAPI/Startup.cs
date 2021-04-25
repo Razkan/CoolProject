@@ -1,5 +1,6 @@
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Text.Json.Serialization;
 using BackendAPI.HostedService;
 using Interfaces.Model;
 using Interfaces.Model.Db;
@@ -48,7 +49,7 @@ namespace BackendAPI
                 })
                 .AddJsonOptions(option =>
                 {
-                    option.JsonSerializerOptions.Converters.Add(new InterfaceConverter());
+                    option.JsonSerializerOptions.Converters.Add(new InterfaceConverter_v2());
                 });
 
             services.AddControllers();

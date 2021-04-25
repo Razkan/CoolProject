@@ -12,10 +12,19 @@ namespace Interfaces.Model.Book.Spell
         SpellAction Action { get; }
         long Level { get; }
         string Effect { get; }
-        IEnumerable<ISpellLevel> SpellLevel { get; }
+
         MaintenanceDuration MaintenanceDuration { get; }
+
+        [DbObjectCollection]
+        IEnumerable<ISpellLevel> SpellLevel { get; }
+
+        [DbPrimitiveCollection]
         IEnumerable<SpellType> Type { get; }
+
+        [DbObjectCollection]
         IEnumerable<IResistance> Resistances { get; }
+
+        [DbPrimitiveCollection]
         IEnumerable<Tag> Tags { get; }
     }
 }

@@ -51,12 +51,12 @@ namespace BackendAPI.HostedService
                 }
 
                 {
-                    var subPaths = new List<IArcanaSpellBook>
+                    var spellBooks = new List<IArcanaSpellBook>
                     {
                         ArcanaSpellBooks.GetNobility(),
                     };
 
-                    var tasks = subPaths.Select(subPath => Task.Run(async () => await database.InsertAsync(subPath), cancellationToken)).ToList();
+                    var tasks = spellBooks.Select(book => Task.Run(async () => await database.InsertAsync(book), cancellationToken)).ToList();
                     Task.WhenAll(tasks).Wait(cancellationToken);
                 }
             });

@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Interfaces.Model.Db;
 using Interfaces.Model.Db.Attribute;
-using Library.Model.DbEntity;
+using Library.Emit;
 using Library.Service.Repository.Db.Setting;
 using Serilog;
 
@@ -27,7 +27,6 @@ namespace Library.Service.Repository.Db.Databases
         private const string EnumerableDelimiter = "|";
 
         private static readonly Type[] StringTypeArr = {typeof(string)};
-        private static readonly Type[] ObjectTypeArr = {typeof(object)};
 
         private static readonly MethodInfo ContainsAsyncMethod =
             typeof(SqLiteDatabase).GetMethod(nameof(ContainsAsync), StringTypeArr);
@@ -37,9 +36,6 @@ namespace Library.Service.Repository.Db.Databases
 
         private static readonly MethodInfo InsertAsyncMethod =
             typeof(SqLiteDatabase).GetMethod(nameof(InsertAsync));
-
-        private static readonly MethodInfo UpdateAsyncMethod =
-            typeof(SqLiteDatabase).GetMethod(nameof(UpdateAsync));
 
         private readonly DbConnection _dbConnection;
         private readonly IDatabaseSettings _settings;
@@ -59,7 +55,6 @@ namespace Library.Service.Repository.Db.Databases
             Setup();
             await EnsureDbConnection();
             await CreateInterfaceTables();
-            await CreateImplementationTables();
         }
 
         private void Setup()
@@ -85,7 +80,7 @@ namespace Library.Service.Repository.Db.Databases
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             var attributeType = typeof(TableInterfaceAttribute);
-            var templateType = typeof(TableInterfaceObject);
+            
             foreach (var assembly in assemblies)
             {
                 foreach (var type in GetTypesWithAttributeType(assembly, attributeType))
@@ -95,36 +90,8 @@ namespace Library.Service.Repository.Db.Databases
                         var cmd = new SQLiteCommand
                         {
                             CommandType = CommandType.Text,
-                            CommandText = $"CREATE TABLE IF NOT EXISTS {type.Name} (" +
-                                          $"{CreateQueryFromProperties(templateType)});"
-                        };
-                        await ExecuteNonQueryAsync(cmd);
-                    }
-#pragma warning disable 168
-                    catch (Exception e)
-#pragma warning restore 168
-                    {
-                        Log.Error(e, e.Message);
-                    }
-                }
-            }
-        }
-
-        private async Task CreateImplementationTables()
-        {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            var attributeType = typeof(TableAttribute);
-            foreach (var assembly in assemblies)
-            {
-                foreach (var type in GetTypesWithAttributeType(assembly, attributeType))
-                {
-                    try
-                    {
-                        var cmd = new SQLiteCommand
-                        {
-                            CommandType = CommandType.Text,
-                            CommandText = $"CREATE TABLE IF NOT EXISTS {type.Name} (" +
-                                          $"{CreateQueryFromProperties(type)});"
+                            CommandText = $"CREATE TABLE IF NOT EXISTS {type.Name.ToSqlLiteral()} (" +
+                                          $"{CreateQueryFromInterface(type)});"
                         };
                         await ExecuteNonQueryAsync(cmd);
                     }
@@ -144,6 +111,14 @@ namespace Library.Service.Repository.Db.Databases
 
         private static string CreateQueryFromProperties(Type t) => string.Join(", ",
             t.GetProperties().Select(e =>
+            {
+                if (IsPrimaryKey(e)) return $"[{e.Name}] TEXT NON NULL PRIMARY KEY";
+                if (IsUnique(e)) return $"[{e.Name}] TEXT NON NULL UNIQUE";
+                return $"[{e.Name}] {ToSQLType(e.PropertyType)} NON NULL";
+            }));
+
+        private static string CreateQueryFromInterface(Type t) => string.Join(", ",
+            t.GetAllPublicProperties().Select(e =>
             {
                 if (IsPrimaryKey(e)) return $"[{e.Name}] TEXT NON NULL PRIMARY KEY";
                 if (IsUnique(e)) return $"[{e.Name}] TEXT NON NULL UNIQUE";
@@ -179,42 +154,14 @@ namespace Library.Service.Repository.Db.Databases
             }
         }
 
-        private async Task InsertLookupAsync(Type interfaceType, Type entityType, object entity)
-        {
-            var cmd = new SQLiteCommand
-            {
-                CommandType = CommandType.Text,
-                CommandText = $"INSERT OR IGNORE INTO {interfaceType.Name}({GetPropertyNames(entityType)}) " +
-                              $"VALUES({GetPropertyParameterizedNamesInsert(entityType)});"
-            };
-            AddPropertyValues(cmd, entity, entityType);
-            await ExecuteNonQueryAsync(cmd);
-        }
-
-        private async Task<TableInterfaceObject> SelectLookupAsync(Type interfaceType, string id)
-        {
-            var cmd = new SQLiteCommand {CommandType = CommandType.Text};
-            cmd.CommandText = $"SELECT * FROM {interfaceType.Name} " +
-                              "WHERE id=@id;";
-            cmd.Parameters.AddWithValue("@id", id);
-            return await ExecuteReaderAsync(cmd, async reader =>
-            {
-                await reader.ReadAsync();
-                return reader.HasRows
-                    ? (TableInterfaceObject) await ToObjectAsync(reader, typeof(TableInterfaceObject))
-                    : default;
-            }).Unwrap();
-        }
-
         public async Task<T> SelectAsync<T>(string id)
         {
             await EnsureDbConnection();
 
-            var type = await GetTableReference<T>(id);
-
+            var type = typeof(T);
             var cmd = new SQLiteCommand();
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = $"SELECT * FROM {type.Name} " +
+            cmd.CommandText = $"SELECT * FROM {type.Name.ToSqlLiteral()} " +
                               "WHERE id=@id;";
             cmd.Parameters.AddWithValue("@id", id);
 
@@ -235,7 +182,7 @@ namespace Library.Service.Repository.Db.Databases
             var cmd = new SQLiteCommand
             {
                 CommandType = CommandType.Text,
-                CommandText = $"SELECT * FROM {type.Name};"
+                CommandText = $"SELECT * FROM {type.Name.ToSqlLiteral()};"
             };
 
             return await ExecuteReaderAsync(cmd, async reader =>
@@ -256,7 +203,7 @@ namespace Library.Service.Repository.Db.Databases
 
             var type = typeof(T);
             var cmd = new SQLiteCommand {CommandType = CommandType.Text};
-            cmd.CommandText = $"SELECT * FROM {type.Name} " +
+            cmd.CommandText = $"SELECT * FROM {type.Name.ToSqlLiteral()} " +
                               "WHERE id=@id " +
                               "LIMIT 1;";
             cmd.Parameters.AddWithValue("@id", id);
@@ -274,13 +221,12 @@ namespace Library.Service.Repository.Db.Databases
 
             var parameterType = typeof(T);
             var entityType = entity.GetType();
-            await CreateTableReference(parameterType, entityType, GetPropertyId(entity));
 
             await RecursiveInsert(entity, entityType);
             var cmd = new SQLiteCommand
             {
                 CommandType = CommandType.Text,
-                CommandText = $"INSERT OR IGNORE INTO {entityType.Name}({GetPropertyNames(entityType)}) " +
+                CommandText = $"INSERT OR IGNORE INTO {parameterType.Name.ToSqlLiteral()}({GetPropertyNames(entityType)}) " +
                               $"VALUES({GetPropertyParameterizedNamesInsert(entityType)});"
             };
             AddPropertyValues(cmd, entity, entityType);
@@ -314,12 +260,12 @@ namespace Library.Service.Repository.Db.Databases
         public async Task UpdateAsync<T>(T entity)
         {
             await EnsureDbConnection();
-
-            var type = await GetTableReference<T>(GetPropertyId(entity));
+            
+            var type = typeof(T);
             var cmd = new SQLiteCommand
             {
                 CommandType = CommandType.Text,
-                CommandText = $"UPDATE {type.Name} " +
+                CommandText = $"UPDATE {type.Name.ToSqlLiteral()} " +
                               $"SET {GetPropertyParameterizedNamesUpdate(type)} " +
                               "WHERE id = @entityId;"
             };
@@ -331,12 +277,12 @@ namespace Library.Service.Repository.Db.Databases
         public async Task DeleteAsync<T>(T entity)
         {
             await EnsureDbConnection();
-
-            var type = await GetTableReference<T>(GetPropertyId(entity));
+            
+            var type = typeof(T);
             var cmd = new SQLiteCommand
             {
                 CommandType = CommandType.Text,
-                CommandText = $"DELETE FROM {type.Name} " +
+                CommandText = $"DELETE FROM {type.Name.ToSqlLiteral()} " +
                               "WHERE id = @id;"
             };
             cmd.Parameters.AddWithValue("@id", GetPropertyId(entity));
@@ -352,7 +298,7 @@ namespace Library.Service.Repository.Db.Databases
             {
                 CommandType = CommandType.Text,
                 CommandText = "SELECT COUNT(*) " +
-                              $"FROM {type.Name}"
+                              $"FROM {type.Name.ToSqlLiteral()}"
             };
 
             return await ExecuteReaderAsync(cmd, async reader =>
@@ -400,13 +346,13 @@ namespace Library.Service.Repository.Db.Databases
 
         private async Task<object> ToObjectAsync(IDataRecord reader, Type entityType)
         {
-            var entity = Activator.CreateInstance(entityType);
+            var entity = InterfaceBuilder.New().Build(entityType);
+            entityType = entity.GetType();
 
             for (var i = 0; i < reader.FieldCount; i++)
             {
                 var propertyInfo = entityType.GetProperty(reader.GetName(i));
                 if (propertyInfo == null) continue;
-                if (!IsAutoProperty(propertyInfo)) continue;
 
                 propertyInfo.SetValue(entity, await ToObject(reader.GetValue(i)));
 
@@ -429,18 +375,9 @@ namespace Library.Service.Repository.Db.Databases
             return entity;
         }
 
-        public static bool IsAutoProperty(PropertyInfo property)
+        private static object GetDbPrimitiveCollection(PropertyInfo pi, object obj)
         {
-            var backingFieldName = $"<{property.Name}>k__BackingField";
-            var backingField =
-                property.DeclaringType?.GetField(backingFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
-
-            return backingField != null && backingField.GetCustomAttribute(typeof(CompilerGeneratedAttribute)) != null;
-        }
-
-        private object GetDbPrimitiveCollection(PropertyInfo pi, object obj)
-        {
-            string values = (string) obj;
+            var values = (string) obj;
             if (string.IsNullOrWhiteSpace(values)) return null;
 
             var genericArguments = pi.PropertyType.GetGenericArguments().First();
@@ -478,50 +415,11 @@ namespace Library.Service.Repository.Db.Databases
             return list;
         }
 
-        private async Task CreateTableReference(Type parameterType, Type entityType, string entityId)
-        {
-            foreach (var @interface in entityType.GetInterfaces())
-            {
-                if (@interface.GetCustomAttributes(typeof(TableInterfaceAttribute), true).Length > 0)
-                {
-                    var tableInterfaceObject = new TableInterfaceObject
-                    {
-                        Id = entityId,
-                        Type = entityType.AssemblyQualifiedName
-                    };
-
-                    if (!await InternalContainsAsync(tableInterfaceObject.Id, parameterType))
-                    {
-                        await InsertLookupAsync(parameterType, tableInterfaceObject.GetType(), tableInterfaceObject);
-                    }
-                }
-            }
-        }
-
-        private async Task<Type> GetTableReference<T>(string entityId)
-        {
-            var type = typeof(T);
-            if (type.IsInterface)
-            {
-                var tableInterface = await SelectLookupAsync(type, entityId);
-
-                if (tableInterface == null)
-                    throw new Exception($"Lookup for {type.AssemblyQualifiedName} does not exist");
-
-                return Type.GetType(tableInterface.Type);
-            }
-
-            return type;
-        }
-
         private async Task<bool> InternalContainsAsync(object obj, params Type[] types) =>
             (bool) await InvokeAsync(ContainsAsyncMethod.MakeGenericMethod(types), this, obj);
 
         private Task InternalInsertAsync(object obj, params Type[] types) =>
             InvokeAsync(InsertAsyncMethod.MakeGenericMethod(types), this, obj);
-
-        private Task InternalUpdateAsync(object obj, params Type[] types) =>
-            InvokeAsync(UpdateAsyncMethod.MakeGenericMethod(types), this, obj);
 
         private Task<object> InternalSelectAsync(object value, params Type[] types) =>
             InvokeAsync(SelectAsyncMethod.MakeGenericMethod(types), this, value);
@@ -613,6 +511,14 @@ namespace Library.Service.Repository.Db.Databases
         {
             _dbConnection.Close();
             _dbConnection.Dispose();
+        }
+    }
+
+    internal static class SqlExtensions
+    {
+        internal static string ToSqlLiteral(this string s)
+        {
+            return $"'{s}'";
         }
     }
 }

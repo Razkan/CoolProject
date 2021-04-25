@@ -1,4 +1,6 @@
-﻿namespace Library.Model.Book
+﻿using System;
+
+namespace Library.Model.Book
 {
     public class Identification
     {
@@ -15,5 +17,10 @@
         public const string BookOfNecromancy = nameof(BookOfNecromancy);
         
         public const string Nobility = nameof(Nobility);
+        
+        public static string Generate()
+        {
+            return Guid.NewGuid().ToString();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interfaces.Model;
 using Interfaces.Model.Book;
 using Library.Communication;
@@ -21,22 +22,23 @@ namespace BackendAPI.Controllers
         [HttpGet("all")]
         public async Task<ITrackedArray<ICoreSpellBook>> All()
         {
-            var arr = new[]
-            {
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfLight),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfDarkness),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfCreation),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfDestruction),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfAir),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfWater),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfFire),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfEarth),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfEssence),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfIllusion),
-                await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfNecromancy)
-            };
+            //var arr = new[]
+            //{
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfLight),
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfDarkness),
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfCreation),
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfDestruction),
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfAir),
+            //    await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfWater),
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfFire),
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfEarth),
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfEssence),
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfIllusion),
+            //    //await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfNecromancy)
+            //};
 
-            return new TrackedArray<ICoreSpellBook>(arr);
+            //return new TrackedArray<ICoreSpellBook>(arr);
+            return new TrackedArray<ICoreSpellBook>(await _repository.GetAllAsync<ICoreSpellBook>());
         }
 
         [HttpGet("light")]
@@ -76,9 +78,10 @@ namespace BackendAPI.Controllers
         }
 
         [HttpGet("earth")]
-        public async Task<ITrackedObject<ICoreSpellBook>> Earth()
+        public async Task<ICoreSpellBook> Earth()
         {
-            return await GetBook(Identification.BookOfEarth);
+            //return await GetBook(Identification.BookOfEarth);
+            return await _repository.GetAsync<ICoreSpellBook>(Identification.BookOfEarth);
         }
 
         [HttpGet("air")]
