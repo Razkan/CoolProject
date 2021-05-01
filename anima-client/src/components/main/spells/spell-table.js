@@ -14,7 +14,8 @@ class SpellTable extends React.Component {
             books: {},
             filters: {
                 schools: [],
-                tags: []
+                tags: [],
+                specials: []
             },
 
             coreBookFilter: {},
@@ -54,6 +55,7 @@ class SpellTable extends React.Component {
     createFilter() {
         var schools = {};
         var tags = {};
+        var specials = {};
 
         for (const school of this.state.filters.schools) {
             schools[school.value] = school.value;
@@ -63,12 +65,18 @@ class SpellTable extends React.Component {
             tags[tag.value] = tag.value;
         }
 
+        for (const special of this.state.filters.specials) {
+            specials[special.value] = special.value;
+        }
+
         for (const bookArr of Object.values(this.state.books)) {
             for (var book of bookArr) {
                 schools[book.school] = book.school;
 
                 // Get tags
                 for (var spell of book.spells) {
+                    specials[spell.maintenanceDuration] = spell.maintenanceDuration;
+
                     if (spell.tags) {
                         for (var tag of spell.tags) {
                             tags[tag] = tag;
@@ -86,6 +94,7 @@ class SpellTable extends React.Component {
             filters: {
                 schools: toFilter(schools),
                 tags: toFilter(tags),
+                specials: toFilter(specials),
             }
         });
     }

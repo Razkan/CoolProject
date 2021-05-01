@@ -31,9 +31,11 @@ class FilterSidebar extends React.Component {
     render() {
         var schoolFilter = this.props.filterData.schools || [];
         var tagsFilter = this.props.filterData.tags || [];
+        var specialsFilter = this.props.filterData.specials || [];
 
         schoolFilter = this.sortFilter(schoolFilter);
         tagsFilter = this.sortFilter(tagsFilter);
+        specialsFilter = this.sortFilter(specialsFilter);
 
         var key = 0;
         return (
@@ -59,7 +61,7 @@ class FilterSidebar extends React.Component {
                 />
                 <MultiFilter key={key++}
                     title="Special"
-                    options={[]}
+                    options={specialsFilter.sort((a, b) => a.value > b.value)}
                     onFilter={e => this.setFilter("specials", e)}
                 />
             </div>

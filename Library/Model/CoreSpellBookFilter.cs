@@ -87,8 +87,33 @@ namespace Library.Model
             return new ValueTask<ICoreSpellBook>(spellBook);
         }
 
-        public ValueTask<ICoreSpellBook> BySpecial(string[] filter, ICoreSpellBook spellBook)
+        public ValueTask<ICoreSpellBook> BySpecial(string[] filters, ICoreSpellBook spellBook)
         {
+            if (filters.Any())
+            {
+                var containsList = new HashSet<ICoreSpell>();
+                foreach (var filter in filters)
+                {
+                    foreach (var spell in spellBook.Spells)
+                    {
+                        var containsSpecial = filter.Equals(spell.MaintenanceDuration.ToString(), StringComparison.OrdinalIgnoreCase);
+                        if (containsSpecial)
+                        {
+                            containsList.Add(spell);
+                        }
+                    }
+                }
+
+                var removeList = spellBook.Spells
+                    .Where(spell => !containsList.Contains(spell))
+                    .ToList();
+
+                foreach (var spell in removeList)
+                {
+                    spellBook.Spells.Remove(spell);
+                }
+            }
+
             return new ValueTask<ICoreSpellBook>(spellBook);
         }
     }

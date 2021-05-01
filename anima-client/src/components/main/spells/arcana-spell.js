@@ -55,7 +55,7 @@ class ArcanaSpell extends React.Component {
     }
 
     getType() {
-        if (this.props.data.type.length === 0) {
+        if (!this.props.data.type || this.props.data.type.length === 0) {
             return (
                 <div>
                     None

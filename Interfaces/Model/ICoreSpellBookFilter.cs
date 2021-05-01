@@ -8,6 +8,6 @@ namespace Interfaces.Model
         ValueTask<bool> BySchool(string[] filter, ICoreSpellBook spellBook);
         ValueTask<ICoreSpellBook> BySpell(string[] filter, ICoreSpellBook spellBook);
         ValueTask<ICoreSpellBook> ByTag(string[] filter, ICoreSpellBook spellBook);
-        ValueTask<ICoreSpellBook> BySpecial(string[] filter, ICoreSpellBook spellBook);
+        ValueTask<ICoreSpellBook> BySpecial(string[] filters, ICoreSpellBook spellBook);
     }
 }

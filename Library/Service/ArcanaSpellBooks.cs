@@ -174,61 +174,227 @@ namespace Library.Service
                                     Id = Identification.Generate(),
                                     //Id = "Nobility_Basic",
                                     Name = "Basic",
-                                    Zeon = 40,
-                                    IntellectRequirement = 5,
-                                    Effect = "",
-                                    Maintenance = 5
+                                    Zeon = 60,
+                                    IntellectRequirement = 6,
+                                    Effect = "Music, Dance and Art Ability 120.",
+                                    Maintenance = 0
                                 },
                                 new 
                                 {
                                     Id = Identification.Generate(),
                                     //Id = "Nobility_Intermediate",
                                     Name = "Intermediate",
-                                    Zeon = 60,
-                                    IntellectRequirement = 8,
-                                    Effect = "100 foot radius / As Basic level, but when the target makes a " +
-                                             "Style check that might be influenced by his body odor, he can " +
-                                             "increase the result of the check by one level.",
-                                    Maintenance = 5
+                                    Zeon = 90,
+                                    IntellectRequirement = 9,
+                                    Effect = "Music, Dance and Art Ability 180.",
+                                    Maintenance = 0
                                 },
                                 new 
                                 {
                                     Id = Identification.Generate(),
                                     //Id = "Nobility_Advanced",
                                     Name = "Advanced",
-                                    Zeon = 90,
-                                    IntellectRequirement = 10,
-                                    Effect = "120 foot radius / As Intermediate level, but the spell increases " +
-                                             "the result of the check by two levels.",
-                                    Maintenance = 5
+                                    Zeon = 120,
+                                    IntellectRequirement = 11,
+                                    Effect = "Music, Dance and Art Ability 240.",
+                                    Maintenance = 0
                                 },
                                 new 
                                 {
                                     Id = Identification.Generate(),
                                     //Id = "Nobility_Arcane",
                                     Name = "Arcane",
-                                    Zeon = 120,
-                                    IntellectRequirement = 12,
-                                    Effect = "150 foot radius / As Advanced level, and anyone who smells the " +
-                                             "parfume for more than 5 turns must pass a MR 100 check or fall " +
-                                             "into a state of Fascination, becoming stupefied with pleasure and " +
-                                             "more receptive to the target's words.",
-                                    Maintenance = 10
+                                    Zeon = 150,
+                                    IntellectRequirement = 13,
+                                    Effect = "Music, Dance and Art Ability 280.",
+                                    Maintenance = 0
                                 },
                             },
-                            MaintenanceDuration = MaintenanceDuration.Daily,
+                            MaintenanceDuration = MaintenanceDuration.None,
                             Type = new[]
                             {
-                                SpellType.Effect,
-                                SpellType.Automatic
+                                SpellType.Effect
                             },
                             Tags = new[]
                             {
                                 Tag.Self,
                                 Tag.Buff,
-                                Tag.Area,
                                 Tag.Target,
                                 Tag.Single
+                            }
+                        },
+                        new 
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Wardrobe",
+                            Action = SpellAction.Active,
+                            Level = 34,
+                            Effect = "",
+                            SpellLevel = new[]
+                            {
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Basic",
+                                    Name = "Basic",
+                                    Zeon = 60,
+                                    IntellectRequirement = 6,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Intermediate",
+                                    Name = "Intermediate",
+                                    Zeon = 90,
+                                    IntellectRequirement = 9,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Advanced",
+                                    Name = "Advanced",
+                                    Zeon = 120,
+                                    IntellectRequirement = 11,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Arcane",
+                                    Name = "Arcane",
+                                    Zeon = 150,
+                                    IntellectRequirement = 13,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                            },
+                            MaintenanceDuration = MaintenanceDuration.None,
+                            Type = new SpellType[]
+                            {
+                            },
+                            Tags = new Tag[]
+                            {
+                            }
+                        },
+                        new 
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Pleasant Conversation",
+                            Action = SpellAction.Active,
+                            Level = 44,
+                            Effect = "",
+                            SpellLevel = new[]
+                            {
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Basic",
+                                    Name = "Basic",
+                                    Zeon = 60,
+                                    IntellectRequirement = 6,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Intermediate",
+                                    Name = "Intermediate",
+                                    Zeon = 90,
+                                    IntellectRequirement = 9,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Advanced",
+                                    Name = "Advanced",
+                                    Zeon = 120,
+                                    IntellectRequirement = 11,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Arcane",
+                                    Name = "Arcane",
+                                    Zeon = 150,
+                                    IntellectRequirement = 13,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                            },
+                            MaintenanceDuration = MaintenanceDuration.None,
+                            Type = new SpellType[]
+                            {
+                            },
+                            Tags = new Tag[]
+                            {
+                            }
+                        },
+                        new 
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Grandeur",
+                            Action = SpellAction.Active,
+                            Level = 54,
+                            Effect = "",
+                            SpellLevel = new[]
+                            {
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Basic",
+                                    Name = "Basic",
+                                    Zeon = 60,
+                                    IntellectRequirement = 6,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Intermediate",
+                                    Name = "Intermediate",
+                                    Zeon = 90,
+                                    IntellectRequirement = 9,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Advanced",
+                                    Name = "Advanced",
+                                    Zeon = 120,
+                                    IntellectRequirement = 11,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                                new 
+                                {
+                                    Id = Identification.Generate(),
+                                    //Id = "Nobility_Arcane",
+                                    Name = "Arcane",
+                                    Zeon = 150,
+                                    IntellectRequirement = 13,
+                                    Effect = "",
+                                    Maintenance = 0
+                                },
+                            },
+                            MaintenanceDuration = MaintenanceDuration.None,
+                            Type = new SpellType[]
+                            {
+                            },
+                            Tags = new Tag[]
+                            {
                             }
                         },
                     }
