@@ -2,7 +2,6 @@
 using Interfaces.Model.Enum;
 using Library.Emit;
 using Library.Model.Book;
-using Library.Model.Book.Spell;
 using Library.Model.Book.Spell.Resistance;
 
 namespace Library.Service
@@ -2234,6 +2233,358 @@ namespace Library.Service
                             Tags = new[]
                             {
                                 Tag.Area
+                            }
+                        },
+                        new
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Distort Detection",
+                            Action = SpellAction.Active,
+                            Level = 52,
+                            Cost = 120,
+                            Effect = "Casting this spell, the caster distorts the " +
+                                     "result of any supernatural detection methods " +
+                                     "in a 150-foot radius. The distortion may be " +
+                                     "applied in any possible way; increasing " +
+                                     "or decreasing the potential, abilities, or " +
+                                     "situation of a creature or object. The " +
+                                     "character using the supernatural detection " +
+                                     "will have to pass a MR Check with a Difficulty of 120 " +
+                                     "to avoid deception. " +
+                                     "This spell works on the supernatural detection itself " +
+                                     "and not on the individuals inside an area. Therefore, " +
+                                     "characters attempting to detect something inside " +
+                                     "the area must pass the MR even if they are physically " +
+                                     "outside the spell’s radius. An example of this could be " +
+                                     "a spellcaster trying to locate an illusionist miles away, " +
+                                     "through magic.",
+                            AddedEffect = "+150 feet to radius and +5 to the MR Difficulty.",
+                            MaximumZeon = "x20",
+                            ZeonAttribute = CharacterAttribute.Int,
+                            Maintenance = "1 every 10 (12)",
+                            MaintenanceDuration = MaintenanceDuration.Daily,
+                            Type = new[]
+                            {
+                                SpellType.Automatic
+                            },
+                            Resistances = new[]
+                            {
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Magic,
+                                    Value = 120
+                                }
+                            },
+                            Tags = new[]
+                            {
+                                Tag.Area,
+                                Tag.Buff,
+                                Tag.Protection,
+                                Tag.Defensive
+                            }
+                        },
+                        new
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Lie",
+                            Action = SpellAction.Active,
+                            Level = 56,
+                            Cost = 100,
+                            Effect = "This spell allows the caster to convince his audience to believe anything " +
+                                     "he says, no matter how ridiculous or absurd. The affected parties will not      " +
+                                     "necessarily obey orders from him, but they will believe what he says to be true." +
+                                     "Any given subject can avoid the result of the spell by passing a MR Check with" +
+                                     "a Difficulty of 120. Characters are permitted a new Resistance roll each hour." +
+                                     "In the case of an exceptionally unbelievable lie, or if the subjects have been" +
+                                     "warned of this ability, they may apply a +40 bonus to their MR Check.",
+                            AddedEffect = "+5 to MR Difficulty.",
+                            MaximumZeon = "x10",
+                            ZeonAttribute = CharacterAttribute.Int,
+                            Maintenance = "1 every 10 (10)",
+                            MaintenanceDuration = MaintenanceDuration.Daily,
+                            Type = new[]
+                            {
+                                SpellType.Spiritual
+                            },
+                            Resistances = new[]
+                            {
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Magic,
+                                    Value = 120
+                                }
+                            },
+                            Tags = new[]
+                            {
+                                Tag.Single,
+                                Tag.Buff,
+                                Tag.Self,
+                                Tag.Defensive
+                            }
+                        },
+                        new
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Destroy Illusions",
+                            Action = SpellAction.Active,
+                            Level = 60,
+                            Cost = 80,
+                            Effect = "This spell destroys any other Illusion spell " +
+                                     "with a Zeonic Value not greater than 60.",
+                            AddedEffect = "+5 to Zeonic Value affected by the spell.",
+                            MaximumZeon = "x40",
+                            ZeonAttribute = CharacterAttribute.Int,
+                            Maintenance = "",
+                            MaintenanceDuration = MaintenanceDuration.None,
+                            Type = new[]
+                            {
+                                SpellType.Effect
+                            },
+                            Resistances = new Resistance[]
+                            {
+                            },
+                            Tags = new[]
+                            {
+                                Tag.Target,
+                                Tag.Offensive
+                            }
+                        },
+                        new
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Ghostly Being",
+                            Action = SpellAction.Active,
+                            Level = 62,
+                            Cost = 80,
+                            Effect = "This spell creates a 4th-level ghostly being fashioned according to the " +
+                                     "caster’s desires using the Being Between Worlds rules in " +
+                                     "Chapter 26. Ghostly Being functions exactly as the spell Create Illusory Being(Illusion level 40), " +
+                                     "except that it has no area limitation, and those who fail the MR Check are " +
+                                     "subjected to the rules of Ghostly Spells.A character might receive a new Check " +
+                                     "if he had reason to doubt the authenticity of the entity.The illusion may be a " +
+                                     "maximum of three levels higher than the caster.",
+                            AddedEffect = "+5 to the MR Difficulty and +1 to the Being’s level.",
+                            MaximumZeon = "x10",
+                            ZeonAttribute = CharacterAttribute.Int,
+                            Maintenance = "1 every 20 (4)",
+                            MaintenanceDuration = MaintenanceDuration.Turn,
+                            Type = new[]
+                            {
+                                SpellType.Automatic
+                            },
+                            Resistances = new[]
+                            {
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Magic,
+                                    Value = 120
+                                }
+                            },
+                            Tags = new[]
+                            {
+                                Tag.Target
+                            }
+                        },
+                        new
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Gullibility",
+                            Action = SpellAction.Active,
+                            Level = 66,
+                            Cost = 80,
+                            Effect = "This spell weakens a target’s Resistance against illusion spells. The " +
+                                     "affected party must pass a MR with a Difficulty of 120 or suffer a penalty to " +
+                                     "future MR and PsR Checks against illusion spells equal to his Failure Level. This " +
+                                     "penalty will only work against spells of this Path.",
+                            AddedEffect = "+10 to MR Difficulty.",
+                            MaximumZeon = "x10",
+                            ZeonAttribute = CharacterAttribute.Int,
+                            Maintenance = "1 every 10 (8)",
+                            MaintenanceDuration = MaintenanceDuration.Turn,
+                            Type = new[]
+                            {
+                                SpellType.Spiritual
+                            },
+                            Resistances = new[]
+                            {
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Magic,
+                                    Value = 120
+                                }
+                            },
+                            Tags = new[]
+                            {
+                                Tag.Target,
+                                Tag.Offensive,
+                                Tag.Debuff
+                            }
+                        },
+                        new
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Ghostly Attack",
+                            Action = SpellAction.Active,
+                            Level = 70,
+                            Cost = 100,
+                            Effect = "This spell projects a 100-point Base Damage discharge of energy that " +
+                                     "uses the Ghostly Spell rules. Character’s can avoid the damage of this spell by " +
+                                     "passing a MR Check with a Difficulty of 120. Given the attack’s unreal status, it " +
+                                     "can not clash against other discharges.",
+                            AddedEffect = "+5 to MR Difficulty and +5 to Base Damage.",
+                            MaximumZeon = "x20",
+                            ZeonAttribute = CharacterAttribute.Int,
+                            Maintenance = "",
+                            MaintenanceDuration = MaintenanceDuration.None,
+                            Type = new[]
+                            {
+                                SpellType.Attack,
+                                SpellType.Spiritual
+                            },
+                            Resistances = new[]
+                            {
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Magic,
+                                    Value = 120
+                                }
+                            },
+                            Tags = new[]
+                            {
+                                Tag.Damage,
+                                Tag.Target,
+                                Tag.Offensive
+                            }
+                        },
+                        new
+                        {
+                            Id = Identification.Generate(),
+                            Name = "The Gift of Lying",
+                            Action = SpellAction.Active,
+                            Level = 72,
+                            Cost = 140,
+                            Effect = "This spell can force an individual to lie. The illusionist can compel the " +
+                                     "target to lie in absolutely everything he says, or about a specific subject matter. " +
+                                     "The affected party is not be able to indicate the deceptive nature of his words " +
+                                     "or convey any truthful information. A character can avoid this spell’s effects by " +
+                                     "passing a MR or PsR Check with a Difficulty of 120. Characters who fail this " +
+                                     "Check receive a new check each day",
+                            AddedEffect = "+5 to MR or PsR Difficulty.",
+                            MaximumZeon = "x20",
+                            ZeonAttribute = CharacterAttribute.Int,
+                            Maintenance = "1 every 10 (14)",
+                            MaintenanceDuration = MaintenanceDuration.Daily,
+                            Type = new[]
+                            {
+                                SpellType.Spiritual
+                            },
+                            Resistances = new[]
+                            {
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Magic,
+                                    Value = 120
+                                },
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Psychic,
+                                    Value = 120
+                                }
+                            },
+                            Tags = new[]
+                            {
+                                Tag.Target,
+                                Tag.Debuff,
+                                Tag.Crowd_Control
+                            }
+                        },
+                        new
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Illusory Life",
+                            Action = SpellAction.Active,
+                            Level = 76,
+                            Cost = 140,
+                            Effect = "This spell introduces fake memories into an individual’s mind. The " +
+                                     "illusionist is able to alter memories and include as much new information as " +
+                                     "he desires. Once under the effects of this spell, characters can not distinguish " +
+                                     "illusory memories from their own real experiences. The MR or PsR Check for " +
+                                     "resisting this spell has a Difficulty of 120.Characters receive a new roll only " +
+                                     "upon finding a reason to doubt the authenticity of their recollections.",
+                            AddedEffect = "+5 to MR or PsR Difficulty.",
+                            MaximumZeon = "x20",
+                            ZeonAttribute = CharacterAttribute.Int,
+                            Maintenance = "1 every 10 (14)",
+                            MaintenanceDuration = MaintenanceDuration.Daily,
+                            Type = new[]
+                            {
+                                SpellType.Spiritual
+                            },
+                            Resistances = new[]
+                            {
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Magic,
+                                    Value = 120
+                                },
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Psychic,
+                                    Value = 120
+                                }
+                            },
+                            Tags = new[]
+                            {
+                                Tag.Target,
+                                Tag.Debuff,
+                                Tag.Offensive,
+                            }
+                        },
+                        new
+                        {
+                            Id = Identification.Generate(),
+                            Name = "Major Illusion",
+                            Action = SpellAction.Active,
+                            Level = 80,
+                            Cost = 250,
+                            Effect = "This spell creates an enormous illusion affecting all five human senses. The " +
+                                     "spell develops within a one mile radius within which people see, hear, feel, smell, " +
+                                     "and taste whatever the spellcaster desires. For instance, he may trick someone into " +
+                                     "thinking a whole town is deserted, when it is actually a thriving city. Any character " +
+                                     "entering the area of this spell is automatically affected by the illusion unless he passes " +
+                                     "a MR Check with a Difficulty of 120. Affected characters only receive a new Check " +
+                                     "upon encountering a reason to doubt the illusory world around them.",
+                            AddedEffect = "+500 meters to radius and +5 to MR Difficulty.",
+                            MaximumZeon = "x30",
+                            ZeonAttribute = CharacterAttribute.Int,
+                            Maintenance = "1 every 10 (25)",
+                            MaintenanceDuration = MaintenanceDuration.Daily,
+                            Type = new[]
+                            {
+                                SpellType.Automatic
+                            },
+                            Resistances = new[]
+                            {
+                                new
+                                {
+                                    Id = Identification.Generate(),
+                                    Type = ResistanceType.Magic,
+                                    Value = 120
+                                }
+                            },
+                            Tags = new[]
+                            {
+                                Tag.Area,
+                                Tag.Crowd_Control
                             }
                         }
                     }
