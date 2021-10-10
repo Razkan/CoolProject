@@ -35,7 +35,7 @@ class SpellTable extends React.Component {
         this.openFilterSidebar = this.openFilterSidebar.bind(this);
         this.closeFilterSidebar = this.closeFilterSidebar.bind(this);
 
-        this.baseUrl = "http://localhost:9422";
+        this.baseUrl = "";
         this.coreUrl = this.baseUrl + "/core/all";
         this.arcanaUrl = this.baseUrl + "/arcana/all";
 

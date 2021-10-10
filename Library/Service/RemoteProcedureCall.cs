@@ -42,7 +42,7 @@ namespace Library.Service
                 var content = new StringContent(json, Encoding.UTF8, ApplicationJsonMediaType);
 
                 var client = GetClient();
-                await client.PostAsync("http://localhost:5000/tracker/post", content);
+                await client.PostAsync("http://tracker-api/tracker/post", content);
             }
 
             static ISet<string> GetInterfaces(Type type, ISet<string> set)
@@ -75,7 +75,7 @@ namespace Library.Service
 
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri("http://localhost:5000/tracker/get"),
+                RequestUri = new Uri("http://tracker-api/tracker/get"),
                 Content = content,
                 Method = HttpMethod.Get
             };

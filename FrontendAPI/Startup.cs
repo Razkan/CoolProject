@@ -25,6 +25,7 @@ namespace FrontendAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHealthChecks();
 
             services.AddHttpClient("client");
             services.AddScoped<IRemoteProcedureCall, RemoteProcedureCall>();
@@ -41,16 +42,6 @@ namespace FrontendAPI
                 {
                     option.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
-
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.WithOrigins("http://localhost:3000")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,11 +56,14 @@ namespace FrontendAPI
 
             app.UseRouting();
 
-            app.UseCors();
-
             app.UseAuthorization();
+            app.UseHealthChecks("/health");
 
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/health");
+                endpoints.MapControllers();
+            });
         }
     }
 }

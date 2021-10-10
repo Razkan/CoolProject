@@ -65,7 +65,7 @@ namespace BackendAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseSerilogRequestLogging();
 

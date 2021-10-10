@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/dotnet/sdk:3.1-alpine as build
+
+WORKDIR /tmp
+COPY ./FrontendAPI ./FrontendAPI
+COPY ./Interfaces ./Interfaces
+COPY ./Library ./Library
+RUN dotnet restore "./FrontendAPI/FrontendAPI.csproj"
+
+FROM build AS publish
+RUN dotnet publish "./FrontendAPI/FrontendAPI.csproj" -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:3.1-alpine as runtime
+RUN apk --no-cache add curl
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+EXPOSE 80
+EXPOSE 443
+ENTRYPOINT ["dotnet", "FrontendAPI.dll"]

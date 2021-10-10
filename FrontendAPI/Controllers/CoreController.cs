@@ -31,7 +31,6 @@ namespace FrontendAPI.Controllers
             [FromQuery] string[] tags,
             [FromQuery] string[] specials)
         {
-            Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
             Response.Headers.Add("Content-Type", "application/json");
             var result = await _remoteProcedureCall.GetAsync<ICoreSpellBook>();
 
@@ -51,9 +50,9 @@ namespace FrontendAPI.Controllers
         [Route("test")]
         public async Task Test()
         {
-            Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
             var result = await _remoteProcedureCall.GetAsync<ICoreSpellBook>();
             
+            Response.Headers.Add("Content-Type", "application/json");
             await foreach (var stream in result.GetStreams())
             {
                 await stream.CopyToAsync(HttpContext.Response.Body);
@@ -64,7 +63,6 @@ namespace FrontendAPI.Controllers
         [Route("earth")]
         public async Task<IRPCResponse> Earth()
         {
-            Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
             Response.Headers.Add("Content-Type", "application/json");
             return await _remoteProcedureCall.GetAsync<IBookOfEarth>();
         }
@@ -73,7 +71,6 @@ namespace FrontendAPI.Controllers
         [Route("illusion")]
         public async Task<IRPCResponse> Illusion()
         {
-            Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
             Response.Headers.Add("Content-Type", "application/json");
             return await _remoteProcedureCall.GetAsync<IBookOfIllusion>();
         }

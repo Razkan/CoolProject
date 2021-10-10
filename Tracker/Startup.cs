@@ -22,7 +22,7 @@ namespace Tracker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
+            services.AddHealthChecks();
             services.AddSingleton<ICache, Cache>();
         }
 
@@ -34,16 +34,18 @@ namespace Tracker
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseSerilogRequestLogging();
 
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseHealthChecks("/health");
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });
         }

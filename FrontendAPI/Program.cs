@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +22,7 @@ namespace FrontendAPI
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .Enrich.FromLogContext()
+                .Filter.ByExcluding(c => c.Properties.Any(p => p.Value.ToString().Contains("/health")))
                 .WriteTo.Debug()
                 .WriteTo.Console()
                 .CreateLogger();

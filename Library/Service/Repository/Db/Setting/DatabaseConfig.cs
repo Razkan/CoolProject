@@ -7,6 +7,6 @@
         public string Args { get; set; }
         public bool Recreate { get; set; }
 
-        public string File => Directory + "\\" + Name;
+        public string File => Directory + "/" + Name;
     }
 }

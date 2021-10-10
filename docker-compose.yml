@@ -1,11 +1,63 @@
-version: "3.7"
+version: "3.9"
 
 services:
     tracker-api:
-    #   image: tracker
-        build: ./Tracker
+        build: 
+            context: .
+            dockerfile: Dockerfile.trackerapi
+        image: trackerapi:latest
         ports:
-            - 3000:3000
+            - 4000:80
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost/health"]
+            interval: 5s
+            timeout: 5s
+            start_period: 5s
+            retries: 5
+
+    backend-api:
+        build: 
+            context: .
+            dockerfile: Dockerfile.backendapi
+        image: backendapi:latest
+        ports:
+            - 5000:80
+        # volumes:
+        #     - "C:/_database_:/_database_"
         volumes:
-            - ./Interfaces:/Interface
-            - ./Library:/Library
+            - type: bind
+              source: C:/_database_
+              target: /_database_
+        depends_on:
+            tracker-api:
+                condition: service_healthy
+    
+    frontend-api:
+        build: 
+            context: .
+            dockerfile: Dockerfile.frontendapi
+        image: frontendapi:latest
+        ports:
+            - 6000:80
+            - 6001:443
+        depends_on:
+            tracker-api:
+                condition: service_healthy
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost/health"]
+            interval: 5s
+            timeout: 5s
+            start_period: 5s
+            retries: 5
+    
+    anima:
+        build: 
+            context: .
+            dockerfile: Dockerfile.anima
+        image: anima:latest
+        ports:
+            - 10001:80
+            - 10002:443
+        depends_on:
+            frontend-api:
+                condition: service_healthy

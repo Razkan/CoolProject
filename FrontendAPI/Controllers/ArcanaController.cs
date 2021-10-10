@@ -30,7 +30,6 @@ namespace FrontendAPI.Controllers
             [FromQuery] string[] tags,
             [FromQuery] string[] specials)
         {
-            Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
             Response.Headers.Add("Content-Type", "application/json");
             var result = await _remoteProcedureCall.GetAsync<IArcanaSpellBook>();
 
