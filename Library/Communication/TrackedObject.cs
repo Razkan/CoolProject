@@ -1,4 +1,4 @@
-﻿using Interfaces.Model;
+﻿using Interfaces.Model.Shared;
 
 namespace Library.Communication
 {

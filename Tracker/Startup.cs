@@ -1,4 +1,4 @@
-using Interfaces.Model;
+using Interfaces.Model.Shared;
 using Library.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

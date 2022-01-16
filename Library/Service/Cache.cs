@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Interfaces.Model;
+using Interfaces.Model.Shared;
 using Library.Model;
 
 namespace Library.Service

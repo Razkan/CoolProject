@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Interfaces.Model;
 using Interfaces.Model.Db;
+using Interfaces.Model.Shared;
 using Library.Service.Repository.Db.Repository;
 
 namespace Library.Service.Repository

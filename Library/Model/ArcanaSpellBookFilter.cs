@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Interfaces.Model;
-using Interfaces.Model.Book;
-using Interfaces.Model.Book.Spell;
-using Interfaces.Model.Enum;
+using Interfaces.Model.Anima;
+using Interfaces.Model.Anima.Book;
+using Interfaces.Model.Anima.Book.Spell;
+using Interfaces.Model.Anima.Enum;
+using Interfaces.Model.Shared;
 
 namespace Library.Model
 {

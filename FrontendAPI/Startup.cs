@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
-using Interfaces.Model;
+using Interfaces.Model.Anima;
+using Interfaces.Model.Shared;
 using Library.Model;
 using Library.Service;
 using Microsoft.AspNetCore.Builder;

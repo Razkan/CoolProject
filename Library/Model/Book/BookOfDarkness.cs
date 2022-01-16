@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using Interfaces.Model.Book;
-using Interfaces.Model.Book.Spell;
+using Interfaces.Model.Anima.Book;
+using Interfaces.Model.Anima.Book.Spell;
 using Interfaces.Model.Db.Attribute;
 
 namespace Library.Model.Book

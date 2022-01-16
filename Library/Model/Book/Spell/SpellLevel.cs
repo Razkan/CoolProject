@@ -1,4 +1,4 @@
-﻿using Interfaces.Model.Book.Spell;
+﻿using Interfaces.Model.Anima.Book.Spell;
 using Interfaces.Model.Db.Attribute;
 
 namespace Library.Model.Book.Spell

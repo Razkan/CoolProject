@@ -1,4 +1,4 @@
-﻿using Interfaces.Model;
+﻿using Interfaces.Model.Shared;
 using Library.Model;
 using Microsoft.AspNetCore.Mvc;
 

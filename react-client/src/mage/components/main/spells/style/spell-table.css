@@ -1,0 +1,66 @@
+.spell-table-container {
+    height: 100%;
+    width: 100%;
+    
+    background: #efefef;
+
+    overflow: hidden;
+}
+
+.spell-table-content {
+    display: flex;
+
+    height: calc(100% - 51px);
+    width: 100%;
+}
+
+.spell-table-board {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+    
+    border-top: 1px solid #cacaca; 
+    
+    overflow: hidden;
+}
+
+div.spell-table-board > div.card-category-container:first-child {
+    margin-top: 5px;
+}
+
+div.spell-table-board > div.card-category-container:last-child {
+    margin-bottom: 5px;
+}
+
+.spell-table-sidebar {
+    width: 0%;
+    min-width: 400px;
+    height: 100%;
+
+    background-color: #646464;
+
+    transition: min-width 0.75s;
+
+    overflow-x: hidden;
+}
+
+.spell-table-sidebar-hidden {
+    min-width: 0px;
+}
+
+.spell-table-show-filter-result {
+    height: 25px;
+    
+    margin-left: 10px;
+
+    transition: height 0.5s;
+}
+
+.spell-table-show-filter-result-hidden {
+    height: 0px;
+}

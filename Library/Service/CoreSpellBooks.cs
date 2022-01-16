@@ -1,5 +1,6 @@
-﻿using Interfaces.Model.Book;
-using Interfaces.Model.Enum;
+﻿using Interfaces.Model.Anima.Book;
+using Interfaces.Model.Anima.Enum;
+using Interfaces.Model.Shared;
 using Library.Emit;
 using Library.Model.Book;
 using Library.Model.Book.Spell.Resistance;

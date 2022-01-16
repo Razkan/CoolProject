@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Interfaces.Model;
+using Interfaces.Model.Shared;
 using Library.Communication.Converter;
 
 namespace Library.Communication

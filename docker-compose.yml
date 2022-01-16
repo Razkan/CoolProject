@@ -53,7 +53,19 @@ services:
     anima:
         build: 
             context: .
-            dockerfile: Dockerfile.anima
+            dockerfile: Dockerfile.backend_anima
+        image: anima:latest
+        ports:
+            - 10001:80
+            - 10002:443
+        depends_on:
+            frontend-api:
+                condition: service_healthy
+    
+    mage:
+        build: 
+            context: .
+            dockerfile: Dockerfile.backend_mage
         image: anima:latest
         ports:
             - 10001:80

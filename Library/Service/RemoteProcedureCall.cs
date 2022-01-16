@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Interfaces.Model;
+using Interfaces.Model.Shared;
 using Library.Communication;
 using Library.Model;
 
@@ -42,7 +42,8 @@ namespace Library.Service
                 var content = new StringContent(json, Encoding.UTF8, ApplicationJsonMediaType);
 
                 var client = GetClient();
-                await client.PostAsync("http://tracker-api/tracker/post", content);
+                var tracker_host = Environment.GetEnvironmentVariable("TRACKER_HOST") ?? "localhost:5000";
+                await client.PostAsync($"http://{tracker_host}/tracker/post", content);
             }
 
             static ISet<string> GetInterfaces(Type type, ISet<string> set)
@@ -73,9 +74,10 @@ namespace Library.Service
 
             var content = new StringContent(trackerInfo, Encoding.UTF8, ApplicationJsonMediaType);
 
+            var tracker_host = Environment.GetEnvironmentVariable("TRACKER_HOST") ?? "localhost:5000";
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri("http://tracker-api/tracker/get"),
+                RequestUri = new Uri($"http://{tracker_host}/tracker/get"),
                 Content = content,
                 Method = HttpMethod.Get
             };

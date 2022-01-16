@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using Interfaces.Model.Book.Spell;
+using Interfaces.Model.Anima.Book.Spell;
+using Interfaces.Model.Anima.Enum;
 using Interfaces.Model.Db.Attribute;
-using Interfaces.Model.Enum;
+using Interfaces.Model.Shared;
 
 namespace Library.Model.Book.Spell
 {

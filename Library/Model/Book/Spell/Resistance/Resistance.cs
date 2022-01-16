@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using Interfaces.Model.Book.Spell;
+using Interfaces.Model.Anima.Book.Spell;
+using Interfaces.Model.Anima.Enum;
 using Interfaces.Model.Db.Attribute;
-using Interfaces.Model.Enum;
 
 namespace Library.Model.Book.Spell.Resistance
 {

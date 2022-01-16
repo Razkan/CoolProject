@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using Interfaces.Model;
+using Interfaces.Model.Shared;
 
 namespace Library.Model
 {
