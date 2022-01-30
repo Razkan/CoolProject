@@ -14,23 +14,6 @@ services:
             timeout: 5s
             start_period: 5s
             retries: 5
-
-    backend-api:
-        build: 
-            context: .
-            dockerfile: Dockerfile.backendapi
-        image: backendapi:latest
-        ports:
-            - 5000:80
-        # volumes:
-        #     - "C:/_database_:/_database_"
-        volumes:
-            - type: bind
-              source: C:/_database_
-              target: /_database_
-        depends_on:
-            tracker-api:
-                condition: service_healthy
     
     frontend-api:
         build: 
@@ -38,8 +21,10 @@ services:
             dockerfile: Dockerfile.frontendapi
         image: frontendapi:latest
         ports:
-            - 6000:80
-            - 6001:443
+            - 9422:80
+            # - 6001:443
+        environment:
+        - TRACKER_HOST=tracker-api
         depends_on:
             tracker-api:
                 condition: service_healthy
@@ -49,24 +34,52 @@ services:
             timeout: 5s
             start_period: 5s
             retries: 5
-    
+   
     anima:
         build: 
             context: .
-            dockerfile: Dockerfile.backend_anima
+            dockerfile: Dockerfile.backendapi_anima
         image: anima:latest
         ports:
-            - 10001:80
-            - 10002:443
+            - 5000:80
+        # volumes:
+        #     - "C:/_database_:/_database_"
+        environment:
+        - ANIMA_HOST=anima
+        - TRACKER_HOST=tracker-api
+        volumes:
+            - type: bind
+              source: C:/_database_
+              target: /_database_
         depends_on:
-            frontend-api:
+            tracker-api:
                 condition: service_healthy
-    
+
     mage:
         build: 
             context: .
-            dockerfile: Dockerfile.backend_mage
-        image: anima:latest
+            dockerfile: Dockerfile.backendapi_mage
+        image: mage:latest
+        ports:
+            - 5001:80
+        # volumes:
+        #     - "C:/_database_:/_database_"
+        environment:
+        - MAGE_HOST=mage
+        - TRACKER_HOST=tracker-api
+        volumes:
+            - type: bind
+              source: C:/_database_
+              target: /_database_
+        depends_on:
+            tracker-api:
+                condition: service_healthy
+
+    client:
+        build: 
+            context: .
+            dockerfile: Dockerfile.client
+        image: client:latest
         ports:
             - 10001:80
             - 10002:443
