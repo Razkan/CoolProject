@@ -3,6 +3,7 @@
     public enum Withstand
     {
         None,
-        Stamina
+        Stamina,
+        Durability
     }
 }

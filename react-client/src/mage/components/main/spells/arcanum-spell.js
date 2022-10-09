@@ -175,13 +175,13 @@ class ArcanumSpell extends React.Component {
                     <div className="arcanum-spell-expandable-item-section2-effect">
                         <strong>Effect:</strong> <Text value={this.props.data.effect} onHighlight={this.onHighlight} />
                     </div>
-                    {this.props.data.reachEffects.length > 0 && 
+                    {this.props.data.reachEffects && this.props.data.reachEffects.length > 0 && 
                         <div className="arcanum-spell-expandable-item-section2-reach">
                             <strong>Reaches:</strong> 
                             {this.getReachEffect()}
                         </div>
                     }
-                    {this.props.data.schoolEffects.length > 0 &&
+                    {this.props.data.schoolEffects && this.props.data.schoolEffects.length > 0 &&
                         <div className="arcanum-spell-expandable-item-section2-school">
                             {/* <strong>School:</strong>  */}
                             {this.getSchoolEffect()}

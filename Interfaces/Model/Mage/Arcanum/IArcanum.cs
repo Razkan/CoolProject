@@ -2,6 +2,7 @@
 using Interfaces.Model.Db;
 using Interfaces.Model.Db.Attribute;
 using Interfaces.Model.Mage.Arcanum.Spell;
+using Interfaces.Model.Mage.Enum;
 
 namespace Interfaces.Model.Anima.Book
 {
@@ -9,7 +10,7 @@ namespace Interfaces.Model.Anima.Book
     public interface IArcanum : IDatabaseEntity
     {
         string Name { get; }
-        string School { get; }
+        School School { get; }
 
         [DbObjectCollection]
         ICollection<IArcanumSpell> Spells { get; }

@@ -16,6 +16,7 @@
         Offensive,
         Crowd_Control,
         Single,
-        Multiple
+        Multiple,
+        Enchant
     }
 }

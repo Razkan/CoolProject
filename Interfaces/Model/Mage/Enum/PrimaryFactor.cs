@@ -2,6 +2,7 @@
 {
     public enum PrimaryFactor
     {
-        Duration
+        Duration,
+        Potency
     }
 }

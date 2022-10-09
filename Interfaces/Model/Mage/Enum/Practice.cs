@@ -2,6 +2,14 @@
 {
     public enum Practice
     {
-        Knowing
+        Knowing,
+        Unveiling,
+        Compelling,
+        Shielding,
+        Ruling,
+        Veiling,
+        Weaving,
+        FrayingOrPerfecting,
+        Perfecting
     }
 }
